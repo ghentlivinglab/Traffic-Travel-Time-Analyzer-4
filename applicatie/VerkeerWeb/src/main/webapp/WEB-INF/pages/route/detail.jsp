@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -7,9 +8,6 @@
         <jsp:param name="title" value="Traject ${detail.name}"/>
     </jsp:include>
     <jsp:include page="/WEB-INF/shared/maprequirements.jsp"/>
-    <script src="<c:url value="/static/scripts/route/map.js" />"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
@@ -50,7 +48,7 @@
                     </dl>
                 </div>
                 <div class="col-md-8">
-                    <div id="map" style="height:500px;">
+                    <div id="map" style="height:500px">
                     </div>
                 </div>
             </div>
@@ -62,22 +60,26 @@
                 <h3 class="panel-title">Filteropties</h3>
             </div>
             <div class="panel-body">
-                <div class="col-md-4">
-                    <label>Van</label>
-                    <div class="input-group">
-                        <input class="datePicker form-control" type="text"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">Update</button>
-                                </span>
+                <div class="col-md-6">
+                    <label>Begindatum</label>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label>Tot</label>
-                    <div class="input-group">
-                        <input class="datePicker form-control" type="text"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">Update</button>
-                                </span>
+                <div class="col-md-6">
+                    <label>Einddatum</label>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker2'>
+                            <input type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,74 +92,27 @@
             </div>
             <div class="panel-body">
                 <div class="container">
-                    <script>
-                        $(function () {
-                            $('#container').highcharts({
-                                title: {
-                                    text: 'Gemiddelde Vertragingen Per Provider',
-                                    x: -20 //center
-                                },
-
-                                xAxis: {
-                                    categories: ['Id11', 'Id12', 'Id13', 'Id14', 'Id15', 'Id16',
-                                        'Id17', 'Id18', 'Id19', 'Id20', 'Id21', 'Id22']
-                                },
-                                yAxis: {
-                                    title: {
-                                        text: 'Time (seconds)'
-                                    },
-                                    plotLines: [{
-                                        value: 0,
-                                        width: 1,
-                                        color: '#808080'
-                                    }]
-                                },
-                                tooltip: {
-                                    valueSuffix: 'sec'
-                                },
-                                legend: {
-                                    layout: 'vertical',
-                                    align: 'right',
-                                    verticalAlign: 'middle',
-                                    borderWidth: 0
-                                },
-                                series: [{
-                                    name: 'TomTom',
-                                    data: [100, 190, 65, 145, 182, 215, 252, 265, 233, 183, 139, 96]
-                                }, {
-                                    name: 'Waze',
-                                    data: [100, 108, 57, 113, 170, 220, 248, 241, 201, 141, 86, 25]
-                                }, {
-                                    name: 'Google Maps',
-                                    data: [110, 106, 35, 84, 135, 170, 186, 179, 143, 90, 39, 10]
-                                }, {
-                                    name: 'Coyote',
-                                    data: [120, 106, 35, 84, 135, 170, 186, 179, 143, 90, 39, 100]
-                                }, {
-                                    name: 'Here',
-                                    data: [103, 142, 57, 85, 119, 152, 170, 166, 142, 103, 66, 48]
-                                }]
-                            });
-                        });
-                    </script>
+                    <script src="<c:url value="/static/scripts/route/detail/chart.js" />"></script>
                     <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
                 </div>
-                <table class="table">
+                <table class="table table-striped table-condensed">
                     <thead>
                     <tr>
                         <th>Datum</th>
+                        <th>Tijd</th>
+                        <th>Provider</th>
                         <th>Reistijd (seconden)</th>
+                        <th>Vertraging (seconden)</th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach var="data" items="${detail.data}">
                         <tr>
-                            <td>
-                                    ${data.timestamp}
-                            </td>
-                            <td>
-                                    ${data.travelTime}
-                            </td>
+                            <td><fmt:formatDate pattern="dd/MM/yyyy" value="${data.timestamp}"/></td>
+                            <td><fmt:formatDate pattern="HH:mm:ss" value="${data.timestamp}"/></td>
+                            <td> ${data.provider} </td>
+                            <td> ${data.travelTime} </td>
+                            <td><span class="label label-warning">${data.delay}</span></td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -165,11 +120,12 @@
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function () {
-            $(".datePicker").datetimepicker();
-            MapManagement.intializeRouteMap("map", "<c:url value="/route/mapdata?id=${detail.id}" />");
-        });
-    </script>
+</div>
+<script src="<c:url value="/static/scripts/route/map.js" />"></script>
+<script>
+    MapManagement.intializeRouteMap("map", "<c:url value="/route/mapdata?id=${detail.id}" />");
+</script>
+<script src="<c:url value="/static/scripts/highcharts.js" />"></script>
+<script src="<c:url value="/static/scripts/route/detail/detail.js" />"></script>
 </body>
 </html>
