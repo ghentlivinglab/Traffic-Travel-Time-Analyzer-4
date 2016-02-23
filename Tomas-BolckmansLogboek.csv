@@ -10,3 +10,5 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 18/02/16,11:00,12:00,School,"Documentatie API HereMaps doornemen + project in Netbeans openen",8,
 18/02/16,13:00,15:15,School,"HereMaps provider aangemaakt; json wordt ingeladen maar nog niet geparsed",8,
 21/02/16,15:00,17:00,Thuis,"Bekijken JSON2Pojo; En huidige implementatie providers in het project",8,
+23/02/16,08:15,12:30,School,"Standup meeting, issues besproken, HereMaps provider afgewerkt en getest, issues verder verdeeld",,
+23/02/16,14:45,15:45,School,"Eerste tests met de API van Bing Maps. API key aangevraagd van Bing Maps",42,
