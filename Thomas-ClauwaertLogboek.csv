@@ -13,3 +13,6 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 21/02/16,12:30,14:30,Thuis,"Bootstrap toegevoegd + info pages + voorbeeldtabel",#16 en #17,
 21/02/16,18:00,18:30,Thuis,"Frontend fixes",,
 21/02/16,18:45,19:15,Thuis,"POC Highchart demo",#17,
+23/02/16,08:15,12:30,School,"Standup Meeting, Issues + taakverdeling, cleanup wiki/branches/issues",,
+23/02/16,15:00,15:30,School,"Test nieuw project voor backgroundpolling",#14,
+23/02/16,20:00,23:30,Thuis,"Reverse trajecten fix + Deployen + Backgroundpolling",#14 en #37,
