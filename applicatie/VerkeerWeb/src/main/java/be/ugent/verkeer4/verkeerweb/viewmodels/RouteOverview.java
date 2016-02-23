@@ -1,12 +1,7 @@
 package be.ugent.verkeer4.verkeerweb.viewmodels;
 
-import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
-import be.ugent.verkeer4.verkeerdomain.data.composite.RouteSummary;
-import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Route;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 
 public class RouteOverview {
 

@@ -1,7 +1,6 @@
 package be.ugent.verkeer4.verkeerdal;
 
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
-import be.ugent.verkeer4.verkeerdomain.data.composite.RouteSummary;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,15 +38,16 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         }
     }
 
-    public List<RouteSummary> getMostRecentSummaries() {
+    public List<RouteData> getMostRecentSummaries() {
         return getMostRecentSummaries(null, null);
     }
 
-    private List<RouteSummary> getMostRecentSummaries(String condition, Map<String, Object> parameters) {
+    private List<RouteData> getMostRecentSummaries(String condition, Map<String, Object> parameters) {
         // http://stackoverflow.com/a/8757062/694640 want inner join is veel te traag door disk seek
         try (org.sql2o.Connection con = sql2o.open()) {
 
-            String query = "select rd.routeId as routeId, rd.provider as provider, max(FloorToNearest5min(rd.Timestamp)) as timestamp, rd.traveltime as traveltime "
+            String query = "select rd.id as id, rd.routeId as routeId, rd.provider as provider, max(FloorToNearest5min(rd.Timestamp)) as timestamp, " +
+                    "rd.traveltime as traveltime, rd.delay as delay "
                     + "from " + getTableName() + " rd ";
             if (condition != null) {
                 query += "where " + condition + " ";
@@ -62,12 +62,12 @@ public class RouteDataDbSet extends DbSet<RouteData> {
                 }
             }
 
-            List<RouteSummary> lst = q.executeAndFetch(RouteSummary.class);
+            List<RouteData> lst = q.executeAndFetch(RouteData.class);
             return lst;
         }
     }
 
-    public List<RouteSummary> getMostRecentSummaryForRoute(int id) {
+    public List<RouteData> getMostRecentSummaryForRoute(int id) {
         Map<String, Object> params = new HashMap<>();
         params.put("RouteId", id);
         return getMostRecentSummaries("RouteId = :RouteId", params);

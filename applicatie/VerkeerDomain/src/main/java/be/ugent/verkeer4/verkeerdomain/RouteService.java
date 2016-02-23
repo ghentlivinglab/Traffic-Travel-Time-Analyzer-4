@@ -1,9 +1,8 @@
 package be.ugent.verkeer4.verkeerdomain;
 
 import be.ugent.verkeer4.verkeerdomain.data.Route;
+import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
-import be.ugent.verkeer4.verkeerdomain.data.composite.RouteSummary;
-import be.ugent.verkeer4.verkeerdomain.provider.TomTomProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.CalculateRouteResponse;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Leg;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Point;
@@ -89,12 +88,12 @@ public class RouteService extends BaseService implements IRouteService {
     }
 
     @Override
-    public List<RouteSummary> getMostRecentRouteSummaries() {
+    public List<RouteData> getMostRecentRouteSummaries() {
         return repo.getRouteDataSet().getMostRecentSummaries();
     }
 
     @Override
-    public List<RouteSummary> getMostRecentRouteSummariesForRoute(int id) {
+    public List<RouteData> getMostRecentRouteSummariesForRoute(int id) {
         return repo.getRouteDataSet().getMostRecentSummaryForRoute(id);
     }
 

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import be.ugent.verkeer4.verkeerdomain.*;
 import be.ugent.verkeer4.verkeerdomain.data.*;
-import be.ugent.verkeer4.verkeerdomain.data.composite.*;
 import be.ugent.verkeer4.verkeerweb.dataobjects.*;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetails;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEdit;
@@ -35,7 +34,7 @@ public class RouteController {
         IRouteService routeService = new RouteService(); // eventueel dependency injection
         List<Route> lst = routeService.getRoutes();
 
-        List<RouteSummary> mostRecentRouteSummaries = routeService.getMostRecentRouteSummaries();
+        List<RouteData> mostRecentRouteSummaries = routeService.getMostRecentRouteSummaries();
         // TODO maak van routes een map van route viewmodels en overloop alle summaries en lookup route in de map om de recente gegevens aan te vullen
 
         RouteOverview overview = new RouteOverview();
@@ -49,16 +48,16 @@ public class RouteController {
             entries.put(r.getId(), entry);
         }
 
-        for (RouteSummary sum : mostRecentRouteSummaries) {
-            Map<ProviderEnum, RouteSummary> summaryPerProvider = entries.get(sum.getRouteId()).getRecentSummaries();
+        for (RouteData sum : mostRecentRouteSummaries) {
+            Map<ProviderEnum, RouteData> summaryPerProvider = entries.get(sum.getRouteId()).getRecentSummaries();
             summaryPerProvider.put(sum.getProvider(), sum);
         }
 
         for (Route r : lst) {
             RouteSummaryEntry entry =  entries.get(r.getId());
-            Map<ProviderEnum, RouteSummary> summaryPerProvider =entry.getRecentSummaries();
+            Map<ProviderEnum, RouteData> summaryPerProvider =entry.getRecentSummaries();
             
-            double delayPercentage = getTrafficDelayPercentage(r, summaryPerProvider.values().stream().toArray(RouteSummary[]::new));
+            double delayPercentage = getTrafficDelayPercentage(r, summaryPerProvider.values().stream().toArray(RouteData[]::new));
             double currentTravelTime = r.getDefaultTravelTime() * (1 + delayPercentage);
             double delay = currentTravelTime - r.getDefaultTravelTime();
             if(delay < 0)
@@ -76,23 +75,22 @@ public class RouteController {
 
     @RequestMapping(value = "route/detail", method = RequestMethod.GET)
     public ModelAndView getDetail(int id) throws ClassNotFoundException {
-
         IRouteService routeService = new RouteService();
         IProviderService providerService = new ProviderService(routeService);
-
         Route route = routeService.getRoute(id);
 
-        // TODO valid range
+        // TODO valid range en filter opties
         Calendar calendar = Calendar.getInstance();
-        Date end = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_MONTH, -30);
+        calendar.set(2016, 1, 0, 0, 0, 0);
         Date start = calendar.getTime();
+        calendar.set(2016, 1, 29, 23, 59, 59);
+        Date end = calendar.getTime();
 
         List<RouteData> data = providerService.getRouteDataForRoute(id, start, end);
-        RouteDetails detail = new RouteDetails(route, data);
+        List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
+        RouteDetails detail = new RouteDetails(route, data, summaries);
         ModelAndView model = new ModelAndView("route/detail");
         model.addObject("detail", detail);
-
         return model;
     }
 
@@ -203,8 +201,8 @@ public class RouteController {
         mr.setId(r.getId());
 
         // TODO delay berekenen op delay kolom in routedata
-        List<RouteSummary> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
-        double trafficDelayPercentage = getTrafficDelayPercentage(r, summaries.stream().toArray(RouteSummary[]::new));
+        List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
+        double trafficDelayPercentage = getTrafficDelayPercentage(r, summaries.stream().toArray(RouteData[]::new));
         mr.setTrafficDelayPercentage(trafficDelayPercentage);
         
         data.getRoutes().add(mr);
@@ -217,13 +215,13 @@ public class RouteController {
         return data;
     }
 
-    private double getTrafficDelayPercentage(Route r, RouteSummary[] summaries) {
+    private double getTrafficDelayPercentage(Route r, RouteData[] summaries) {
         // TODO move to route service?
         if (summaries.length <= 0) {
             return 0;
         }
 
-        int totalTravelTime = Arrays.stream(summaries).mapToInt(RouteSummary::getTravelTime).sum();
+        int totalTravelTime = Arrays.stream(summaries).mapToInt(RouteData::getTravelTime).sum();
         double avg = totalTravelTime / summaries.length;
 
         double percentage = (avg / r.getDefaultTravelTime()) - 1;
@@ -238,10 +236,10 @@ public class RouteController {
 
         MapData data = new MapData();
         Map<Integer, MapRoute> mapRoutesPerId = new HashMap<>();
-        Map<Integer, List<RouteSummary>> summariesPerRouteId = new HashMap<>();
+        Map<Integer, List<RouteData>> summariesPerRouteId = new HashMap<>();
 
-        for (RouteSummary summary : routeService.getMostRecentRouteSummaries()) {
-            List<RouteSummary> lst;
+        for (RouteData summary : routeService.getMostRecentRouteSummaries()) {
+            List<RouteData> lst;
             if (!summariesPerRouteId.containsKey(summary.getRouteId())) {
                 summariesPerRouteId.put(summary.getRouteId(), lst = new ArrayList<>());
             } else {
@@ -257,14 +255,14 @@ public class RouteController {
             mr.setDistance(r.getDistance());
             mr.setId(r.getId());
 
-            List<RouteSummary> routeSummaries;
+            List<RouteData> routeSummaries;
             if (!summariesPerRouteId.containsKey(r.getId())) {
                 routeSummaries = new ArrayList<>();
             } else {
                 routeSummaries = summariesPerRouteId.get(r.getId());
             }
 
-            double traficDelayPercentage = getTrafficDelayPercentage(r, routeSummaries.stream().toArray(RouteSummary[]::new));
+            double traficDelayPercentage = getTrafficDelayPercentage(r, routeSummaries.stream().toArray(RouteData[]::new));
             mr.setTrafficDelayPercentage(traficDelayPercentage);
 
             mapRoutesPerId.put(r.getId(), mr);
