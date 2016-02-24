@@ -1,0 +1,43 @@
+package be.ugent.verkeer4.verkeerpollservice;
+
+import be.ugent.verkeer4.verkeerdomain.IProviderService;
+import be.ugent.verkeer4.verkeerdomain.IRouteService;
+import be.ugent.verkeer4.verkeerdomain.ProviderService;
+import be.ugent.verkeer4.verkeerdomain.RouteService;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Main {
+
+    private static final int EVERY_MILLIS = 300000;
+    
+    public static void main(String[] args) throws ClassNotFoundException {
+
+        IRouteService routeService = new RouteService();
+        IProviderService providerService = new ProviderService(routeService);
+
+        long curTime = new Date().getTime() - EVERY_MILLIS;
+
+        while (true) {
+
+            if (new Date().getTime() - curTime > EVERY_MILLIS) {
+                curTime = new Date().getTime();
+                
+                try {
+                    Logger.getLogger(Main.class.getName()).log(Level.INFO, "Starting poll..");
+                    providerService.poll();
+                } catch (Exception ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+    }
+}

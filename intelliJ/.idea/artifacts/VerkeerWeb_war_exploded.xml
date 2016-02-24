@@ -1,0 +1,64 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="VerkeerWeb:war exploded">
+    <output-path>$PROJECT_DIR$/../applicatie/VerkeerWeb/target/VerkeerWeb-1.0-SNAPSHOT</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="VerkeerWeb" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: aopalliance:aopalliance:1.0" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aspects:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.7.4" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context-support:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.1.1" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-instrument:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-instrument-tomcat:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jms:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-messaging:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-orm:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-oxm:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-test:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-tx:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc-portlet:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-websocket:4.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.1" />
+          <element id="library" level="project" name="Maven: org.glassfish.web:javax.servlet.jsp.jstl:1.2.2" />
+          <element id="library" level="project" name="Maven: javax.servlet.jsp.jstl:jstl-api:1.2" />
+          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
+          <element id="library" level="project" name="Maven: javax.servlet.jsp:jsp-api:2.1" />
+          <element id="archive" name="VerkeerDomain-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="VerkeerDomain" />
+          </element>
+          <element id="archive" name="VerkeerDAL-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="VerkeerDAL" />
+          </element>
+          <element id="library" level="project" name="Maven: org.sql2o:sql2o:1.5.4" />
+          <element id="library" level="project" name="Maven: org.mariadb.jdbc:mariadb-java-client:1.3.4" />
+          <element id="library" level="project" name="Maven: com.squareup.retrofit2:retrofit:2.0.0-beta3" />
+          <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:3.0.0-RC1" />
+          <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.6.0" />
+          <element id="library" level="project" name="Maven: com.squareup.retrofit2:converter-gson:2.0.0-beta3" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.4" />
+          <element id="library" level="project" name="Maven: com.typesafe:config:1.3.0" />
+          <element id="archive" name="VerkeerDomain.Data-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="VerkeerDomain.Data" />
+          </element>
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/../applicatie/VerkeerWeb/target/VerkeerWeb-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="VerkeerWeb/web/Web" />
+    </root>
+  </artifact>
+</component>

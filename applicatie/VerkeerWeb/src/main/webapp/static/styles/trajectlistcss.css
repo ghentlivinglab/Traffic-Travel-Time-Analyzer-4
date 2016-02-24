@@ -1,0 +1,8 @@
+img.resize{
+    width:30px; /* you can use % */
+    height: auto;
+}
+
+th, td { 
+    text-align:center;
+}

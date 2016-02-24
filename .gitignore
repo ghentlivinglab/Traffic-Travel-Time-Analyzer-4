@@ -1,0 +1,8 @@
+/applicatie/VerkeerWeb/target/
+/applicatie/VerkeerDomain.Data/target/
+/applicatie/VerkeerDAL/nbproject/
+/applicatie/VerkeerDAL/target/
+/applicatie/VerkeerDomain/target/
+/applicatie/VerkeerDomain/nbproject/
+/applicatie/VerkeerDomain/src/main/resources/database-dev.conf
+/applicatie/VerkeerPollService/target/
