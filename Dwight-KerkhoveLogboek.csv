@@ -36,3 +36,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 22/02/16,17:30,18:30,Thuis,"Be-mobile scraper in Perl geschreven (zonder API key)",,
 22/02/16,18:30,20:00,Thuis,"Coyote scraper in Perl geschreven",,
 22/02/16,20:00,21:30,Thuis,"Scrapers compatibel gemaakt met windows en geintegreerd in java project",,
+24/02/16,08:00,11:00,Thuis,"Productie omgeving opgezet en scraper wijzigingen tot wanneer alles werkte in productie",,
