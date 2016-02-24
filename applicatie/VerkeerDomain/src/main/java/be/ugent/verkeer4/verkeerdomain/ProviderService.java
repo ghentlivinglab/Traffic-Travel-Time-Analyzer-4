@@ -71,7 +71,8 @@ public class ProviderService extends BaseService implements IProviderService {
             }
         }));
 
-        for (Route route : routeService.getRoutes()) {
+        List<Route> routes = routeService.getRoutes();
+        for (Route route : routes) {
             Route r = route; // CLOSURE!
             long curTime = new Date().getTime();
             for (IProvider prov : perRouteProviders) {
@@ -92,7 +93,7 @@ public class ProviderService extends BaseService implements IProviderService {
             // block until everything is finished
             for (Future future : futures) {
                 try {
-                    future.get(30, TimeUnit.SECONDS);
+                    future.get(60, TimeUnit.SECONDS);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {

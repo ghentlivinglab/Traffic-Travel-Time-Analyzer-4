@@ -40,12 +40,12 @@ public class PollTest {
     public void tearDown() {
     }
 
-  
-     @Test
-    public void testPoll() throws ClassNotFoundException {
-         IRouteService routeService = new RouteService();
-         IProviderService providerService = new ProviderService(routeService);
-         
-         providerService.poll();
-    }
+//  
+//     @Test
+//    public void testPoll() throws ClassNotFoundException {
+//         IRouteService routeService = new RouteService();
+//         IProviderService providerService = new ProviderService(routeService);
+//         
+//         providerService.poll();
+//    }
 }
