@@ -31,14 +31,14 @@
                                 <c:forEach var="data" items="${detail.summaries}">
                                     <tr>
                                         <td>${data.provider}</td>
-                                        <td>${data.travelTime}</td>
-                                        <td><span class="label label-warning">${data.delay}</span></td>
+                                        <td><span class="time" data-time=${data.travelTime}></span></td>
+                                        <td><span class="label label-warning time" data-time=${data.delay}></span></td>
                                     </tr>
                                 </c:forEach>
                             </table>
                         </div>
                         <dt>Normale reistijd</dt>
-                        <dd>${detail.defaultTravelTime} seconden</dd>
+                        <dd><span class="humanize" data-time=${detail.defaultTravelTime}></span></dd>
                         <dt>Afstand</dt>
                         <dd>${detail.distance} meter</dd>
                         <dt>Vanaf</dt>
