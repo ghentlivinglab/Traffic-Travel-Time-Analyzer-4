@@ -25,6 +25,7 @@
         <module name="VerkeerDAL" />
         <module name="VerkeerDomain" />
         <module name="VerkeerDomain.Data" />
+        <module name="VerkeerPollService" />
       </profile>
       <profile default="false" name="Annotation profile for VerkeerWeb" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -38,6 +39,7 @@
       <module name="VerkeerDAL" target="1.8" />
       <module name="VerkeerDomain" target="1.8" />
       <module name="VerkeerDomain.Data" target="1.8" />
+      <module name="VerkeerPollService" target="1.8" />
       <module name="VerkeerWeb" target="1.8" />
     </bytecodeTargetLevel>
   </component>

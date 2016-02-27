@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/../applicatie/VerkeerDAL/VerkeerDAL.iml" filepath="$PROJECT_DIR$/../applicatie/VerkeerDAL/VerkeerDAL.iml" />
       <module fileurl="file://$PROJECT_DIR$/../applicatie/VerkeerDomain/VerkeerDomain.iml" filepath="$PROJECT_DIR$/../applicatie/VerkeerDomain/VerkeerDomain.iml" />
       <module fileurl="file://$PROJECT_DIR$/../applicatie/VerkeerDomain.Data/VerkeerDomain.Data.iml" filepath="$PROJECT_DIR$/../applicatie/VerkeerDomain.Data/VerkeerDomain.Data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../applicatie/VerkeerPollService/VerkeerPollService.iml" filepath="$PROJECT_DIR$/../applicatie/VerkeerPollService/VerkeerPollService.iml" />
       <module fileurl="file://$PROJECT_DIR$/../applicatie/VerkeerWeb/VerkeerWeb.iml" filepath="$PROJECT_DIR$/../applicatie/VerkeerWeb/VerkeerWeb.iml" />
     </modules>
   </component>
