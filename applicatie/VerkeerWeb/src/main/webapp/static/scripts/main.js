@@ -33,7 +33,7 @@ function secondsToText(seconds){
 function humanizeSeconds() {
     var tag = $(".humanize")
     for (var i = 0; i < tag.length; i++) {
-        var milliSec = parseInt($(tag[i]).attr("data-time")) * 100; //works with millisec only
+        var milliSec = parseInt($(tag[i]).attr("data-time")) * 1000; //works with millisec only
         var humanTime = humanizeDuration(milliSec, {language: 'nl'});
         $(tag[i]).text(humanTime);
     }
