@@ -2,8 +2,7 @@ package be.ugent.verkeer4.verkeerweb;
 
 import java.util.List;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import be.ugent.verkeer4.verkeerdomain.*;
 import be.ugent.verkeer4.verkeerdomain.data.*;
@@ -21,9 +20,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class RouteController {
@@ -89,6 +85,16 @@ public class RouteController {
         model.addObject("overview", overview);
 
         return model;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "route/routedata", method = RequestMethod.GET)
+    public List<RouteData> ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
+            throws ClassNotFoundException {
+        IRouteService routeService = new RouteService();
+        IProviderService providerService = new ProviderService(routeService);
+        List<RouteData> data = providerService.getRouteDataForRoute(id, startDate, endDate);
+       return data;
     }
 
     @RequestMapping(value = "route/detail", method = RequestMethod.GET)

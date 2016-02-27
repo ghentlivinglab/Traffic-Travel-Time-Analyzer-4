@@ -63,7 +63,7 @@
                 <div class="col-md-6">
                     <label>Begindatum</label>
                     <div class="form-group">
-                        <div class='input-group date' id='datetimepicker1'>
+                        <div class='input-group date' id='datetimepicker-begin'>
                             <input type='text' class="form-control"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -74,7 +74,7 @@
                 <div class="col-md-6">
                     <label>Einddatum</label>
                     <div class="form-group">
-                        <div class='input-group date' id='datetimepicker2'>
+                        <div class='input-group date' id='datetimepicker-end'>
                             <input type='text' class="form-control"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -82,6 +82,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="panel-footer">
+                <button id="update-btn" type="button" class="btn btn-primary">Update</button>
             </div>
         </div>
     </div>
@@ -95,16 +98,17 @@
                     <script src="<c:url value="/static/scripts/route/detail/chart.js" />"></script>
                     <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
                 </div>
-                <table class="table table-striped table-condensed">
+                <table id="data-table" class="table table-striped table-condensed">
                     <thead>
                     <tr>
                         <th>Datum</th>
                         <th>Tijd</th>
                         <th>Provider</th>
-                        <th>Reistijd (seconden)</th>
-                        <th>Vertraging (seconden)</th>
+                        <th>Reistijd</th>
+                        <th>Vertraging</th>
                     </tr>
                     </thead>
+                    <tbody id="data-table-body"></tbody>
                 </table>
             </div>
         </div>
