@@ -17,7 +17,7 @@ public class RouteSummaryEntry {
 
     public RouteSummaryEntry() {
         recentSummaries = new HashMap<>();
-        
+
         // TODO!
         trafficPercentage = Math.random();
     }
@@ -66,13 +66,14 @@ public class RouteSummaryEntry {
         } else {
             // TODO aanpassen naar .getDelay()!
             double delay = recentSummaries.get(prov).getTravelTime() - this.route.getDefaultTravelTime();
-            if(delay < 0)
+            if (delay < 0) {
                 delay = 0;
+            }
             return delay;
         }
     }
 
-      public double getTrafficPercentageForProvider(int provider) {
+    public double getTrafficPercentageForProvider(int provider) {
         ProviderEnum prov = ProviderEnum.values()[provider];
         if (!recentSummaries.containsKey(prov)) {
             return 0;
@@ -82,8 +83,6 @@ public class RouteSummaryEntry {
         }
     }
 
-    
-    
     /**
      * @return the averageCurrentTravelTime
      */
