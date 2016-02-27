@@ -20,23 +20,24 @@
             <div class="panel-body">
                 <div class="col-md-4">
                     <dl>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Huidige reistijd</div>
-                            <table class="table table-hover">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Provider</th>
+                                <th>Reistijd</th>
+                                <th>Vertraging</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="data" items="${detail.summaries}">
                                 <tr>
-                                    <th>Provider</th>
-                                    <th>Reistijd (s)</th>
-                                    <th>Vertraging (s)</th>
+                                    <td>${data.provider}</td>
+                                    <td><span class="time" data-time=${data.travelTime}></span></td>
+                                    <td><span class="label label-warning time" data-time=${data.delay}></span></td>
                                 </tr>
-                                <c:forEach var="data" items="${detail.summaries}">
-                                    <tr>
-                                        <td>${data.provider}</td>
-                                        <td><span class="time" data-time=${data.travelTime}></span></td>
-                                        <td><span class="label label-warning time" data-time=${data.delay}></span></td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
-                        </div>
+                            </c:forEach>
+                            </tbody>
+                        </table>
                         <dt>Normale reistijd</dt>
                         <dd><span class="humanize" data-time=${detail.defaultTravelTime}></span></dd>
                         <dt>Afstand</dt>
@@ -98,7 +99,7 @@
                     <script src="<c:url value="/static/scripts/route/detail/chart.js" />"></script>
                     <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
                 </div>
-                <table id="data-table" class="table table-striped table-condensed">
+                <table id="data-table" class="table table-striped table-condensed sortable">
                     <thead>
                     <tr>
                         <th>Datum</th>

@@ -35,11 +35,11 @@ $(function () {
                 }
             })
             .done(function (routeData) {
-                setTableData("#data-table-body", routeData)
+                setTableData("#data-table", "#data-table-body", routeData)
             });
     }
 
-    function setTableData(tableBodyId, routeData) {
+    function setTableData(tableId, tableBodyId, routeData) {
         $(tableBodyId).empty();
         routeData.forEach(function (ele) {
             var date = new Date(ele.timestamp);
@@ -49,9 +49,13 @@ $(function () {
                 + "<td>" + ele.provider + "</td>"
                 + "<td>" + secondsToText(ele.travelTime) + "</td>"
                 + "<td><span class='label label-warning'>" + secondsToText(ele.delay) + "</span></td>"
-                + "</tr>"
+                + "</tr>";
             $(tableBodyId).append(row);
         });
+        // Make sure to refresh sort again
+        $(tableId).trigger("update");
+        // set sorting column and direction
+        var sorting = [[0, 0], [1, 0], [2, 0]];
+        $(tableId).trigger("sorton", [sorting]);
     }
 });
-
