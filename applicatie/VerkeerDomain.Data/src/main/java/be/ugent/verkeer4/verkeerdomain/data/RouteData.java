@@ -10,7 +10,6 @@ public class RouteData {
     private int travelTime;
     private int delay;
     private int distance;
-
     private Date timestamp;
 
     /**
