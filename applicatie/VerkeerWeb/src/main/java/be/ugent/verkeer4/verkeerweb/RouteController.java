@@ -94,19 +94,10 @@ public class RouteController {
     @RequestMapping(value = "route/detail", method = RequestMethod.GET)
     public ModelAndView getDetail(int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IProviderService providerService = new ProviderService(routeService);
         Route route = routeService.getRoute(id);
 
-        // TODO valid range en filter opties
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2016, 1, 0, 0, 0, 0);
-        Date start = calendar.getTime();
-        calendar.set(2016, 1, 29, 23, 59, 59);
-        Date end = calendar.getTime();
-
-        List<RouteData> data = providerService.getRouteDataForRoute(id, start, end);
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
-        RouteDetails detail = new RouteDetails(route, data, summaries);
+        RouteDetails detail = new RouteDetails(route, summaries);
         ModelAndView model = new ModelAndView("route/detail");
         model.addObject("detail", detail);
         return model;

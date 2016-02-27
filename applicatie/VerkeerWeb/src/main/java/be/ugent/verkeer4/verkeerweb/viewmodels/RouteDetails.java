@@ -13,14 +13,12 @@ public class RouteDetails {
     private String fromAddress;
     private String toAddress;
     private double defaultTravelTime;
-    private List<RouteData> data;
     private List<RouteData> summaries;
 
-    public RouteDetails(Route route, List<RouteData> data, List<RouteData> summaries) {
+    public RouteDetails(Route route, List<RouteData> summaries) {
         setId(route.getId());
         setName(route.getName());
         setDistance(route.getDistance());
-        setData(data);
         setFromAddress(route.getFromAddress());
         setToAddress(route.getToAddress());
         setDefaultTravelTime(route.getDefaultTravelTime());
@@ -67,20 +65,6 @@ public class RouteDetails {
      */
     public void setDistance(double distance) {
         this.distance = distance;
-    }
-
-    /**
-     * @return the data
-     */
-    public List<RouteData> getData() {
-        return data;
-    }
-
-    /**
-     * @param data the data to set
-     */
-    public void setData(List<RouteData> data) {
-        this.data = data;
     }
 
     public String getFromAddress() {

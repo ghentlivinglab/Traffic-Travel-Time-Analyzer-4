@@ -105,17 +105,6 @@
                         <th>Vertraging (seconden)</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <c:forEach var="data" items="${detail.data}">
-                        <tr>
-                            <td><fmt:formatDate pattern="dd/MM/yyyy" value="${data.timestamp}"/></td>
-                            <td><fmt:formatDate pattern="HH:mm:ss" value="${data.timestamp}"/></td>
-                            <td> ${data.provider} </td>
-                            <td> ${data.travelTime} </td>
-                            <td><span class="label label-warning">${data.delay}</span></td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
                 </table>
             </div>
         </div>
