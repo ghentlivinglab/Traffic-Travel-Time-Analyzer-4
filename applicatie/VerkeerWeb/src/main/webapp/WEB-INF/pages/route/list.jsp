@@ -16,6 +16,7 @@
         <div class="container">
             <h1>Traject Overzicht</h1>
 
+            <span>Laatste gegevens van ${overview.recentRouteDateFrom}</span>
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item active">
                     <a class="nav-link active" data-toggle="tab" href="#summary" role="tab">Samenvatting</a>
@@ -64,7 +65,7 @@
                                         </span>                                        
                                     </td>
                                     <td>
-                                        <div class="cell-background" style="opacity: ${routeSummaryEntry.trafficPercentage}">
+                                        <div class="cell-background" style="opacity: ${routeSummaryEntry.trafficDelayPercentage}">
                                         </div>                                                                                
                                         <span class="time" data-time="${routeSummaryEntry.delay}">
                                             ${routeSummaryEntry.delay}
