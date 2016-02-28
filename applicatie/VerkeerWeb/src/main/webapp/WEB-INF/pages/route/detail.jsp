@@ -96,7 +96,6 @@
             </div>
             <div class="panel-body">
                 <div class="container">
-                    <script src="<c:url value="/static/scripts/route/detail/chart.js" />"></script>
                     <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
                 </div>
                 <table id="data-table" class="table table-striped table-condensed sortable">
