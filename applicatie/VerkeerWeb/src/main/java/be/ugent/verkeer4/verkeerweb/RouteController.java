@@ -32,7 +32,7 @@ public class RouteController {
     public ModelAndView getList() throws ClassNotFoundException {
 
         IRouteService routeService = new RouteService(); // eventueel dependency injection
-        
+
         // haal routes op
         List<Route> lst = routeService.getRoutes();
 
@@ -55,10 +55,10 @@ public class RouteController {
 
         Date maxDate = mostRecentRouteSummaries.stream().map(rs -> rs.getTimestamp()).max(Date::compareTo).get();
         overview.setRecentRouteDateFrom(maxDate);
-        
+
         // overloop alle recente route data en steek vul de routesummaryentry object aan
         for (RouteData sum : mostRecentRouteSummaries) {
-            
+
             Map<ProviderEnum, RouteData> summaryPerProvider = entries.get(sum.getRouteId()).getRecentSummaries();
             summaryPerProvider.put(sum.getProvider(), sum);
         }
@@ -94,7 +94,9 @@ public class RouteController {
     @RequestMapping(value = "route/detail", method = RequestMethod.GET)
     public ModelAndView getDetail(int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IProviderService providerService = new ProviderService(routeService);
+        IPOIService poiService = new POIService();
+        IProviderService providerService = new ProviderService(routeService, poiService);
+
         Route route = routeService.getRoute(id);
 
         // TODO valid range en filter opties
@@ -254,6 +256,8 @@ public class RouteController {
 
     private MapData getAllRouteMapData() throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
+        IPOIService poiService = new POIService();
+        
         List<Route> routes = routeService.getRoutes();
 
         List<RouteWaypoint> waypoints = routeService.getRouteWaypoints();
@@ -273,6 +277,17 @@ public class RouteController {
             lst.add(summary);
         }
 
+        List<POI> pois = poiService.getActivePOIs();
+        // TODO group pois on same location
+        for (POI poi : pois) {
+            MapPOI mp = new MapPOI();
+            mp.setId(poi.getId());
+            mp.setLatitude(poi.getLatitude());
+            mp.setLongitude(poi.getLongitude());
+            mp.setInfo(poi.getInfo());
+            data.getPois().add(mp);
+        }
+        
         for (Route r : routes) {
             MapRoute mr = new MapRoute();
             mr.setName(r.getName());

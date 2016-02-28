@@ -4,10 +4,13 @@
  * and open the template in the editor.
  */
 
+import be.ugent.verkeer4.verkeerdomain.IPOIService;
 import be.ugent.verkeer4.verkeerdomain.IProviderService;
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
+import be.ugent.verkeer4.verkeerdomain.POIService;
 import be.ugent.verkeer4.verkeerdomain.ProviderService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
+import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -48,4 +51,15 @@ public class PollTest {
 //         
 //         providerService.poll();
 //    }
+    
+      
+     @Test
+    public void testPollPOI() throws ClassNotFoundException {
+         IRouteService routeService = new RouteService();
+         IPOIService poiService = new POIService();
+         IProviderService providerService = new ProviderService(routeService, poiService);
+         
+         BoundingBox bbox = routeService.getBoundingBoxOfAllRoutes();
+         providerService.pollPOI(bbox);
+    }
 }

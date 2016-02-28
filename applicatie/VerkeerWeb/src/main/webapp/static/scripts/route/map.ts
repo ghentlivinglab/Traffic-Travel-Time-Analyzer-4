@@ -9,7 +9,15 @@ namespace MapManagement {
 
     interface MapData {
         routes: MapRoute[];
+        pois: MapPOI[];
     }
+    interface MapPOI {
+        id:number;
+        info:string;
+        latitude:number;
+        longitude:number;
+    }
+    
     interface MapRoute {
         id: number;
         name: string;
@@ -26,9 +34,15 @@ namespace MapManagement {
         constructor(public layer: L.Path, public route: MapRoute, public points: L.LatLng[]) { }
     }
 
+   class LeafletMapPOI {
+       constructor(public layer: L.Circle, public poi: MapPOI, public point: L.LatLng) { }
+   }
+   
     class MapManager {
 
         private leafletMapRouteById = {};
+        private leafletMapPOIById = {};
+        
         private map: L.Map;
 
         constructor(private mapElementId: string) {
@@ -66,7 +80,34 @@ namespace MapManagement {
                 llmr.layer.redraw();
             }
         }
+        
+        protected showPOI(p: MapPOI) {
+            let llmp: LeafletMapPOI;
+            if (!this.leafletMapPOIById[p.id]) {
 
+                let latLng = new L.LatLng(p.latitude,p.longitude);
+
+                let color = "blue";
+
+                let circle = L.circle(latLng, 10, { color: color, });
+
+                this.initializePOIPopup(circle, p);
+              
+                this.map.addLayer(circle, false);
+                llmp = new LeafletMapPOI(circle, p, latLng);
+                this.leafletMapRouteById[p.id] = llmp;
+            }
+            else {
+                // already exists, update layer
+                llmp = this.leafletMapRouteById[p.id];
+                llmp.layer.redraw();
+            }
+        }
+       
+        private initializePOIPopup(circle: L.Circle, poi: MapPOI) {
+            circle.bindPopup(`${poi.info}`, {});
+        }
+        
         centerMap(): void {
             let allPoints: L.LatLng[] = [];
             for (let id in this.leafletMapRouteById) {
@@ -142,6 +183,7 @@ namespace MapManagement {
                 dataType: "json",
                 success: (data: MapData) => {
                     this.showRoutes(data);
+                    this.showPOIs(data);
                     this.centerMap();
                 },
             });
@@ -151,6 +193,11 @@ namespace MapManagement {
             for (let r of data.routes) {
                 this.showRoute(r);
             }
+        }
+        
+        private showPOIs(data:MapData) {
+            for(let p of data.pois)
+                this.showPOI(p);
         }
     }
 

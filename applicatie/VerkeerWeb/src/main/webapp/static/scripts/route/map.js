@@ -13,10 +13,19 @@ var MapManagement;
         }
         return LeafletMapRoute;
     })();
+    var LeafletMapPOI = (function () {
+        function LeafletMapPOI(layer, poi, point) {
+            this.layer = layer;
+            this.poi = poi;
+            this.point = point;
+        }
+        return LeafletMapPOI;
+    })();
     var MapManager = (function () {
         function MapManager(mapElementId) {
             this.mapElementId = mapElementId;
             this.leafletMapRouteById = {};
+            this.leafletMapPOIById = {};
             this.initialize();
         }
         MapManager.prototype.initialize = function () {
@@ -42,6 +51,26 @@ var MapManagement;
                 llmr.layer.setStyle({ fillColor: MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage) });
                 llmr.layer.redraw();
             }
+        };
+        MapManager.prototype.showPOI = function (p) {
+            var llmp;
+            if (!this.leafletMapPOIById[p.id]) {
+                var latLng = new L.LatLng(p.latitude, p.longitude);
+                var color = "blue";
+                var circle = L.circle(latLng, 10, { color: color });
+                this.initializePOIPopup(circle, p);
+                this.map.addLayer(circle, false);
+                llmp = new LeafletMapPOI(circle, p, latLng);
+                this.leafletMapRouteById[p.id] = llmp;
+            }
+            else {
+                // already exists, update layer
+                llmp = this.leafletMapRouteById[p.id];
+                llmp.layer.redraw();
+            }
+        };
+        MapManager.prototype.initializePOIPopup = function (circle, poi) {
+            circle.bindPopup("" + poi.info, {});
         };
         MapManager.prototype.centerMap = function () {
             var allPoints = [];
@@ -113,6 +142,7 @@ var MapManagement;
                 dataType: "json",
                 success: function (data) {
                     _this.showRoutes(data);
+                    _this.showPOIs(data);
                     _this.centerMap();
                 }
             });
@@ -121,6 +151,12 @@ var MapManagement;
             for (var _i = 0, _a = data.routes; _i < _a.length; _i++) {
                 var r = _a[_i];
                 this.showRoute(r);
+            }
+        };
+        RemoteRouteManager.prototype.showPOIs = function (data) {
+            for (var _i = 0, _a = data.pois; _i < _a.length; _i++) {
+                var p = _a[_i];
+                this.showPOI(p);
             }
         };
         return RemoteRouteManager;

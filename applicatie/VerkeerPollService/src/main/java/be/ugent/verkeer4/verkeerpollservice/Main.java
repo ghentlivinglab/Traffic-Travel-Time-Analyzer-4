@@ -1,7 +1,9 @@
 package be.ugent.verkeer4.verkeerpollservice;
 
+import be.ugent.verkeer4.verkeerdomain.IPOIService;
 import be.ugent.verkeer4.verkeerdomain.IProviderService;
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
+import be.ugent.verkeer4.verkeerdomain.POIService;
 import be.ugent.verkeer4.verkeerdomain.ProviderService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
 import java.util.Date;
@@ -11,11 +13,12 @@ import java.util.logging.Logger;
 public class Main {
 
     private static final int EVERY_MILLIS = 300000;
-    
+
     public static void main(String[] args) throws ClassNotFoundException {
 
         IRouteService routeService = new RouteService();
-        IProviderService providerService = new ProviderService(routeService);
+        IPOIService poiService = new POIService();
+        IProviderService providerService = new ProviderService(routeService, poiService);
 
         long curTime = new Date().getTime() - EVERY_MILLIS;
 
@@ -23,7 +26,7 @@ public class Main {
 
             if (new Date().getTime() - curTime > EVERY_MILLIS) {
                 curTime = new Date().getTime();
-                
+
                 try {
                     Logger.getLogger(Main.class.getName()).log(Level.INFO, "Starting poll..");
                     providerService.poll();
