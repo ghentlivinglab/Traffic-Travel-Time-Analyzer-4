@@ -57,7 +57,7 @@ var MapManagement;
             if (!this.leafletMapPOIById[p.id]) {
                 var latLng = new L.LatLng(p.latitude, p.longitude);
                 var color = "blue";
-                var circle = L.circle(latLng, 10, { color: color });
+                var circle = L.circle(latLng, 30, { color: color });
                 this.initializePOIPopup(circle, p);
                 this.map.addLayer(circle, false);
                 llmp = new LeafletMapPOI(circle, p, latLng);

@@ -89,7 +89,7 @@ namespace MapManagement {
 
                 let color = "blue";
 
-                let circle = L.circle(latLng, 10, { color: color, });
+                let circle = L.circle(latLng, 30, { color: color, });
 
                 this.initializePOIPopup(circle, p);
               
