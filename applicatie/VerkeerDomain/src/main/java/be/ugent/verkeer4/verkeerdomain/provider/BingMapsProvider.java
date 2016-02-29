@@ -40,14 +40,15 @@ public class BingMapsProvider extends BaseProvider implements IProvider {
                 //Data word gereturned als een Double en niet als een double
                 //Double kan niet rechtstreeks gecast worden naar een int, maar double wel
                 //daarom eerst omzetten naar double en dan naar int.
+                
                 int distance = (int) ((double) bingResource.getTravelDistance());
                 
                 //vertraging is de tijd met verkeer - de berekende tijd
-                int delay = bingResource.getTravelDurationTraffic() - bingResource.getTravelDuration();
+                int delay = (int) (bingResource.getTravelDurationTraffic() - bingResource.getTravelDuration());
                 
                 RouteData rd = setRouteData(route,
                         distance,
-                        bingResource.getTravelDurationTraffic(),
+                        (int) bingResource.getTravelDurationTraffic(),
                         delay);
 
                 return rd;
