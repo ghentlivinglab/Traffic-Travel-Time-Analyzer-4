@@ -12,3 +12,6 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 23/02/16,08:15,12:15,School,"Scrum meeting, taakverdeling en zelfstandig verder werken",27,
 23/02/16,14:45,15:30,School,Algemene trajectinfo afgewerkt en RouteSummary vervangen door RouteData,27,
 23/02/16,21:00,22:00,Thuis,"Kalender en table afgewerkt, plus algemene structuur",27,
+27/02/2016,12:00,19:00,Thuis,"RouteData niet meer via JSP, maar AJAX calls. Filter in order gebracht. Datum en tijd wordt goed geformatteerd. Issues 48-51 gemaakt.",27,Issue 27 was te groot en moest opgedeeld geweest zijn.
+28/02/16,21:00,00:00,Thuis,"Tabel sortable gemaakt, kleine UI change en kleine bugfix. Grafiek is nu ook dynamisch.",27,
+29/02/16,21:00,22:00,Thuis,Assen van de grafiek in orde gebracht.,27,
