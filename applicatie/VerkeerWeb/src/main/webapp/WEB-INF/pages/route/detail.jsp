@@ -20,25 +20,26 @@
             <div class="panel-body">
                 <div class="col-md-4">
                     <dl>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Huidige reistijd</div>
-                            <table class="table table-hover">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Provider</th>
+                                <th>Reistijd</th>
+                                <th>Vertraging</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="data" items="${detail.summaries}">
                                 <tr>
-                                    <th>Provider</th>
-                                    <th>Reistijd (s)</th>
-                                    <th>Vertraging (s)</th>
+                                    <td>${data.provider}</td>
+                                    <td><span class="time" data-time=${data.travelTime}></span></td>
+                                    <td><span class="label label-warning time" data-time=${data.delay}></span></td>
                                 </tr>
-                                <c:forEach var="data" items="${detail.summaries}">
-                                    <tr>
-                                        <td>${data.provider}</td>
-                                        <td>${data.travelTime}</td>
-                                        <td><span class="label label-warning">${data.delay}</span></td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
-                        </div>
+                            </c:forEach>
+                            </tbody>
+                        </table>
                         <dt>Normale reistijd</dt>
-                        <dd>${detail.defaultTravelTime} seconden</dd>
+                        <dd><span class="humanize" data-time=${detail.defaultTravelTime}></span></dd>
                         <dt>Afstand</dt>
                         <dd>${detail.distance} meter</dd>
                         <dt>Vanaf</dt>
@@ -63,7 +64,7 @@
                 <div class="col-md-6">
                     <label>Begindatum</label>
                     <div class="form-group">
-                        <div class='input-group date' id='datetimepicker1'>
+                        <div class='input-group date' id='datetimepicker-begin'>
                             <input type='text' class="form-control"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -74,7 +75,7 @@
                 <div class="col-md-6">
                     <label>Einddatum</label>
                     <div class="form-group">
-                        <div class='input-group date' id='datetimepicker2'>
+                        <div class='input-group date' id='datetimepicker-end'>
                             <input type='text' class="form-control"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -82,6 +83,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="panel-footer">
+                <button id="update-btn" type="button" class="btn btn-primary">Update</button>
             </div>
         </div>
     </div>
@@ -92,30 +96,19 @@
             </div>
             <div class="panel-body">
                 <div class="container">
-                    <script src="<c:url value="/static/scripts/route/detail/chart.js" />"></script>
                     <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
                 </div>
-                <table class="table table-striped table-condensed">
+                <table id="data-table" class="table table-striped table-condensed sortable">
                     <thead>
                     <tr>
                         <th>Datum</th>
                         <th>Tijd</th>
                         <th>Provider</th>
-                        <th>Reistijd (seconden)</th>
-                        <th>Vertraging (seconden)</th>
+                        <th>Reistijd</th>
+                        <th>Vertraging</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <c:forEach var="data" items="${detail.data}">
-                        <tr>
-                            <td><fmt:formatDate pattern="dd/MM/yyyy" value="${data.timestamp}"/></td>
-                            <td><fmt:formatDate pattern="HH:mm:ss" value="${data.timestamp}"/></td>
-                            <td> ${data.provider} </td>
-                            <td> ${data.travelTime} </td>
-                            <td><span class="label label-warning">${data.delay}</span></td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
+                    <tbody id="data-table-body"></tbody>
                 </table>
             </div>
         </div>
