@@ -28,12 +28,16 @@ public class BingMapsClient {
         
         BingRoutingService service = retrofit.create(BingRoutingService.class);
         
-        BingClient client = null;
-        try{
-            client =  service.calculateRoute(api_key, waypoint0, waypoint1).execute().body();
-        } catch(Exception ex){
-            Logger.getLogger(BingMapsClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        /*Benodigde parameters bij BingMaps API
+        Key
+        Waypoint 0
+        Waypoint 1
+        De travelmode is by default Driving
+        optimize is by default de snelste route
+        viaWaypoint.n vwp.n => extra waypoints toevoegen als de route niet correct is
+        */
+        BingClient client =  service.calculateRoute(api_key, waypoint0, waypoint1).execute().body();
+
 
         return client.getResourceSets().get(0);
     }    
