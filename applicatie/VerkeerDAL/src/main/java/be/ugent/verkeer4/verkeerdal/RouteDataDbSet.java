@@ -26,7 +26,8 @@ public class RouteDataDbSet extends DbSet<RouteData> {
     public List<RouteData> getRouteDataAlignedTo5min(String condition, Map<String, Object> parameters) {
 
         try (org.sql2o.Connection con = sql2o.open()) {
-            Query q = con.createQuery("select rd.id as id, rd.routeId as routeId, rd.provider as provider, FloorToNearest5min(rd.Timestamp) as timestamp, rd.traveltime as traveltime "
+            Query q = con.createQuery("select rd.id as id, rd.routeId as routeId, rd.provider as provider, " +
+                    "FloorToNearest5min(rd.Timestamp) as timestamp, rd.traveltime as traveltime, rd.delay as delay "
                     + "from " + getTableName() + " rd "
                     + "where " + condition);
 
