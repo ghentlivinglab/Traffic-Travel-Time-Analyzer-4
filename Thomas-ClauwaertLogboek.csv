@@ -18,3 +18,6 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 23/02/16,20:00,23:30,Thuis,"Reverse trajecten fix + Deployen + Backgroundpolling",#14 en #37,
 28/02/16,14:00,15:00,Thuis,"Enkele testopstelling om load te verminderen, oa. tomcat geprobeerd",,
 28/02/16,20:00,23:00,Thuis,"Analyse/Documentatie + alternatieven voor overzichtstabel (eig. 29/02)",#6 en #14 en #16,
+01/03/16,08:15,12:30,School,"Stand-up, einde sprint 1, documentatie en analyse discussie",,
+01/03/16,15:00,15:30,School,"Analyse, projectdossier voorbereiding",#57,
+01/03/16,20:30,23:30,School,"Use case diagram, use cases, NFRs, start klassendiagram",#57,
