@@ -12,5 +12,5 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 21/02/16,15:00,17:00,Thuis,"Bekijken JSON2Pojo; En huidige implementatie providers in het project",8,
 23/02/16,08:15,12:30,School,"Standup meeting, issues besproken, HereMaps provider afgewerkt en getest, issues verder verdeeld",,
 23/02/16,14:45,15:45,School,"Eerste tests met de API van Bing Maps. API key aangevraagd van Bing Maps",42,
-25/02/16,15:00,15:30,School,"Videocall met Niels om te helpen met Google Maps provider implementatie in het project (Niels was enkele dagen afwezig wegens ziekte)",10,
-29/02/16,15:00,18:45,Thuis,"Implementatie van de Bing Maps provider adhv de Rest API, provider nog niet kunnen testen",42,
+25/02/16,15:00,15:45,School,"Videocall met Niels om te helpen met Google Maps provider implementatie in het project (Niels was enkele dagen afwezig wegens ziekte)",10,
+28/02/16,15:00,18:45,Thuis,"Implementatie van de Bing Maps provider adhv de Rest API, provider nog niet kunnen testen",42,
