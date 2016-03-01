@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<link rel="icon" href="<c:url value="/images/favicon.png" />">
 <link rel="stylesheet" href="<c:url value="/static/styles/bootstrap.css" />"/>
 <link rel="stylesheet" href="<c:url value="/static/styles/bootstrap-datetimepicker.css" />"/>
 <!-- voor jquery.tablesorter -->
