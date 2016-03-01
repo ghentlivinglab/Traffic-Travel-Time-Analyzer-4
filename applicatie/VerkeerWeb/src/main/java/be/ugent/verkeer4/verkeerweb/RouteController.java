@@ -2,12 +2,10 @@ package be.ugent.verkeer4.verkeerweb;
 
 import java.util.List;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import be.ugent.verkeer4.verkeerdomain.*;
 import be.ugent.verkeer4.verkeerdomain.data.*;
-import be.ugent.verkeer4.verkeerdomain.data.composite.*;
 import be.ugent.verkeer4.verkeerweb.dataobjects.*;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetails;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEdit;
@@ -22,9 +20,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class RouteController {
@@ -33,66 +28,84 @@ public class RouteController {
     public ModelAndView getList() throws ClassNotFoundException {
 
         IRouteService routeService = new RouteService(); // eventueel dependency injection
+        
+        // haal routes op
         List<Route> lst = routeService.getRoutes();
 
-        List<RouteSummary> mostRecentRouteSummaries = routeService.getMostRecentRouteSummaries();
-        // TODO maak van routes een map van route viewmodels en overloop alle summaries en lookup route in de map om de recente gegevens aan te vullen
+        // haal meest recentste gegevens op voor alle routes
+        List<RouteData> mostRecentRouteSummaries = routeService.getMostRecentRouteSummaries();
 
         RouteOverview overview = new RouteOverview();
 
+        // hou per route id een RouteSummaryEntry bij
         Map<Integer, RouteSummaryEntry> entries = new HashMap<>();
 
+        // overloop alle routes en maak een nieuw routeSummaryEntry en steek het in de entries map
         for (Route r : lst) {
             RouteSummaryEntry entry = new RouteSummaryEntry();
             entry.setRoute(r);
+
             overview.getSummaries().add(entry);
             entries.put(r.getId(), entry);
         }
 
-        for (RouteSummary sum : mostRecentRouteSummaries) {
-            Map<ProviderEnum, RouteSummary> summaryPerProvider = entries.get(sum.getRouteId()).getRecentSummaries();
+        Date maxDate = mostRecentRouteSummaries.stream().map(rs -> rs.getTimestamp()).max(Date::compareTo).get();
+        overview.setRecentRouteDateFrom(maxDate);
+        
+        // overloop alle recente route data en steek vul de routesummaryentry object aan
+        for (RouteData sum : mostRecentRouteSummaries) {
+            
+            Map<ProviderEnum, RouteData> summaryPerProvider = entries.get(sum.getRouteId()).getRecentSummaries();
             summaryPerProvider.put(sum.getProvider(), sum);
         }
 
+        // nu dat alle summary per provider per route entry toegevoegd zijn overlopen
+        // we nogmaals alle routes om de gemiddelden te berekenen
         for (Route r : lst) {
-            RouteSummaryEntry entry =  entries.get(r.getId());
-            Map<ProviderEnum, RouteSummary> summaryPerProvider =entry.getRecentSummaries();
-            
-            double delayPercentage = getTrafficDelayPercentage(r, summaryPerProvider.values().stream().toArray(RouteSummary[]::new));
-            double currentTravelTime = r.getDefaultTravelTime() * (1 + delayPercentage);
-            double delay = currentTravelTime - r.getDefaultTravelTime();
-            if(delay < 0)
-                delay = 0;
-            entry.setDelay(delay);
-            entry.setAverageCurrentTravelTime(currentTravelTime);
+            RouteSummaryEntry entry = entries.get(r.getId());
+            Map<ProviderEnum, RouteData> summaryPerProvider = entry.getRecentSummaries();
+
+            // bereken gemiddelde van delay
+            int totalDelay = summaryPerProvider.values().stream().mapToInt(RouteData::getDelay).sum();
+            double avgDelay = totalDelay / (float) summaryPerProvider.size();
+            entry.setDelay(avgDelay);
+
+            // bereken traffic delay percentage ( travelTime / baseTime) - 1
+            double delayPercentage = getTrafficDelayPercentage(r, summaryPerProvider.values().stream().toArray(RouteData[]::new));
+            entry.setTrafficDelayPercentage(delayPercentage);
+
+            // bereken gemiddelde travel time (met traffic)
+            int totalTravelTime = summaryPerProvider.values().stream().mapToInt(RouteData::getTravelTime).sum();
+            double avgCurrentTravelTime = totalTravelTime / (float) summaryPerProvider.size();
+            entry.setAverageCurrentTravelTime(avgCurrentTravelTime);
         }
 
+        // geef mee als model aan view
         ModelAndView model = new ModelAndView("route/list");
-
         model.addObject("overview", overview);
 
         return model;
     }
 
-    @RequestMapping(value = "route/detail", method = RequestMethod.GET)
-    public ModelAndView getDetail(int id) throws ClassNotFoundException {
-
+    @ResponseBody
+    @RequestMapping(value = "route/routedata", method = RequestMethod.GET)
+    public List<RouteData> ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
+            throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         IProviderService providerService = new ProviderService(routeService);
+        List<RouteData> data = providerService.getRouteDataForRoute(id, startDate, endDate);
+       return data;
+    }
 
+    @RequestMapping(value = "route/detail", method = RequestMethod.GET)
+    public ModelAndView getDetail(int id) throws ClassNotFoundException {
+        IRouteService routeService = new RouteService();
         Route route = routeService.getRoute(id);
 
-        // TODO valid range
-        Calendar calendar = Calendar.getInstance();
-        Date end = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_MONTH, -30);
-        Date start = calendar.getTime();
-
-        List<RouteData> data = providerService.getRouteDataForRoute(id, start, end);
-        RouteDetails detail = new RouteDetails(route, data);
+        List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
+        RouteDetails detail = new RouteDetails(route, summaries);
         ModelAndView model = new ModelAndView("route/detail");
         model.addObject("detail", detail);
-
         return model;
     }
 
@@ -203,10 +216,13 @@ public class RouteController {
         mr.setId(r.getId());
 
         // TODO delay berekenen op delay kolom in routedata
-        List<RouteSummary> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
-        double trafficDelayPercentage = getTrafficDelayPercentage(r, summaries.stream().toArray(RouteSummary[]::new));
+        List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
+        double trafficDelayPercentage = getTrafficDelayPercentage(r, summaries.stream().toArray(RouteData[]::new));
         mr.setTrafficDelayPercentage(trafficDelayPercentage);
-        
+
+        int totalDelay = summaries.stream().mapToInt(RouteData::getDelay).sum();
+        double avgDelay = totalDelay / (float) summaries.size();
+
         data.getRoutes().add(mr);
 
         for (RouteWaypoint waypoint : waypoints) {
@@ -217,16 +233,19 @@ public class RouteController {
         return data;
     }
 
-    private double getTrafficDelayPercentage(Route r, RouteSummary[] summaries) {
+    private double getTrafficDelayPercentage(Route r, RouteData[] summaries) {
         // TODO move to route service?
         if (summaries.length <= 0) {
             return 0;
         }
 
-        int totalTravelTime = Arrays.stream(summaries).mapToInt(RouteSummary::getTravelTime).sum();
-        double avg = totalTravelTime / summaries.length;
+        double baseTravelTime = Arrays.stream(summaries).mapToDouble(rd -> rd.getBaseTime()).sum();
+        double avgBaseTravelTime = baseTravelTime / (float) summaries.length;
 
-        double percentage = (avg / r.getDefaultTravelTime()) - 1;
+        int totalTravelTime = Arrays.stream(summaries).mapToInt(rd -> rd.getTravelTime()).sum();
+        double avgTravelTime = totalTravelTime / (float) summaries.length;
+
+        double percentage = (avgTravelTime / avgBaseTravelTime) - 1;
         return percentage;
     }
 
@@ -238,10 +257,10 @@ public class RouteController {
 
         MapData data = new MapData();
         Map<Integer, MapRoute> mapRoutesPerId = new HashMap<>();
-        Map<Integer, List<RouteSummary>> summariesPerRouteId = new HashMap<>();
+        Map<Integer, List<RouteData>> summariesPerRouteId = new HashMap<>();
 
-        for (RouteSummary summary : routeService.getMostRecentRouteSummaries()) {
-            List<RouteSummary> lst;
+        for (RouteData summary : routeService.getMostRecentRouteSummaries()) {
+            List<RouteData> lst;
             if (!summariesPerRouteId.containsKey(summary.getRouteId())) {
                 summariesPerRouteId.put(summary.getRouteId(), lst = new ArrayList<>());
             } else {
@@ -257,14 +276,14 @@ public class RouteController {
             mr.setDistance(r.getDistance());
             mr.setId(r.getId());
 
-            List<RouteSummary> routeSummaries;
+            List<RouteData> routeSummaries;
             if (!summariesPerRouteId.containsKey(r.getId())) {
                 routeSummaries = new ArrayList<>();
             } else {
                 routeSummaries = summariesPerRouteId.get(r.getId());
             }
 
-            double traficDelayPercentage = getTrafficDelayPercentage(r, routeSummaries.stream().toArray(RouteSummary[]::new));
+            double traficDelayPercentage = getTrafficDelayPercentage(r, routeSummaries.stream().toArray(RouteData[]::new));
             mr.setTrafficDelayPercentage(traficDelayPercentage);
 
             mapRoutesPerId.put(r.getId(), mr);

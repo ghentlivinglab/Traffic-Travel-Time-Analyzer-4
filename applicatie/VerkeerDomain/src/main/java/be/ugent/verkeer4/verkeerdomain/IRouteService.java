@@ -1,8 +1,8 @@
 package be.ugent.verkeer4.verkeerdomain;
 
 import be.ugent.verkeer4.verkeerdomain.data.Route;
+import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
-import be.ugent.verkeer4.verkeerdomain.data.composite.RouteSummary;
 import java.util.List;
 
 public interface IRouteService {
@@ -17,9 +17,9 @@ public interface IRouteService {
 
     public List<RouteWaypoint> getRouteWaypoints();
     
-    public List<RouteSummary> getMostRecentRouteSummaries();
+    public List<RouteData> getMostRecentRouteSummaries();
 
     public List<RouteWaypoint> getRouteWaypointsForRoute(int id);
 
-    public List<RouteSummary> getMostRecentRouteSummariesForRoute(int id);
+    public List<RouteData> getMostRecentRouteSummariesForRoute(int id);
 }

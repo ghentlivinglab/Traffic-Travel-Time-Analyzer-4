@@ -2,6 +2,7 @@ package be.ugent.verkeer4.verkeerweb.viewmodels;
 
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
+
 import java.util.List;
 
 public class RouteDetails {
@@ -9,14 +10,19 @@ public class RouteDetails {
     private int id;
     private String name;
     private double distance;
+    private String fromAddress;
+    private String toAddress;
+    private double defaultTravelTime;
+    private List<RouteData> summaries;
 
-    private List<RouteData> data;
-
-    public RouteDetails(Route route, List<RouteData> data) {
+    public RouteDetails(Route route, List<RouteData> summaries) {
         setId(route.getId());
         setName(route.getName());
         setDistance(route.getDistance());
-        setData(data);
+        setFromAddress(route.getFromAddress());
+        setToAddress(route.getToAddress());
+        setDefaultTravelTime(route.getDefaultTravelTime());
+        setSummaries(summaries);
     }
 
     /**
@@ -61,18 +67,35 @@ public class RouteDetails {
         this.distance = distance;
     }
 
-    /**
-     * @return the data
-     */
-    public List<RouteData> getData() {
-        return data;
+    public String getFromAddress() {
+        return fromAddress;
     }
 
-    /**
-     * @param data the data to set
-     */
-    public void setData(List<RouteData> data) {
-        this.data = data;
+    public void setFromAddress(String fromAddress) {
+        this.fromAddress = fromAddress;
     }
 
+    public String getToAddress() {
+        return toAddress;
+    }
+
+    public void setToAddress(String toAddress) {
+        this.toAddress = toAddress;
+    }
+
+    public double getDefaultTravelTime() {
+        return defaultTravelTime;
+    }
+
+    public void setDefaultTravelTime(double defaultTravelTime) {
+        this.defaultTravelTime = defaultTravelTime;
+    }
+
+    public List<RouteData> getSummaries() {
+        return summaries;
+    }
+
+    public void setSummaries(List<RouteData> summaries) {
+        this.summaries = summaries;
+    }
 }

@@ -43,14 +43,14 @@ public abstract class BaseProvider {
     }
 
     protected RouteData parseScrapeOutput(BufferedReader reader, Route route) throws IOException, Exception, NumberFormatException {
-        Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Reading header from scrape result");
+       // Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Reading header from scrape result");
         String headers = reader.readLine();
         
-        Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Header line is " + headers);
-        Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Reading result line from scrape result");
+        //Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Header line is " + headers);
+        //Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Reading result line from scrape result");
         String results = reader.readLine();
         
-        Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Result line is " + results);
+       // Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Result line is " + results);
         
         if (results.equalsIgnoreCase("")) {
             throw new Exception("Invalid scrape data");

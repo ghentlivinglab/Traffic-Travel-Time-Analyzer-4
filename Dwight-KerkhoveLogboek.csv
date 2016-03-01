@@ -1,18 +1,39 @@
-Datum;Start;Einde;Plaats;Omschrijving;Issue #;Opmerkingen
-9/02/2016;8:15;10:15;School;Uitlegsessie VOP;;
-9/02/2016;10:15;12:30;School;[Wiki] Planning Scrum opstellen;;
-9/02/2016;19:15;20:30;Thuis;[Wiki] Sprint #1 formeel gedefinieerd op de wiki & Product backlog aangemaakt;;
-11/02/2016;7:30;9:30;Thuis;Issues met technische analyse aangemaakt voor Sprint #1;;
-11/02/2016;9:30;11:45;Thuis;Opzetten dev omgeving met demo;1;
-11/02/2016;11:45;12:00;Thuis;[Wiki] Omschrijven hoe dev omgeving opzetten;;
-11/02/2016;12:30;13:30;Thuis;CRUD acties in DAL repository;2;
-11/02/2016;15:30;15:50;Thuis;Feedback beantwoorden;;
-12/02/2016;7:30;7:45;Werk;Comments op issues beantwoorden;;
-13/02/2016;8:30;10:30;Thuis;Voorbeeld implementatie REST client met Retrofit en TomTom als provider;6 en 11;
-13/02/2016;17:30;18:30;Thuis;Bootstrap toegepast, static content serven, jsp includes;5;
-13/02/2016;19:00;20:00;Thuis;Onderzoeken hoe background services moet opgezet worden;14;
-13/02/2016;20:30;21:00;Thuis;Perl script schrijven om elke 5min data op te vragen en weg te schrijven in csv;24;
-14/02/2016;8:30;10:30;Thuis;Perl script schrijven om trajecten uit pdf te parsen;25;
-14/02/2016;10:30;11:45;Thuis;Refactoren;19 en 6;
-14/02/2016;11:45;12:45;Thuis;Route data meer uitgefleshed;6;
-14/02/2016;13:00;13:30;Thuis;Route data ook aan web pagina toegevoegd en 15min zitten zoeken waarom de lijn niet getoond werd tot ik doorhad dat ik de lijn in de verkeerde db toegevoegd had;6;
+Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
+09/02/16,08:15,10:15,School,"Uitlegsessie VOP",,
+09/02/16,10:15,12:30,School,"[Wiki] Planning Scrum opstellen",,
+09/02/16,19:15,20:30,Thuis,"[Wiki] Sprint #1 formeel gedefinieerd op de wiki & Product backlog aangemaakt",,
+11/02/16,07:30,09:30,Thuis,"Issues met technische analyse aangemaakt voor Sprint #1",,
+11/02/16,09:30,11:45,Thuis,"Opzetten dev omgeving met demo",1,
+11/02/16,11:45,12:00,Thuis,"[Wiki] Omschrijven hoe dev omgeving opzetten",,
+11/02/16,12:30,13:30,Thuis,"CRUD acties in DAL repository",2,
+11/02/16,15:30,15:50,Thuis,"Feedback beantwoorden",,
+12/02/16,07:30,07:45,Werk,"Comments op issues beantwoorden",,
+13/02/16,08:30,10:30,Thuis,"Voorbeeld implementatie REST client met Retrofit en TomTom als provider",6 en 11,
+13/02/16,17:30,18:30,Thuis,"Bootstrap toegepast, static content serven, jsp includes",5,
+13/02/16,19:00,20:00,Thuis,"Onderzoeken hoe background services moet opgezet worden",14,
+13/02/16,20:30,21:00,Thuis,"Perl script schrijven om elke 5min data op te vragen en weg te schrijven in csv",24,
+14/02/16,08:30,10:30,Thuis,"Perl script schrijven om trajecten uit pdf te parsen",25,
+14/02/16,10:30,11:45,Thuis,"Refactoren",19 en 6,
+14/02/16,11:45,12:45,Thuis,"Route data meer uitgefleshed",6,
+14/02/16,13:00,13:30,Thuis,"Route data ook aan web pagina toegevoegd en 15min zitten zoeken waarom de lijn niet getoond werd tot ik doorhad dat ik de lijn in de verkeerde db toegevoegd had",6,
+16/02/16,08:15,12:30,School,"Scrum meeting, issues overlopen en bespreken, toekennen taakverdeling",,
+17/02/16,14:15,16:10,Thuis,"Gegevens in database proper zetten met testdata","30,31,32,33",
+17/02/16,16:10,16:30,Thuis,"Issues overlopen en aanvullende comments geven","",
+17/02/16,17:00,17:45,Thuis,"Leaflet js onderzoeken","",
+17/02/16,18:00,21:00,Thuis,"Test implementatie van leaflet, ajax met json in Spring MVC toepassen, onderzoeken typescript in netbeans",,
+19/02/16,18:20,19:40,Thuis,"Tomtom fallback scraper in perl schrijven om api limiet te omzeilen",11,
+19/02/16,20:30,21:15,Thuis,"Scraper call toegevoegd in java",11,
+20/02/16,07:00,08:00,Thuis,"RouteSummary toegevoegd voor traject overzicht gemakkelijker op te bouwen",16,
+20/02/16,08:00,08:30,Thuis,"Parent POM project onderzocht en toegevoegd",,
+20/02/16,08:30,09:30,Thuis,"Route summaries geintegreerd met het traject map overzicht",36,
+20/02/16,09:30,10:00,Thuis,"Map toegevoegd in detail van een traject",36,
+20/02/16,10:00,10:55,Thuis,"Filtering per traject & focus bij aanklikken in map overzicht",36,
+20/02/16,13:00,14:30,Thuis,"Form validation in spring onderzocht en toegepast",38,
+20/02/16,14:30,16:00,Thuis,"Route editeren verder uitgewerkt met google maps integratie",38,
+21/02/16,16:30,17:50,Thuis,"Traject overzicht verder gekoppeld aan domain en afgewerkt",16,
+21/02/16,18:30,19:20,Thuis,"Here maps scraper in Perl geschreven (zonder API key)",8,
+21/02/16,19:40,20:20,Thuis,"Waze scraper in Perl geschreven (zonder API key)",9,
+22/02/16,17:30,18:30,Thuis,"Be-mobile scraper in Perl geschreven (zonder API key)",,
+22/02/16,18:30,20:00,Thuis,"Coyote scraper in Perl geschreven",,
+22/02/16,20:00,21:30,Thuis,"Scrapers compatibel gemaakt met windows en geintegreerd in java project",,
+24/02/16,08:00,11:00,Thuis,"Productie omgeving opgezet en scraper wijzigingen tot wanneer alles werkte in productie",,

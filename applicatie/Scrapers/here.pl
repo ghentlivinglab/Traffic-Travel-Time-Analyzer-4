@@ -22,17 +22,17 @@ sub main {
 	my $cache = readCache();
 	if(exists $cache->{"appCode"} && $cache->{"appCode"} ne "" && 
 	   exists $cache->{"appId"} && $cache->{"appId"} ne "") {
-		$appCode = $cache->{"appCode"};
-		$appId = $cache->{"appId"};
 	}
 	else {
-		
 		my $obj = getAppCodeAndId();
 		$cache->{"appCode"} = $obj->{"appCode"};
 		$cache->{"appId"} = $obj->{"appId"};
+		
 		saveCache($cache);
 	}
 	
+	$appCode = $cache->{"appCode"};
+	$appId = $cache->{"appId"};
 	
 	#print "\n";
 	printRouteData($appCode, $appId);

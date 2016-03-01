@@ -23,6 +23,7 @@
                             <div class="form-group">
                                 <label for="name">Naam</label>
                                 <form:input class="form-control" path="name" />                
+                                <span>Opgelet: De naam moet overeenstemmen met het traject in Coyote om correct de gegevens te kunnen uitlezen</span>
                                 <form:errors path="name"  cssClass="error" />
                             </div>
 

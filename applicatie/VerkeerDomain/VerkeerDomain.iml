@@ -21,6 +21,16 @@
     <orderEntry type="library" name="Maven: com.squareup.retrofit2:converter-gson:2.0.0-beta3" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.4" level="project" />
     <orderEntry type="library" name="Maven: com.typesafe:config:1.3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.sql2o:sql2o:1.5.4" level="project" />
+    <orderEntry type="library" name="Maven: org.mariadb.jdbc:mariadb-java-client:1.3.4" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.retrofit2:retrofit:2.0.0-beta3" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.0.0-RC1" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.6.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.retrofit2:converter-gson:2.0.0-beta3" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.4" level="project" />
+    <orderEntry type="library" name="Maven: com.typesafe:config:1.3.0" level="project" />
     <orderEntry type="module" module-name="VerkeerDomain.Data" />
     <orderEntry type="module" module-name="VerkeerDAL" />
     <orderEntry type="library" name="Maven: org.sql2o:sql2o:1.5.4" level="project" />

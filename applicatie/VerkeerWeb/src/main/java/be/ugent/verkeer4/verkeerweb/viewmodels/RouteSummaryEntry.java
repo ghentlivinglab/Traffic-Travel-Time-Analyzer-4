@@ -2,17 +2,18 @@ package be.ugent.verkeer4.verkeerweb.viewmodels;
 
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
-import be.ugent.verkeer4.verkeerdomain.data.composite.RouteSummary;
+import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RouteSummaryEntry {
 
     private Route route;
-    private Map<ProviderEnum, RouteSummary> recentSummaries;
+    private Map<ProviderEnum, RouteData> recentSummaries;
 
     private double averageCurrentTravelTime;
     private double delay;
+    private double trafficDelayPercentage;
 
     public RouteSummaryEntry() {
         recentSummaries = new HashMap<>();
@@ -35,14 +36,14 @@ public class RouteSummaryEntry {
     /**
      * @return the recentSummaries
      */
-    public Map<ProviderEnum, RouteSummary> getRecentSummaries() {
+    public Map<ProviderEnum, RouteData> getRecentSummaries() {
         return recentSummaries;
     }
 
     /**
      * @param recentSummaries the recentSummaries to set
      */
-    public void setRecentSummaries(Map<ProviderEnum, RouteSummary> recentSummaries) {
+    public void setRecentSummaries(Map<ProviderEnum, RouteData> recentSummaries) {
         this.recentSummaries = recentSummaries;
     }
 
@@ -60,10 +61,23 @@ public class RouteSummaryEntry {
         if (!recentSummaries.containsKey(prov)) {
             return 0;
         } else {
-            double delay = recentSummaries.get(prov).getTravelTime() - this.route.getDefaultTravelTime();
-            if(delay < 0)
+            double delay = recentSummaries.get(prov).getDelay();
+            if (delay < 0) {
                 delay = 0;
+            }
             return delay;
+        }
+    }
+
+    public double getTrafficPercentageForProvider(int provider) {
+        ProviderEnum prov = ProviderEnum.values()[provider];
+        if (!recentSummaries.containsKey(prov)) {
+            return 0;
+        } else {
+            double baseTime = recentSummaries.get(prov).getBaseTime();
+            double travelTime = recentSummaries.get(prov).getTravelTime();
+            
+            return (travelTime / baseTime) - 1;
         }
     }
 
@@ -93,6 +107,20 @@ public class RouteSummaryEntry {
      */
     public void setDelay(double delay) {
         this.delay = delay;
+    }
+
+    /**
+     * @return the trafficDelayPercentage
+     */
+    public double getTrafficDelayPercentage() {
+        return trafficDelayPercentage;
+    }
+
+    /**
+     * @param trafficDelayPercentage the trafficDelayPercentage to set
+     */
+    public void setTrafficDelayPercentage(double trafficDelayPercentage) {
+        this.trafficDelayPercentage = trafficDelayPercentage;
     }
 
 }
