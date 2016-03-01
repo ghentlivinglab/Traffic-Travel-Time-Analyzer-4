@@ -74,5 +74,9 @@ public class Settings {
         return conf.getString("APIKeys.Google.AppCode");
     }
 
+    public String getBingRoutingAPIKey() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        return conf.getString("APIKeys.BingMaps");
+    }
     
 }
