@@ -110,7 +110,7 @@
                                 <th>Normale Reistijd</th>
                                 <th>Gem. Vertraging</th>
                                 <th class="provider-header provider-hr" data-provider="0">
-                                    <img class="header" src="../images/tomtom.png"/>
+                                    <img class="header" src="<c:url value="/static/images/tomtom.png" />"/>
                                     <br/>
                                     HR
                                 </th>
@@ -119,7 +119,7 @@
                                     V
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="5">
-                                    <img class="header" src="../images/waze.png"/>
+                                    <img class="header" src="<c:url value="/static/images/waze.png" />"/>
                                     <br/>
                                     HR
                                 </th>
@@ -128,7 +128,7 @@
                                     V
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="2">
-                                    <img class="header" src="../images/gmaps.png"/>
+                                    <img class="header" src="<c:url value="/static/images/gmaps.png" />"/>
                                     </br>
                                     HR
                                 </th>
@@ -137,7 +137,7 @@
                                     V
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="1">
-                                    <img class="header" src="../images/here.png"/>
+                                    <img class="header" src="<c:url value="/static/images/here.png" />"/>
                                     <br/>
                                     HR
                                 </th> 
@@ -146,7 +146,7 @@
                                     V
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="3">
-                                    <img class="header" src="../images/coyote.jpg"/>
+                                    <img class="header" src="<c:url value="/static/images/coyote.jpg" />"/>
                                     <br/>
                                     HR
                                 </th>
@@ -155,7 +155,7 @@
                                     V
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="4">
-                                    <img class="header" src="../images/bemobile.png"/>
+                                    <img class="header" src="<c:url value="/static/images/bemobile.png" />"/>
                                     <br/>
                                     HR
                                 </th>
@@ -164,7 +164,7 @@
                                     V
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="6">
-                                    <img class="header" src="../images/bing.png"/>
+                                    <img class="header" src="<c:url value="/static/images/bing.png" />"/>
                                     <br/>
                                     HR
                                 </th>
@@ -173,7 +173,7 @@
                                     V
                                 </th>                                
                                 <th class="provider-header provider-hr" data-provider="7">
-                                    <img class="header" src="../images/viamichelin.png"/>
+                                    <img class="header" src="<c:url value="/static/images/viamichelin.png" />"/>
                                     <br/>
                                     HR
                                 </th>

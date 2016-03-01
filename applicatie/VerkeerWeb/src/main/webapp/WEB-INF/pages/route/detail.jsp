@@ -118,7 +118,7 @@
 <script>
     MapManagement.intializeRouteMap("map", "<c:url value="/route/mapdata?id=${detail.id}" />");
 </script>
-<script src="<c:url value="/static/scripts/highcharts.js" />"></script>
+<script src="<c:url value="/static/scripts/libs/highcharts.js" />"></script>
 <script src="<c:url value="/static/scripts/route/detail/detail.js" />"></script>
 </body>
 </html>
