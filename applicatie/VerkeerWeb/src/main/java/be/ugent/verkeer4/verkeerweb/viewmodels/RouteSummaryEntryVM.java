@@ -6,7 +6,7 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RouteSummaryEntry {
+public class RouteSummaryEntryVM {
 
     private Route route;
     private Map<ProviderEnum, RouteData> recentSummaries;
@@ -15,7 +15,7 @@ public class RouteSummaryEntry {
     private double delay;
     private double trafficDelayPercentage;
 
-    public RouteSummaryEntry() {
+    public RouteSummaryEntryVM() {
         recentSummaries = new HashMap<>();
     }
 

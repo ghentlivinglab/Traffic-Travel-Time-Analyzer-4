@@ -15,7 +15,7 @@ $(function () {
             {
                 format: 'DD/MM/YYYY HH:mm',
                 showTodayButton: true,
-                sideBySide: true,
+                showClear: true,
                 defaultDate: moment().endOf('day')
             }
         );
@@ -64,25 +64,26 @@ $(function () {
 
     function buildChart() {
         $('#container').highcharts({
-            title: {
-                text: 'Historiek per provider',
-                x: -20 //center
+            chart: {
+                zoomType: 'x'
             },
-
+            title: {
+                text: 'Historiek per provider'
+            },
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                    'Klik en sleep op de grafiek om te zoomen' : 'Pinch op de grafiek om te zoomen'
+            },
             xAxis: {
                 title: {
-                    text: 'Tijd (uur)'
-                }
+                    text: 'Tijdstip'
+                },
+                type: "datetime"
             },
             yAxis: {
                 title: {
-                    text: 'Reistijd (minuten)'
-                },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
+                    text: 'Reistijd (s)'
+                }
             },
             tooltip: {
                 valueSuffix: 's'
@@ -138,7 +139,7 @@ $(function () {
                 };
                 providersDict[ele.provider] = provider;
             }
-            provider.data.push(ele.travelTime);
+            provider.data.push([ele.timestamp, ele.travelTime]);
         });
         var providerArr = [];
         for (var providerKey in providersDict) {

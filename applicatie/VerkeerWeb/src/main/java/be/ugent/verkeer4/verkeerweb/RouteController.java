@@ -1,19 +1,20 @@
 package be.ugent.verkeer4.verkeerweb;
 
 import java.util.List;
+
+import be.ugent.verkeer4.verkeerweb.viewmodels.RouteSummaryEntryVM;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import be.ugent.verkeer4.verkeerdomain.*;
 import be.ugent.verkeer4.verkeerdomain.data.*;
 import be.ugent.verkeer4.verkeerweb.dataobjects.*;
-import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetails;
-import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEdit;
-import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverview;
-import be.ugent.verkeer4.verkeerweb.viewmodels.RouteSummaryEntry;
+import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetailsVM;
+import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEditVM;
+import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverviewVM;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,14 +36,14 @@ public class RouteController {
         // haal meest recentste gegevens op voor alle routes
         List<RouteData> mostRecentRouteSummaries = routeService.getMostRecentRouteSummaries();
 
-        RouteOverview overview = new RouteOverview();
+        RouteOverviewVM overview = new RouteOverviewVM();
 
         // hou per route id een RouteSummaryEntry bij
-        Map<Integer, RouteSummaryEntry> entries = new HashMap<>();
+        Map<Integer, RouteSummaryEntryVM> entries = new HashMap<>();
 
         // overloop alle routes en maak een nieuw routeSummaryEntry en steek het in de entries map
         for (Route r : lst) {
-            RouteSummaryEntry entry = new RouteSummaryEntry();
+            RouteSummaryEntryVM entry = new RouteSummaryEntryVM();
             entry.setRoute(r);
 
             overview.getSummaries().add(entry);
@@ -62,7 +63,7 @@ public class RouteController {
         // nu dat alle summary per provider per route entry toegevoegd zijn overlopen
         // we nogmaals alle routes om de gemiddelden te berekenen
         for (Route r : lst) {
-            RouteSummaryEntry entry = entries.get(r.getId());
+            RouteSummaryEntryVM entry = entries.get(r.getId());
             Map<ProviderEnum, RouteData> summaryPerProvider = entry.getRecentSummaries();
 
             // bereken gemiddelde van delay
@@ -105,7 +106,7 @@ public class RouteController {
         Route route = routeService.getRoute(id);
 
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
-        RouteDetails detail = new RouteDetails(route, summaries);
+        RouteDetailsVM detail = new RouteDetailsVM(route, summaries);
         ModelAndView model = new ModelAndView("route/detail");
         model.addObject("detail", detail);
         return model;
@@ -137,7 +138,7 @@ public class RouteController {
     public ModelAndView edit(@PathVariable("id") Integer id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         Route r = routeService.getRoute(id);
-        RouteEdit re = new RouteEdit();
+        RouteEditVM re = new RouteEditVM();
         re.setName(r.getName());
         re.setFromAddress(r.getFromAddress());
         re.setToAddress(r.getToAddress());
@@ -152,7 +153,7 @@ public class RouteController {
 
     @RequestMapping(value = "route/edit/{id}", method = RequestMethod.POST)
     public ModelAndView edit(@Valid
-            @ModelAttribute("routeEdit") RouteEdit route, BindingResult result) throws ClassNotFoundException {
+            @ModelAttribute("routeEdit") RouteEditVM route, BindingResult result) throws ClassNotFoundException {
 
         // validation, moet manueel aangezien geen hibernate-validators toegevoegd is
         if (route.getName() == null || route.getName().isEmpty()) {

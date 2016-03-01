@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RouteOverview {
+public class RouteOverviewVM {
 
     private Date recentRouteDateFrom;
     
-    public RouteOverview() {
+    public RouteOverviewVM() {
         summaries = new ArrayList<>();
     }
-     private List<RouteSummaryEntry> summaries;
+     private List<RouteSummaryEntryVM> summaries;
    
     /**
      * @return the summaries
      */
-    public List<RouteSummaryEntry> getSummaries() {
+    public List<RouteSummaryEntryVM> getSummaries() {
         return summaries;
     }
 
     /**
      * @param summaries the summaries to set
      */
-    public void setSummaries(List<RouteSummaryEntry> summaries) {
+    public void setSummaries(List<RouteSummaryEntryVM> summaries) {
         this.summaries = summaries;
     }
 
