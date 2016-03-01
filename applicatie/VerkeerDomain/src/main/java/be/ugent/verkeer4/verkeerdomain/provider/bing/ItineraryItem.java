@@ -42,10 +42,10 @@ public class ItineraryItem {
     private String transitTerminus;
     @SerializedName("travelDistance")
     @Expose
-    private Integer travelDistance;
+    private double travelDistance;
     @SerializedName("travelDuration")
     @Expose
-    private Integer travelDuration;
+    private double travelDuration;
     @SerializedName("travelMode")
     @Expose
     private String travelMode;
@@ -238,7 +238,7 @@ public class ItineraryItem {
      * @return
      *     The travelDistance
      */
-    public Integer getTravelDistance() {
+    public double getTravelDistance() {
         return travelDistance;
     }
 
@@ -256,7 +256,7 @@ public class ItineraryItem {
      * @return
      *     The travelDuration
      */
-    public Integer getTravelDuration() {
+    public double getTravelDuration() {
         return travelDuration;
     }
 

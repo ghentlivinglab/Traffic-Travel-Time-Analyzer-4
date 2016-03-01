@@ -39,10 +39,10 @@ public class Resource {
     private Double travelDistance;
     @SerializedName("travelDuration")
     @Expose
-    private Integer travelDuration;
+    private Double travelDuration;
     @SerializedName("travelDurationTraffic")
     @Expose
-    private Integer travelDurationTraffic;
+    private Double travelDurationTraffic;
 
     /**
      * 
@@ -211,7 +211,7 @@ public class Resource {
      * @return
      *     The travelDuration
      */
-    public Integer getTravelDuration() {
+    public Double getTravelDuration() {
         return travelDuration;
     }
 
@@ -220,7 +220,7 @@ public class Resource {
      * @param travelDuration
      *     The travelDuration
      */
-    public void setTravelDuration(Integer travelDuration) {
+    public void setTravelDuration(Double travelDuration) {
         this.travelDuration = travelDuration;
     }
 
@@ -229,7 +229,7 @@ public class Resource {
      * @return
      *     The travelDurationTraffic
      */
-    public Integer getTravelDurationTraffic() {
+    public Double getTravelDurationTraffic() {
         return travelDurationTraffic;
     }
 
@@ -238,7 +238,7 @@ public class Resource {
      * @param travelDurationTraffic
      *     The travelDurationTraffic
      */
-    public void setTravelDurationTraffic(Integer travelDurationTraffic) {
+    public void setTravelDurationTraffic(Double travelDurationTraffic) {
         this.travelDurationTraffic = travelDurationTraffic;
     }
 

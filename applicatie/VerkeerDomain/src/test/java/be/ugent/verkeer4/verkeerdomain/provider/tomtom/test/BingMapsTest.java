@@ -49,13 +49,7 @@ public class BingMapsTest {
         r.setToLatitude(51.056146);
         r.setToLongitude(3.695183);
 
-       
         RouteData rData = provider.useAPI(r);
         
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
 }

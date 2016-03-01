@@ -48,7 +48,7 @@ public class BingMapsProvider extends BaseProvider implements IProvider {
                 
                 RouteData rd = setRouteData(route,
                         distance,
-                        (int) bingResource.getTravelDurationTraffic(),
+                        (int) ((double) bingResource.getTravelDurationTraffic()),
                         delay);
 
                 return rd;
