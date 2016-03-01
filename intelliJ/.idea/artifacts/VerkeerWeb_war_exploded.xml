@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="VerkeerWeb:war exploded">
-    <output-path>$PROJECT_DIR$/../applicatie/VerkeerWeb/target/VerkeerWeb-1.0-SNAPSHOT</output-path>
+    <output-path>$PROJECT_DIR$/../applicatie/VerkeerWeb/target/VerkeerWeb</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -35,6 +35,7 @@
           <element id="library" level="project" name="Maven: javax.servlet.jsp.jstl:jstl-api:1.2" />
           <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
           <element id="library" level="project" name="Maven: javax.servlet.jsp:jsp-api:2.1" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" />
           <element id="archive" name="VerkeerDomain-1.0-SNAPSHOT.jar">
             <element id="module-output" name="VerkeerDomain" />
           </element>
@@ -52,11 +53,10 @@
           <element id="archive" name="VerkeerDomain.Data-1.0-SNAPSHOT.jar">
             <element id="module-output" name="VerkeerDomain.Data" />
           </element>
-          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" />
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/../applicatie/VerkeerWeb/target/VerkeerWeb-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/../applicatie/VerkeerWeb/target/VerkeerWeb/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="VerkeerWeb/web/Web" />
     </root>

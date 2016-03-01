@@ -10,7 +10,6 @@ public class RouteData {
     private int travelTime;
     private int delay;
     private int distance;
-
     private Date timestamp;
 
     /**
@@ -56,12 +55,21 @@ public class RouteData {
     }
 
     /**
+     * Tijd inclusief traffic delay
      * @return the travelTime
      */
     public int getTravelTime() {
         return travelTime;
     }
 
+    /**
+     * Basis tijd om route af te leggen zonder delay
+     * @return 
+     */
+    public double getBaseTime() {
+        return travelTime - delay;
+    }
+    
     /**
      * @param travelTime the travelTime to set
      */
@@ -88,6 +96,7 @@ public class RouteData {
     }
 
     /**
+     * Traffic delay (in seconden) 
      * @return the delay
      */
     public int getDelay() {

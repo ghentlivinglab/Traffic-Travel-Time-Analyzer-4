@@ -4,6 +4,7 @@ import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.provider.BeMobileProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.CoyoteProvider;
+import be.ugent.verkeer4.verkeerdomain.provider.GoogleProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.HereMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.IProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.ISummaryProvider;
@@ -36,6 +37,7 @@ public class ProviderService extends BaseService implements IProviderService {
         perRouteProviders.add(new TomTomProvider());
         perRouteProviders.add(new BeMobileProvider());
         perRouteProviders.add(new HereMapsProvider());
+        perRouteProviders.add(new GoogleProvider());
         perRouteProviders.add(new WazeProvider());
         perRouteProviders.add(new ViaMichelinProvider());
 

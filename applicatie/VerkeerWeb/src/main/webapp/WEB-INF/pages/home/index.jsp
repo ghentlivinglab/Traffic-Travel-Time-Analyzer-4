@@ -16,7 +16,6 @@
 
             <a href="<c:url value="/route/list" />">Traject overzicht</a> <hr/>
             <a href="<c:url value="/route/map" />">Traject map</a>
-            <a href="<c:url value="/charts/test" />">POC Demo chart</a>
         </div>
     </body>
 </html>
