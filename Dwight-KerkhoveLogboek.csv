@@ -38,3 +38,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 22/02/16,20:00,21:30,Thuis,"Scrapers compatibel gemaakt met windows en geintegreerd in java project",,
 24/02/16,08:00,11:00,Thuis,"Productie omgeving opgezet en scraper wijzigingen tot wanneer alles werkte in productie",,
 27/02/16,08:00,09:00,Thuis,"Trajectoverzicht aangepast met alle providers, sorteerbare tabellen, geformatteerde tijden en heatmap",44 en 16,
+01/03/16,08:15,12:15,School,"Sprint meeting, issues overlopen, afgewerkte feature branches mergen, bespreken TODOs voor einde sprint",,
