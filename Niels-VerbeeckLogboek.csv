@@ -11,5 +11,6 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 20/02/16,14:00,16:45,Thuis,"MariaDB opzetten, bestaande code bekijken en beheersen, Google Provider implementeren en testklasse geschreven",10,
 24/02/16,15:00,16:20,Thuis,Google Provider implementeren via java API, 10,
 25/02/16,14:00,15:00,Thuis,Zoeken naar oplossing om zowel traffic time als normale tijd uit API te krijgen (Geen mogelijkheid in gratis versie),10,
+25/02/16,15:00,15:30,Thuis, Videocall met Thomas voor uitleg van afgelopen gebeurtenissen,,
 25/02/16,16:00,18:00,Thuis,Implementatie van eigen client via json2pojo en retrofit om zo ook traffic_time uit te kunnen lezen,10,
 25/02/16,20:00,20:50,Thuis, Debuggen van fout in ontvangen van de data. Parameters werden niet goed geconcatineerd,10,
