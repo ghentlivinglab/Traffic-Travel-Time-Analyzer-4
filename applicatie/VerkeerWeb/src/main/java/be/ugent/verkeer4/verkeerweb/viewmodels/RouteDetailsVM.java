@@ -5,7 +5,7 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 
 import java.util.List;
 
-public class RouteDetails {
+public class RouteDetailsVM {
 
     private int id;
     private String name;
@@ -15,7 +15,7 @@ public class RouteDetails {
     private double defaultTravelTime;
     private List<RouteData> summaries;
 
-    public RouteDetails(Route route, List<RouteData> summaries) {
+    public RouteDetailsVM(Route route, List<RouteData> summaries) {
         setId(route.getId());
         setName(route.getName());
         setDistance(route.getDistance());

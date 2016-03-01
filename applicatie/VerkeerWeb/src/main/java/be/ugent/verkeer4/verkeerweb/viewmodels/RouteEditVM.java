@@ -3,7 +3,7 @@ package be.ugent.verkeer4.verkeerweb.viewmodels;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class RouteEdit {
+public class RouteEditVM {
 
     private Integer id;
 
