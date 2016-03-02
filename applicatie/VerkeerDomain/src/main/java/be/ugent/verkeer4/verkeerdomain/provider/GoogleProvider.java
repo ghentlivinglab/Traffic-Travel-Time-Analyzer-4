@@ -45,8 +45,8 @@ public class GoogleProvider extends BaseProvider implements IProvider {
             }
 
             return null;
-        } catch (IOException ex) {
-            Logger.getLogger(GoogleProvider.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+             Logger.getLogger(GoogleProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId(), ex);
             return null;
         }     
     }   

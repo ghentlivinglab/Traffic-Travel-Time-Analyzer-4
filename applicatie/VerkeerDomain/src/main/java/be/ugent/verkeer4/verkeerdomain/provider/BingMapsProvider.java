@@ -6,7 +6,6 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.provider.bing.BingMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.bing.ResourceSet;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,9 +21,7 @@ public class BingMapsProvider extends BaseProvider implements IProvider {
     
     @Override
     public RouteData poll(Route route) {
-        //scraper nog te implementeren.
-        RouteData d = new RouteData();
-        return d;
+        return useAPI(route);
     }
     
     public RouteData useAPI(Route route) {
@@ -50,9 +47,9 @@ public class BingMapsProvider extends BaseProvider implements IProvider {
             }
 
             return null;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             //Error logging
-            Logger.getLogger(BingMapsProvider.class.getName()).log(Level.SEVERE, null, ex);
+             Logger.getLogger(TomTomProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId(), ex);
             return null;
         }
     }    
