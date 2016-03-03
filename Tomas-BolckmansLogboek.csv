@@ -16,3 +16,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 28/02/16,15:00,18:45,Thuis,"Implementatie van de Bing Maps provider adhv de Rest API, provider nog niet kunnen testen",42,
 01/03/16,08:15,12:30,School,"Stand-up meeting, bespreken wat iedereen gedaan heeft en waarbij men hulp wenst, bespreken openstaande issues, problemen met BingMaps provider oplossen, issues verdelen",42,
 01/03/16,14:45,15:30,School,"Eerste implementatie van de logger die alle logs bewaard in een tabel van onze database",39,
+03/03/16,13:00,15:30,Bibliotheek,"Samen met Niels een Mockup gemaakt voor de home page en de gebruikershandleiding deels getypt",52,
