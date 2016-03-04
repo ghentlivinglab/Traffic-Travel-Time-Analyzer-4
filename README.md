@@ -1,13 +1,15 @@
 # Indeling repository
-/Analyse: Bevat alle documentatie ivm analyse zoals use case diagrammen enz.
-/applicatie/Scrapers: Bevat alle perl scripts die worden uitgevoerd om de verschillende providers te scrapen
-/applicatie/Scripts: Bevat perl scripts en SQL scripts die éénmalig zijn uitgevoerd om o.a de trajecten pdf naar insert statements om te zetten.
-/applicatie/verkeer*: De verschillende netbeans projecten van het project. Het 'verkeer' project is het overkoepelend project.
-/db: bevat een dump van de database
-/docs: bevat de aangeleverde documentatie
-/build: [//TODO] Bevat de war file van de website en de jar file van de verkeer polling service.
+
+* /Analyse: Bevat alle documentatie ivm analyse zoals use case diagrammen enz.
+* /applicatie/Scrapers: Bevat alle perl scripts die worden uitgevoerd om de verschillende providers te scrapen
+* /applicatie/Scripts: Bevat perl scripts en SQL scripts die éénmalig zijn uitgevoerd om o.a de trajecten pdf naar insert statements om te zetten.
+* /applicatie/verkeer*: De verschillende netbeans projecten van het project. Het 'verkeer' project is het overkoepelend project.
+* /db: bevat een dump van de database
+* /docs: bevat de aangeleverde documentatie
+* /build: [//TODO] Bevat de war file van de website en de jar file van de verkeer polling service.
 
 # Opzetten test omgeving
+
 Zowel in de war als jar file zit een application.conf bestand dat de configuratie bevat. Hierin staat o.a de API keys en het pad naar de scrapers map. 
 Er is ook een database-dev.conf bestand dat de database configuratie bevat (wanneer general.inProduction = false).
 // TODO verder uitschrijven
@@ -17,7 +19,6 @@ Er is ook een database-dev.conf bestand dat de database configuratie bevat (wann
 
 1. Aaron Mousavi
 2. Dwight Kerkhove
-3. Jaron Vervynckt
 4. Niels Verbeeck
 5. Thomas Clauwaert
 6. Tomas Bolckmans
