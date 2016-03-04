@@ -29,18 +29,24 @@ public class RouteController {
     public ModelAndView getList() throws ClassNotFoundException {
 
         IRouteService routeService = new RouteService(); // eventueel dependency injection
-        
+        // route overview model opbouwen
+        RouteOverviewVM overview = getRouteOverviewModel(routeService);        
+
+        // geef mee als model aan view
+        ModelAndView model = new ModelAndView("route/list");
+        model.addObject("overview", overview);
+
+        return model;
+    }
+
+    private RouteOverviewVM getRouteOverviewModel(IRouteService routeService) throws ClassNotFoundException {
         // haal routes op
         List<Route> lst = routeService.getRoutes();
-
         // haal meest recentste gegevens op voor alle routes
         List<RouteData> mostRecentRouteSummaries = routeService.getMostRecentRouteSummaries();
-
         RouteOverviewVM overview = new RouteOverviewVM();
-
         // hou per route id een RouteSummaryEntry bij
         Map<Integer, RouteSummaryEntryVM> entries = new HashMap<>();
-
         // overloop alle routes en maak een nieuw routeSummaryEntry en steek het in de entries map
         for (Route r : lst) {
             RouteSummaryEntryVM entry = new RouteSummaryEntryVM();
@@ -49,17 +55,14 @@ public class RouteController {
             overview.getSummaries().add(entry);
             entries.put(r.getId(), entry);
         }
-
         Date maxDate = mostRecentRouteSummaries.stream().map(rs -> rs.getTimestamp()).max(Date::compareTo).get();
         overview.setRecentRouteDateFrom(maxDate);
-        
         // overloop alle recente route data en steek vul de routesummaryentry object aan
         for (RouteData sum : mostRecentRouteSummaries) {
             
             Map<ProviderEnum, RouteData> summaryPerProvider = entries.get(sum.getRouteId()).getRecentSummaries();
             summaryPerProvider.put(sum.getProvider(), sum);
         }
-
         // nu dat alle summary per provider per route entry toegevoegd zijn overlopen
         // we nogmaals alle routes om de gemiddelden te berekenen
         for (Route r : lst) {
@@ -80,12 +83,7 @@ public class RouteController {
             double avgCurrentTravelTime = totalTravelTime / (float) summaryPerProvider.size();
             entry.setAverageCurrentTravelTime(avgCurrentTravelTime);
         }
-
-        // geef mee als model aan view
-        ModelAndView model = new ModelAndView("route/list");
-        model.addObject("overview", overview);
-
-        return model;
+        return overview;
     }
 
     @ResponseBody
@@ -113,10 +111,11 @@ public class RouteController {
     @RequestMapping(value = "route/map", method = RequestMethod.GET)
     public ModelAndView getMap() throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        List<Route> lst = routeService.getRoutes();
+        
+         RouteOverviewVM overview = getRouteOverviewModel(routeService);
 
         ModelAndView model = new ModelAndView("route/map");
-        model.addObject("routes", lst);
+        model.addObject("overview", overview);
 
         return model;
     }
@@ -136,6 +135,8 @@ public class RouteController {
     public ModelAndView edit(@PathVariable("id") Integer id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         Route r = routeService.getRoute(id);
+        
+        // maak route edit view model
         RouteEditVM re = new RouteEditVM();
         re.setName(r.getName());
         re.setFromAddress(r.getFromAddress());

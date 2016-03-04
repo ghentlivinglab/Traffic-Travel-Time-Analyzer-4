@@ -51,8 +51,8 @@ namespace MapManagement {
 
                 let color = MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage);
 
-                let path = L.polyline(latLngs, { color: color, });
-
+                let path = L.polyline(latLngs, { stroke:true, weight:5, color: color, opacity:1 });
+                
                 this.initializePathPopup(path, r);
 
                 this.map.addLayer(path, false);
@@ -96,13 +96,30 @@ namespace MapManagement {
         }
 
         private static getColorFromTrafficDelayPercentage(delayPercentage: number): string {
+            
+            let r1 = 84;
+            let g1= 228;
+            let b1 = 98;
+            let r2 = 240;
+            let g2 = 76;
+            let b2 = 80;
+            
+            delayPercentage *= 3;
+            if(delayPercentage > 1) delayPercentage = 1;
+            if(delayPercentage < 0) delayPercentage = 0;
+            
+            let r = Math.floor(r1 + delayPercentage * (r2 - r1));
+            let g = Math.floor(g1 + delayPercentage * (g2 - g1));
+            let b = Math.floor(b1 + delayPercentage * (b2 - b1));
+            
+            return `rgb(${r}, ${g}, ${b})`;
             if (delayPercentage >= 0 && delayPercentage < 0.10)
                 return "green";
-            else if (delayPercentage >= 0.1 && delayPercentage < 0.30)
-                return "yellow";
-            else if (delayPercentage >= 0.3 && delayPercentage < 0.60)
+            else if (delayPercentage >= 0.1 && delayPercentage < 0.50)
                 return "orange";
-            else if (delayPercentage >= 0.6 && delayPercentage < 0.90)
+            else if (delayPercentage >= 0.1 && delayPercentage < 0.50)
+                return "orange";
+            else if (delayPercentage >= 0.5 && delayPercentage < 0.90)
                 return "red";
             else if (delayPercentage >= 0.9)
                 return "brown";
