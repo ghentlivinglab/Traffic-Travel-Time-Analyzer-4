@@ -1,3 +1,14 @@
+# Indeling repository
+/Analyse: Bevat alle documentatie ivm analyse zoals use case diagrammen enz.
+/applicatie/Scrapers: Bevat alle perl scripts die worden uitgevoerd om de verschillende providers te scrapen
+/applicatie/Scripts: Bevat perl scripts en SQL scripts die éénmalig zijn uitgevoerd om o.a de trajecten pdf naar insert statements om te zetten.
+/applicatie/verkeer*: De verschillende netbeans projecten van het project. Het 'verkeer' project is het overkoepelend project.
+/db: bevat een dump van de database
+/docs: bevat de aangeleverde documentatie
+
+
+
+
 # Groepsleden
 
 1. Aaron Mousavi
