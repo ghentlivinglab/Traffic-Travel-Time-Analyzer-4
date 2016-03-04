@@ -5,8 +5,12 @@
 /applicatie/verkeer*: De verschillende netbeans projecten van het project. Het 'verkeer' project is het overkoepelend project.
 /db: bevat een dump van de database
 /docs: bevat de aangeleverde documentatie
+/build: [//TODO] Bevat de war file van de website en de jar file van de verkeer polling service.
 
-
+# Opzetten test omgeving
+Zowel in de war als jar file zit een application.conf bestand dat de configuratie bevat. Hierin staat o.a de API keys en het pad naar de scrapers map. 
+Er is ook een database-dev.conf bestand dat de database configuratie bevat (wanneer general.inProduction = false).
+// TODO verder uitschrijven
 
 
 # Groepsleden
