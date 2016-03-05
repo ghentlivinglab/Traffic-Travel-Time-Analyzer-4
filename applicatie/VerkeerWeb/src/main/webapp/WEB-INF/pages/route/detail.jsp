@@ -33,7 +33,7 @@
                                 <tr>
                                     <td>${data.provider}</td>
                                     <td><span class="time" data-time=${data.travelTime}></span></td>
-                                    <td><span class="label label-warning time" data-time=${data.delay}></span></td>
+                                    <td><span class="label-delay time" data-time=${data.delay}></span></td>
                                 </tr>
                             </c:forEach>
                             </tbody>

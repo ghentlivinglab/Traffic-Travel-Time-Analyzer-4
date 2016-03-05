@@ -37,7 +37,7 @@ $(function () {
                 }
             })
             .done(function (routeData) {
-                setTableData("#data-table", "#data-table-body", routeData)
+                setTableData("#data-table", "#data-table-body", routeData);
                 setChartData(routeData);
             });
     }
@@ -46,12 +46,14 @@ $(function () {
         $(tableBodyId).empty();
         routeData.forEach(function (ele) {
             var date = new Date(ele.timestamp);
+            var delayLevel = getDelayLevel(ele.delay);
+            var label = getBootstrapLabelDelay(delayLevel);
             var row = "<tr>"
                 + "<td>" + moment(date).format("D/MM/YYYY") + "</td>"
                 + "<td>" + moment(date).format("HH:mm:ss") + "</td>"
                 + "<td>" + ele.provider + "</td>"
                 + "<td>" + secondsToText(ele.travelTime) + "</td>"
-                + "<td><span class='label label-warning'>" + secondsToText(ele.delay) + "</span></td>"
+                + "<td><span class='" + label + "'>" + secondsToText(ele.delay) + "</span></td>"
                 + "</tr>";
             $(tableBodyId).append(row);
         });
@@ -132,10 +134,9 @@ $(function () {
         routeData.forEach(function (ele) {
             var provider = providersDict[ele.provider];
             if (!provider) {
-                var provider = {
+                provider = {
                     name: ele.provider,
                     data: []
-
                 };
                 providersDict[ele.provider] = provider;
             }
