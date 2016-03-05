@@ -6,7 +6,7 @@
 * /applicatie/verkeer*: De verschillende netbeans projecten van het project. Het 'verkeer' project is het overkoepelend project.
 * /db: bevat een dump van de database
 * /docs: bevat de aangeleverde documentatie
-* /build: [//TODO] Bevat de war file van de website en de jar file van de verkeer polling service.
+* /build: Bevat de war file van de website en de jar file van de verkeer polling service.
 
 # Opzetten test omgeving
 
@@ -36,6 +36,8 @@ Zodra de juiste configuratie is ingesteld volstaat het de war te deployen op gla
 ```
 java -jar VerkeerPollService-1.0-SNAPSHOT.jar
 ```
+
+Vanuit netbeans kan je ook het project starten, alle projecten zijn maven projecten die je kan openen in netbeans. Er is ook een overkoepelend project verkeer dat gebruikt kan worden om 'build with dependencies' uit te voeren. Daarna volstaat het ofwel VerkeerWeb of VerkeerPollService te starten
 
 # Documentatie
 
