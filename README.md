@@ -14,6 +14,10 @@ Zowel in de war als jar file zit een application.conf bestand dat de configurati
 Er is ook een database-dev.conf bestand dat de database configuratie bevat (wanneer general.inProduction = false).
 // TODO verder uitschrijven
 
+# Documentatie
+
+[Structuur & requirements van scrapers](wiki/Documentatie-Scrapers)
+
 
 # Groepsleden
 
