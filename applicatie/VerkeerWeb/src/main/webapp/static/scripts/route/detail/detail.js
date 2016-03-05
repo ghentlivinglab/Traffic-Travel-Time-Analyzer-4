@@ -2,6 +2,12 @@ $(function () {
     "use strict";
 
     var routeChart;
+    var combinedTravelTimes = [];
+    var combinedDelays = [];
+    var showingDelayChart = false;
+    const travelTimeTitle = "Reistijden per provider";
+    const delayTitle = "Vertraging per provider";
+
     $(document).ready(function () {
         markExtremeProviders();
         $("#datetimepicker-begin").datetimepicker({
@@ -21,6 +27,7 @@ $(function () {
         );
 
         $("#update-btn").click(getRouteData);
+        $("#toggle-btn").click(toggleChart);
         buildChart();
         // Fill table with the default filters
         getRouteData();
@@ -37,8 +44,12 @@ $(function () {
                 }
             })
             .done(function (routeData) {
+                showingDelayChart = false;
+                routeChart.setTitle({text: travelTimeTitle});
                 setTableData("#data-table", "#data-table-body", routeData);
-                setChartData(routeData);
+                combineRouteData(routeData, "travelTime", combinedTravelTimes);
+                combineRouteData(routeData, "delay", combinedDelays);
+                setChartData(combinedTravelTimes);
             });
     };
 
@@ -70,7 +81,7 @@ $(function () {
                 zoomType: 'x'
             },
             title: {
-                text: 'Historiek per provider'
+                text: travelTimeTitle
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
@@ -84,7 +95,7 @@ $(function () {
             },
             yAxis: {
                 title: {
-                    text: 'Reistijd (s)'
+                    text: 'Duur (s)'
                 }
             },
             tooltip: {
@@ -100,53 +111,61 @@ $(function () {
         routeChart = $('#container').highcharts();
     };
 
-    var clearAllChartData = function clearAllChartData(redraw) {
+    var clearAllChartData = function clearAllChartData() {
         if (!routeChart || !routeChart.series) return;
 
         while (routeChart.series.length > 0) {
             // todo bug? Repaints with false...
             routeChart.series[0].remove(false);
         }
-        if (redraw) routeChart.redraw();
+        routeChart.redraw();
     };
 
-    var setChartData = function setChartData(routeData) {
-        var newData = false;
-        if (routeData && routeData.length !== 0) {
-            newData = true;
-        }
-        if (routeChart.series.length > 0) {
-            // clear existing data
-            clearAllChartData(!newData);
-        }
-        if (newData) {
+    var setChartData = function setChartData(series) {
+        clearAllChartData();
+
+        if (series && series.length > 0) {
             // Put new data on chart
-            var providers = combineRouteData(routeData);
-            for (var provider in providers) {
-                routeChart.addSeries(providers[provider], false);
-            }
+            series.forEach(function (serie) {
+                routeChart.addSeries(serie, false);
+            });
             routeChart.redraw();
         }
     };
 
-    var combineRouteData = function combineRouteData(routeData) {
-        var providersDict = {};
+    var combineRouteData = function combineRouteData(routeData, xAxisProperty, container) {
+        var dict = {}; // <provider name, provider object>
+
+        // combine all data in one object per provider
         routeData.forEach(function (ele) {
-            var provider = providersDict[ele.provider];
+            var provider = dict[ele.provider];
             if (!provider) {
                 provider = {
                     name: ele.provider,
                     data: []
                 };
-                providersDict[ele.provider] = provider;
+                dict[ele.provider] = provider;
             }
-            provider.data.push([ele.timestamp, ele.travelTime]);
+            provider.data.push([ele.timestamp, ele[xAxisProperty]]);
         });
-        var providerArr = [];
-        for (var providerKey in providersDict) {
-            providerArr.push(providersDict[providerKey]);
+
+        // empty container
+        container.length = 0;
+        // fill container
+        for (var providerKey in dict) {
+            container.push(dict[providerKey]);
         }
-        return providerArr;
+    };
+
+    var toggleChart = function toggleChart() {
+        if (showingDelayChart) {
+            setChartData(combinedTravelTimes);
+            routeChart.setTitle({text: travelTimeTitle});
+        } else {
+            setChartData(combinedDelays);
+            routeChart.setTitle({text: delayTitle});
+        }
+        showingDelayChart = !showingDelayChart;
     };
 
     var getSecondsFromSummaryRow = function getSecondsFromSummaryRow(row) {
