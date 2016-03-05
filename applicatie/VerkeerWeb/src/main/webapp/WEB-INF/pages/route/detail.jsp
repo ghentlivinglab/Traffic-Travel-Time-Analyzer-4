@@ -28,7 +28,7 @@
                                 <th>Vertraging</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="summary-table-body">
                             <c:forEach var="data" items="${detail.summaries}">
                                 <tr>
                                     <td>${data.provider}</td>

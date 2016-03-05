@@ -3,7 +3,7 @@ $(function () {
 
     var routeChart;
     $(document).ready(function () {
-
+        markExtremeProviders();
         $("#datetimepicker-begin").datetimepicker({
             format: 'DD/MM/YYYY HH:mm',
             showTodayButton: true,
@@ -26,7 +26,7 @@ $(function () {
         getRouteData();
     });
 
-    function getRouteData() {
+    var getRouteData = function getRouteData() {
         $.ajax({
                 method: "GET",
                 url: "routedata",
@@ -40,9 +40,9 @@ $(function () {
                 setTableData("#data-table", "#data-table-body", routeData);
                 setChartData(routeData);
             });
-    }
+    };
 
-    function setTableData(tableId, tableBodyId, routeData) {
+    var setTableData = function setTableData(tableId, tableBodyId, routeData) {
         $(tableBodyId).empty();
         routeData.forEach(function (ele) {
             var date = new Date(ele.timestamp);
@@ -62,9 +62,9 @@ $(function () {
         // set sorting column and direction
         var sorting = [[0, 0], [1, 0], [2, 0]];
         $(tableId).trigger("sorton", [sorting]);
-    }
+    };
 
-    function buildChart() {
+    var buildChart = function buildChart() {
         $('#container').highcharts({
             chart: {
                 zoomType: 'x'
@@ -98,9 +98,9 @@ $(function () {
             }
         });
         routeChart = $('#container').highcharts();
-    }
+    };
 
-    function clearAllChartData(redraw) {
+    var clearAllChartData = function clearAllChartData(redraw) {
         if (!routeChart || !routeChart.series) return;
 
         while (routeChart.series.length > 0) {
@@ -108,9 +108,9 @@ $(function () {
             routeChart.series[0].remove(false);
         }
         if (redraw) routeChart.redraw();
-    }
+    };
 
-    function setChartData(routeData) {
+    var setChartData = function setChartData(routeData) {
         var newData = false;
         if (routeData && routeData.length !== 0) {
             newData = true;
@@ -127,9 +127,9 @@ $(function () {
             }
             routeChart.redraw();
         }
-    }
+    };
 
-    function combineRouteData(routeData) {
+    var combineRouteData = function combineRouteData(routeData) {
         var providersDict = {};
         routeData.forEach(function (ele) {
             var provider = providersDict[ele.provider];
@@ -147,5 +147,33 @@ $(function () {
             providerArr.push(providersDict[providerKey]);
         }
         return providerArr;
-    }
+    };
+
+    var getSecondsFromSummaryRow = function getSecondsFromSummaryRow(row) {
+        var td = row.children[1]; // second td, the traveltime
+        var span = td.children[0]; // the span
+        return parseInt(span.getAttribute("data-time"));
+    };
+
+    var markExtremeProviders = function markExtremeProviders() {
+        var table = document.getElementById("summary-table-body");
+
+        var travelTimes = [];
+        var rowLength = table.rows.length;
+        for (var i = 0; i < rowLength; i += 1) {
+            var row = table.rows[i];
+            travelTimes.push(getSecondsFromSummaryRow(row));
+        }
+
+        var m = mean(travelTimes);
+        var vrnc = variance(m, travelTimes);
+        var stdev = standardDeviation(vrnc);
+
+        for (i = 0; i < rowLength; i += 1) {
+            row = table.rows[i];
+            if (!withinStd(travelTimes[i], m, stdev, 1)) {
+                row.className += " danger";
+            }
+        }
+    };
 });
