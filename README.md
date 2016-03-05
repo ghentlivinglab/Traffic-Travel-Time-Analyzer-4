@@ -10,6 +10,8 @@
 
 # Opzetten test omgeving
 
+Er wordt gebruik gemaakt van een databank, dus de database die je onder /db kan vinden moet eerst gerestored worden.
+
 Zowel in de war als jar file zit een application.conf bestand dat de configuratie bevat. Hierin staat o.a de API keys en het pad naar de scrapers map. 
 ```
 general.inProduction=true
@@ -21,7 +23,7 @@ APIKeys.BingMaps = "Al2KtFQ_rRUJ7fHbjzEMRiYMIa0Kz-XAcrg47_u1wduJ_BbNY8rcwP3WoCus
 ScrapePath = "/scrapers/"
 PerlPath = "/usr/bin/perl"
 ```
-Er is ook een database-prod.conf bestand dat de database configuratie bevat (wanneer general.inProduction = true):
+Er is ook een database-prod.conf bestand dat de database configuratie bevat (database-dev.conf wordt gebruikt wanneer general.inProduction=false is aangegeven):
 ```
 database {  
       user = "root"
