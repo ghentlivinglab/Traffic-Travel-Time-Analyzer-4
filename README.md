@@ -16,7 +16,7 @@ Er is ook een database-dev.conf bestand dat de database configuratie bevat (wann
 
 # Documentatie
 
-[Structuur & requirements van scrapers](wiki/Documentatie-Scrapers)
+[Structuur & requirements van scrapers](https://github.ugent.be/iii-vop2016/verkeer-4/wiki/Documentatie-Scrapers)
 
 
 # Groepsleden
