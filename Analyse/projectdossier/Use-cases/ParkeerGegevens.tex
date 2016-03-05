@@ -1,0 +1,24 @@
+\noindent
+\begin{longtable}{|>{\raggedleft\hsize=.7\hsize\bfseries}X|
+    >{\arraybackslash\hsize=1.3\hsize}X|} \hline
+\multicolumn{1}{|l|}{\textbf{Use Case}} &  Verzamel Parkeer \& bord gegevens\\ \hline
+Primaire actor & Polling Service \\ \hline
+Stakeholders & \\ \hline
+Preconditie & De parkeer \& bord-gegevens moeten weggeschreven kunnen worden naar de databank. \\ \hline
+Postconditie & De parkeer \& bord-gegevens zijn weggeschreven naar de database.\\ \hline
+\multicolumn{1}{|l|}{\textbf{Normaal verloop}} & \\ \hline
+1. & De polling service wenst parkeer \& bord-gegevens op te slaan. \\ \hline
+2. & De polling service haalt parkeer \& bord-gegevens op.\\ \hline
+3. & Het systeem slaat de opgehaalde parkeer \& bord-gegevens op.\\ \hline
+4. & De parkeer \& bord-gegevens zijn weggeschreven naar de database. \\ \hline
+\multicolumn{1}{|l|}{\textbf{Alternatief verloop}} & \\ \hline
+2A. & De polling service kan de parkeer \& bord-gegevens niet ophalen. \\ \hline
+2A1. & Het systeem toont een correcte melding. \\ \hline
+2A2. & (Terug naar stap 1)(Postconditie niet bereikt). \\ \hline
+& \\ \hline
+3A. & Het systeem kan de opgehaalde parkeer \& bord-gegevens niet wegschrijven naar de databank. \\ \hline
+3A1. & Het systeem toont een correcte melding. \\ \hline
+3A2. & (Terug naar stap 2)(Postconditie niet bereikt). \\ \hline
+\multicolumn{1}{|l|}{\textbf{Domeinspecifieke regels}} & \\ \hline
+\multicolumn{1}{|l|}{\textbf{Op te klaren punten}} & Bij falen opnieuw proberen of stoppen? \\ \hline \caption{UC: parkeer \& bord-gegevens verzamelen\label{uc:parkeergegevens}}
+\end{longtable}
