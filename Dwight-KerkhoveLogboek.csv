@@ -41,3 +41,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 01/03/16,08:15,12:15,School,"Sprint meeting, issues overlopen, afgewerkte feature branches mergen, bespreken TODOs voor einde sprint",,
 02/03/16,19:00,20:00,Thuis,"Verplaatsen van scrapers naar andere server, ssh tunnel leggen voor localhost:3306 mariadb",,
 04/03/16,18:00,19:00,Thuis,"Analyze doorlopen, GUI consistenter maken, performance fixes",,
+05/03/16,11:00,12:00,Thuis,"Readme verder afgewerkt, 1e draft presentatie",46,
