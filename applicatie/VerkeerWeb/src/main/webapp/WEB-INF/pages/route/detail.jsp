@@ -52,6 +52,7 @@
                     <div id="map" style="height:500px">
                     </div>
                 </div>
+                <a href="${pageContext.servletContext.contextPath}/route/edit/${detail.id}">Traject aanpassen</a>
             </div>
         </div>
     </div>

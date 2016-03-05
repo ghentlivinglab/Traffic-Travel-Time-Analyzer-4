@@ -138,6 +138,7 @@ public class RouteController {
         
         // maak route edit view model
         RouteEditVM re = new RouteEditVM();
+        re.setId(r.getId());
         re.setName(r.getName());
         re.setFromAddress(r.getFromAddress());
         re.setToAddress(r.getToAddress());
