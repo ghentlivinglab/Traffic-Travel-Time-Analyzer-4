@@ -30,7 +30,7 @@ var MapManagement;
             if (!this.leafletMapRouteById[r.id]) {
                 var latLngs = MapManager.convertWaypointsToLatLng(r.waypoints);
                 var color = MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage);
-                var path = L.polyline(latLngs, { color: color });
+                var path = L.polyline(latLngs, { stroke: true, weight: 5, color: color, opacity: 1 });
                 this.initializePathPopup(path, r);
                 this.map.addLayer(path, false);
                 llmr = new LeafletMapRoute(path, r, latLngs);
@@ -69,13 +69,28 @@ var MapManagement;
             path.bindPopup(route.name + " (" + route.distance + "m)", {});
         };
         MapManager.getColorFromTrafficDelayPercentage = function (delayPercentage) {
+            var r1 = 84;
+            var g1 = 228;
+            var b1 = 98;
+            var r2 = 240;
+            var g2 = 76;
+            var b2 = 80;
+            delayPercentage *= 3;
+            if (delayPercentage > 1)
+                delayPercentage = 1;
+            if (delayPercentage < 0)
+                delayPercentage = 0;
+            var r = Math.floor(r1 + delayPercentage * (r2 - r1));
+            var g = Math.floor(g1 + delayPercentage * (g2 - g1));
+            var b = Math.floor(b1 + delayPercentage * (b2 - b1));
+            return "rgb(" + r + ", " + g + ", " + b + ")";
             if (delayPercentage >= 0 && delayPercentage < 0.10)
                 return "green";
-            else if (delayPercentage >= 0.1 && delayPercentage < 0.30)
-                return "yellow";
-            else if (delayPercentage >= 0.3 && delayPercentage < 0.60)
+            else if (delayPercentage >= 0.1 && delayPercentage < 0.50)
                 return "orange";
-            else if (delayPercentage >= 0.6 && delayPercentage < 0.90)
+            else if (delayPercentage >= 0.1 && delayPercentage < 0.50)
+                return "orange";
+            else if (delayPercentage >= 0.5 && delayPercentage < 0.90)
                 return "red";
             else if (delayPercentage >= 0.9)
                 return "brown";

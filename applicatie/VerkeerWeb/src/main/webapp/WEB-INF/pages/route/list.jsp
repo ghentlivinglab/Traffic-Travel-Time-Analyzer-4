@@ -32,7 +32,6 @@
                     <table class="table sortable">
                         <thead>
                             <tr>
-                                <th>Id</th>
                                 <th>Naam</th>
                                 <th>Afstand</th>
                                 <th>Normale Reisduur</th>
@@ -43,9 +42,6 @@
                         <tbody>
                             <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
                                 <tr>
-                                    <td>
-                                        ${routeSummaryEntry.route.id}
-                                    </td>
                                     <td>
                                         <a href="detail?id=${routeSummaryEntry.route.id}">
                                             ${routeSummaryEntry.route.name}
@@ -86,7 +82,7 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <div class="dropdown">
+                                      <div class="dropdown">
                                         <div class="button-group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                                 <span class="glyphicon glyphicon-cog"></span>
@@ -104,8 +100,7 @@
                                             </ul>
                                         </div>                      
                                     </div>
-                                </th>
-                                <th>Naam</th>
+                                    Naam</th>
                                 <th>Afstand<br/>m</th>
                                 <th>Normale Reistijd</th>
                                 <th>Gem. Vertraging</th>
@@ -186,9 +181,6 @@
                         <tbody>
                             <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
                                 <tr>
-                                    <td>
-                                        ${routeSummaryEntry.route.id}
-                                    </td>
                                     <td>
                                         <a href="detail?id=${routeSummaryEntry.route.id}">
                                             ${routeSummaryEntry.route.name}

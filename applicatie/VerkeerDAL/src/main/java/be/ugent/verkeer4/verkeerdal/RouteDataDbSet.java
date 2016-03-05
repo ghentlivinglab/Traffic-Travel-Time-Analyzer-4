@@ -20,11 +20,11 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         map.put("From", from);
         map.put("To", to);
 
-        return this.getRouteDataAlignedTo5min("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map);
+        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map);
     }
 
     public List<RouteData> getRouteDataAlignedTo5min(String condition, Map<String, Object> parameters) {
-
+        // Opgelet: door de functie is dit stukken trager!
         try (org.sql2o.Connection con = sql2o.open()) {
             Query q = con.createQuery("select rd.id as id, rd.routeId as routeId, rd.provider as provider, " +
                     "FloorToNearest5min(rd.Timestamp) as timestamp, rd.traveltime as traveltime, rd.delay as delay "
@@ -47,7 +47,7 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         // http://stackoverflow.com/a/8757062/694640 want inner join is veel te traag door disk seek
         try (org.sql2o.Connection con = sql2o.open()) {
 
-            String query = "select rd.id as id, rd.routeId as routeId, rd.provider as provider, max(FloorToNearest5min(rd.Timestamp)) as timestamp, " +
+            String query = "select rd.id as id, rd.routeId as routeId, rd.provider as provider, max(rd.Timestamp) as timestamp, " +
                     "rd.traveltime as traveltime, rd.delay as delay "
                     + "from " + getTableName() + " rd ";
             if (condition != null) {
