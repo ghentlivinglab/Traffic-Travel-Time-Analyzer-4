@@ -11,3 +11,22 @@
     display:none;
 }
 
+.animated-polyline {
+        stroke-dasharray: 5 5;
+	animation: dash 6s infinite linear;
+	-ms-animation: dash 6s infinite linear;
+	-moz-animation: dash 6s infinite linear;
+	-o-animation: dash 6s infinite linear;
+	-webkit-animation-name: dash;
+	-webkit-animation-duration: 6s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+}
+
+.offset-polyline	{ transform: translate(5px, 5px); }
+.no-offset-polyline	{ transform: none; }
+@keyframes dash			{ to { stroke-dashoffset: -100; } }
+@-webkit-keyframes dash	{ to { stroke-dashoffset: -100; } }
+@-moz-keyframes dash	{ to { stroke-dashoffset: -100; } }
+@-ms-keyframes dash		{ to { stroke-dashoffset: -100; } }
+@-o-keyframes dash		{ to { stroke-dashoffset: -100; } }

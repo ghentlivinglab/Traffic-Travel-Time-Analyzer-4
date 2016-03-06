@@ -6,8 +6,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 var MapManagement;
 (function (MapManagement) {
     var LeafletMapRoute = (function () {
-        function LeafletMapRoute(layer, route, points) {
+        function LeafletMapRoute(layer, layer2, route, points) {
             this.layer = layer;
+            this.layer2 = layer2;
             this.route = route;
             this.points = points;
         }
@@ -29,18 +30,23 @@ var MapManagement;
             var llmr;
             if (!this.leafletMapRouteById[r.id]) {
                 var latLngs = MapManager.convertWaypointsToLatLng(r.waypoints);
-                var color = MapManager.getColor(r.currentDelay);
+                var color = MapManager.getColor(r.currentDelay, false);
+                var colordark = MapManager.getColor(r.currentDelay, true);
                 var path = L.polyline(latLngs, { stroke: true, weight: 5, color: color, opacity: 1 });
+                var path2 = L.polyline(latLngs, { stroke: true, weight: 3, color: colordark, opacity: 1, className: "animated-polyline" });
                 this.initializePathPopup(path, r);
                 this.map.addLayer(path, false);
-                llmr = new LeafletMapRoute(path, r, latLngs);
+                this.map.addLayer(path2, false);
+                llmr = new LeafletMapRoute(path, path2, r, latLngs);
                 this.leafletMapRouteById[r.id] = llmr;
             }
             else {
                 // already exists, update layer
                 llmr = this.leafletMapRouteById[r.id];
-                llmr.layer.setStyle({ fillColor: MapManager.getColor(r.currentDelay) });
+                llmr.layer.setStyle({ fillColor: MapManager.getColor(r.currentDelay, false) });
+                llmr.layer2.setStyle({ fillColor: MapManager.getColor(r.currentDelay, true) });
                 llmr.layer.redraw();
+                llmr.layer2.redraw();
             }
         };
         MapManager.prototype.centerMap = function () {
@@ -73,15 +79,15 @@ var MapManagement;
                 window.formatTimes();
             });
         };
-        MapManager.getColor = function (delay) {
+        MapManager.getColor = function (delay, dark) {
             var level = window.getDelayLevel(delay);
             // spijtig genoeg zijn paths met svg en kunnen er geen css klassen gebruikt worden
             if (level == 0)
-                return "#5cb85c";
+                return dark ? "#306e30" : "#5cb85c";
             else if (level == 1)
-                return "#f0ad4e";
+                return dark ? "#df8a13" : "#f0ad4e";
             else if (level == 2)
-                return "#d9534f";
+                return dark ? "#b52b27" : "#d9534f";
             return "#5cb85c";
         };
         MapManager.convertWaypointsToLatLng = function (waypoints) {
@@ -94,12 +100,18 @@ var MapManagement;
         };
         MapManager.prototype.setRouteVisibility = function (id, visible) {
             var path = this.leafletMapRouteById[id].layer;
+            var path2 = this.leafletMapRouteById[id].layer2;
             // great Open source (TM): https://github.com/Leaflet/Leaflet/issues/2662
             var element = path._path;
-            if (visible)
+            var element2 = path2._path;
+            if (visible) {
                 $(element).show();
-            else
+                $(element2).show();
+            }
+            else {
                 $(element).hide();
+                $(element2).hide();
+            }
         };
         return MapManager;
     })();
