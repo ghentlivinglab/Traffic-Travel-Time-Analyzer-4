@@ -42,3 +42,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 02/03/16,19:00,20:00,Thuis,"Verplaatsen van scrapers naar andere server, ssh tunnel leggen voor localhost:3306 mariadb",,
 04/03/16,18:00,19:00,Thuis,"Analyze doorlopen, GUI consistenter maken, performance fixes",,
 05/03/16,11:00,12:00,Thuis,"Readme verder afgewerkt, 1e draft presentatie",46,
+06/03/16,09:00,12:00,Thuis,"Kleurcodes toegepast op map, betere geanimeerde weergave en popup. POI scrapers",,
