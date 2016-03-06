@@ -12,6 +12,7 @@
 <body>
 <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
 <div class="container">
+    <input type="hidden" id="routeId" value="${detail.id}" />
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -28,12 +29,12 @@
                                 <th>Vertraging</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="summary-table-body">
                             <c:forEach var="data" items="${detail.summaries}">
                                 <tr>
                                     <td>${data.provider}</td>
                                     <td><span class="time" data-time=${data.travelTime}></span></td>
-                                    <td><span class="label label-warning time" data-time=${data.delay}></span></td>
+                                    <td><span class="label-delay time" data-time=${data.delay}></span></td>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -52,6 +53,7 @@
                     <div id="map" style="height:500px">
                     </div>
                 </div>
+                <a href="${pageContext.servletContext.contextPath}/route/edit/${detail.id}">Traject aanpassen</a>
             </div>
         </div>
     </div>
@@ -98,6 +100,7 @@
                 <div class="container">
                     <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
                 </div>
+                <button id="toggle-btn" type="button" class="btn btn-primary" style="margin: 10px auto">Toggle</button>
                 <table id="data-table" class="table table-striped table-condensed sortable">
                     <thead>
                     <tr>

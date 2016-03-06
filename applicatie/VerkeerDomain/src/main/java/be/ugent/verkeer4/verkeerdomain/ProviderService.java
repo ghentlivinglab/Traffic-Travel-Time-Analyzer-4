@@ -5,6 +5,7 @@ import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.provider.BeMobileProvider;
+import be.ugent.verkeer4.verkeerdomain.provider.BingMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.CoyoteProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.GoogleProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.HereMapsProvider;
@@ -53,6 +54,7 @@ public class ProviderService extends BaseService implements IProviderService {
         perRouteProviders.add(new GoogleProvider());
         perRouteProviders.add(new WazeProvider());
         perRouteProviders.add(new ViaMichelinProvider());
+        perRouteProviders.add(new BingMapsProvider());
 
         this.summaryProviders = new ArrayList<>();
         summaryProviders.add(new CoyoteProvider(routeService));
@@ -71,7 +73,7 @@ public class ProviderService extends BaseService implements IProviderService {
     @Override
     public void poll() throws ClassNotFoundException {
 
-        ExecutorService pool = Executors.newFixedThreadPool(6);
+        ExecutorService pool = Executors.newFixedThreadPool(10);
 
         List<Future> futures = new ArrayList<>();
         futures.add(pool.submit(() -> {

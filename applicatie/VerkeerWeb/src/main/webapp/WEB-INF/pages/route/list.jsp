@@ -32,7 +32,6 @@
                     <table class="table sortable">
                         <thead>
                             <tr>
-                                <th>Id</th>
                                 <th>Naam</th>
                                 <th>Afstand</th>
                                 <th>Normale Reisduur</th>
@@ -44,10 +43,7 @@
                             <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
                                 <tr>
                                     <td>
-                                        ${routeSummaryEntry.route.id}
-                                    </td>
-                                    <td>
-                                        <a href="detail?id=${routeSummaryEntry.route.id}">
+                                        <a href="detail/${routeSummaryEntry.route.id}">
                                             ${routeSummaryEntry.route.name}
                                         </a>
                                     </td>
@@ -86,7 +82,7 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <div class="dropdown">
+                                      <div class="dropdown">
                                         <div class="button-group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                                 <span class="glyphicon glyphicon-cog"></span>
@@ -104,10 +100,9 @@
                                             </ul>
                                         </div>                      
                                     </div>
-                                </th>
-                                <th>Naam</th>
-                                <th>Afstand<br/>m</th>
-                                <th>Normale Reistijd</th>
+                                    Naam</th>
+                                <th>Afstand</th>
+                                <th>Huidige Reistijd</th>
                                 <th>Gem. Vertraging</th>
                                 <th class="provider-header provider-hr" data-provider="0">
                                     <img class="header" src="<c:url value="/static/images/tomtom.png" />"/>
@@ -187,10 +182,7 @@
                             <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
                                 <tr>
                                     <td>
-                                        ${routeSummaryEntry.route.id}
-                                    </td>
-                                    <td>
-                                        <a href="detail?id=${routeSummaryEntry.route.id}">
+                                        <a href="detail/${routeSummaryEntry.route.id}">
                                             ${routeSummaryEntry.route.name}
                                         </a>
                                     </td>

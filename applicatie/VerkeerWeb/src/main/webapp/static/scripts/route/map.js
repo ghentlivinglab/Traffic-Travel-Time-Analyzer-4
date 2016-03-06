@@ -38,8 +38,8 @@ var MapManagement;
             var llmr;
             if (!this.leafletMapRouteById[r.id]) {
                 var latLngs = MapManager.convertWaypointsToLatLng(r.waypoints);
-                var color = MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage);
-                var path = L.polyline(latLngs, { color: color });
+                var color = MapManager.getColor(r.currentDelay);
+                var path = L.polyline(latLngs, { stroke: true, weight: 5, color: color, opacity: 1 });
                 this.initializePathPopup(path, r);
                 this.map.addLayer(path, false);
                 llmr = new LeafletMapRoute(path, r, latLngs);
@@ -48,7 +48,7 @@ var MapManagement;
             else {
                 // already exists, update layer
                 llmr = this.leafletMapRouteById[r.id];
-                llmr.layer.setStyle({ fillColor: MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage) });
+                llmr.layer.setStyle({ fillColor: MapManager.getColor(r.currentDelay) });
                 llmr.layer.redraw();
             }
         };
@@ -95,20 +95,23 @@ var MapManagement;
             }
         };
         MapManager.prototype.initializePathPopup = function (path, route) {
-            path.bindPopup(route.name + " (" + route.distance + "m)", {});
+            path.bindPopup("\n                " + route.name + " (" + route.distance + "m)\n                <br>\n                  <span class=\"label label-info time\" data-time=\"" + route.averageCurrentTravelTime + "\">\n                      " + route.averageCurrentTravelTime + "\n                  </span>                  \n                  <span class=\"label time label-delay\" data-time=\"" + route.currentDelay + "\">\n                    " + route.currentDelay + "\n                  </span>\n                  <div class=\"pull-right\">\n                        <a href='detail/" + route.id + "'>Detail</a>\n                  </div>\n            ", {});
+            path.on("popupopen", function () {
+                // todo beter afhandelen
+                window.labelDelays();
+                window.formatTimes();
+            });
         };
-        MapManager.getColorFromTrafficDelayPercentage = function (delayPercentage) {
-            if (delayPercentage >= 0 && delayPercentage < 0.10)
-                return "green";
-            else if (delayPercentage >= 0.1 && delayPercentage < 0.30)
-                return "yellow";
-            else if (delayPercentage >= 0.3 && delayPercentage < 0.60)
-                return "orange";
-            else if (delayPercentage >= 0.6 && delayPercentage < 0.90)
-                return "red";
-            else if (delayPercentage >= 0.9)
-                return "brown";
-            return "green";
+        MapManager.getColor = function (delay) {
+            var level = window.getDelayLevel(delay);
+            // spijtig genoeg zijn paths met svg en kunnen er geen css klassen gebruikt worden
+            if (level == 0)
+                return "#5cb85c";
+            else if (level == 1)
+                return "#f0ad4e";
+            else if (level == 2)
+                return "#d9534f";
+            return "#5cb85c";
         };
         MapManager.convertWaypointsToLatLng = function (waypoints) {
             var latlngs = [];

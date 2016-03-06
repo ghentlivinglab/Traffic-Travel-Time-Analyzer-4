@@ -22,6 +22,8 @@ namespace MapManagement {
         id: number;
         name: string;
         distance: number;
+        averageCurrentTravelTime:number;
+        currentDelay:number;
         trafficDelayPercentage: number;
         waypoints: MapWaypoint[];
     }
@@ -63,10 +65,10 @@ namespace MapManagement {
 
                 let latLngs = MapManager.convertWaypointsToLatLng(r.waypoints);
 
-                let color = MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage);
+                let color = MapManager.getColor(r.currentDelay);
 
-                let path = L.polyline(latLngs, { color: color, });
-
+                let path = L.polyline(latLngs, { stroke:true, weight:5, color: color, opacity:1 });
+                
                 this.initializePathPopup(path, r);
 
                 this.map.addLayer(path, false);
@@ -76,7 +78,7 @@ namespace MapManagement {
             else {
                 // already exists, update layer
                 llmr = this.leafletMapRouteById[r.id];
-                llmr.layer.setStyle({ fillColor: MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage) });
+                llmr.layer.setStyle({ fillColor: MapManager.getColor(r.currentDelay) });
                 llmr.layer.redraw();
             }
         }
@@ -133,22 +135,37 @@ namespace MapManagement {
 
 
         private initializePathPopup(path: L.Path, route: MapRoute) {
-            path.bindPopup(`${route.name} (${route.distance}m)`, {});
+            path.bindPopup(`
+                ${route.name} (${route.distance}m)
+                <br>
+                  <span class="label label-info time" data-time="${route.averageCurrentTravelTime}">
+                      ${route.averageCurrentTravelTime}
+                  </span>                  
+                  <span class="label time label-delay" data-time="${route.currentDelay}">
+                    ${route.currentDelay}
+                  </span>
+                  <div class="pull-right">
+                        <a href='detail/${route.id}'>Detail</a>
+                  </div>
+            `, {});
+            path.on("popupopen", () => {
+                // todo beter afhandelen
+                 (<any>window).labelDelays();
+                 (<any>window).formatTimes();
+            });
         }
 
-        private static getColorFromTrafficDelayPercentage(delayPercentage: number): string {
-            if (delayPercentage >= 0 && delayPercentage < 0.10)
-                return "green";
-            else if (delayPercentage >= 0.1 && delayPercentage < 0.30)
-                return "yellow";
-            else if (delayPercentage >= 0.3 && delayPercentage < 0.60)
-                return "orange";
-            else if (delayPercentage >= 0.6 && delayPercentage < 0.90)
-                return "red";
-            else if (delayPercentage >= 0.9)
-                return "brown";
-
-            return "green";
+        private static getColor(delay: number): string {
+            let level:number = (<any>window).getDelayLevel(delay);
+            // spijtig genoeg zijn paths met svg en kunnen er geen css klassen gebruikt worden
+            if(level == 0)
+                return "#5cb85c";
+            else if(level == 1)
+                return "#f0ad4e";
+            else if(level == 2) 
+                return "#d9534f";
+            
+            return "#5cb85c";
         }
 
         private static convertWaypointsToLatLng(waypoints: MapWaypoint[]): L.LatLng[] {
