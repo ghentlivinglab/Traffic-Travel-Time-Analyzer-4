@@ -50,12 +50,12 @@
                                                 ${routeSummaryEntry.route.distance} m
                                             </td>
                                             <td>
-                                                <span class="label label-warning time" data-time="${routeSummaryEntry.averageCurrentTravelTime}">
+                                                <span class="label label-info time" data-time="${routeSummaryEntry.averageCurrentTravelTime}">
                                                     ${routeSummaryEntry.averageCurrentTravelTime}
                                                 </span>  
                                             </td>
                                             <td>
-                                                <span class="label label-warning time" data-time="${routeSummaryEntry.delay}">
+                                                <span class="label time label-delay" data-time="${routeSummaryEntry.delay}">
                                                     ${routeSummaryEntry.delay}
                                                 </span>
                                             </td>

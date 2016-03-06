@@ -6,8 +6,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 var MapManagement;
 (function (MapManagement) {
     var LeafletMapRoute = (function () {
-        function LeafletMapRoute(layer, route, points) {
+        function LeafletMapRoute(layer, layer2, route, points) {
             this.layer = layer;
+            this.layer2 = layer2;
             this.route = route;
             this.points = points;
         }
@@ -29,18 +30,23 @@ var MapManagement;
             var llmr;
             if (!this.leafletMapRouteById[r.id]) {
                 var latLngs = MapManager.convertWaypointsToLatLng(r.waypoints);
-                var color = MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage);
+                var color = MapManager.getColor(r.currentDelay, false);
+                var colordark = MapManager.getColor(r.currentDelay, true);
                 var path = L.polyline(latLngs, { stroke: true, weight: 5, color: color, opacity: 1 });
+                var path2 = L.polyline(latLngs, { stroke: true, weight: 3, color: colordark, opacity: 1, className: "animated-polyline" });
                 this.initializePathPopup(path, r);
                 this.map.addLayer(path, false);
-                llmr = new LeafletMapRoute(path, r, latLngs);
+                this.map.addLayer(path2, false);
+                llmr = new LeafletMapRoute(path, path2, r, latLngs);
                 this.leafletMapRouteById[r.id] = llmr;
             }
             else {
                 // already exists, update layer
                 llmr = this.leafletMapRouteById[r.id];
-                llmr.layer.setStyle({ fillColor: MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage) });
+                llmr.layer.setStyle({ fillColor: MapManager.getColor(r.currentDelay, false) });
+                llmr.layer2.setStyle({ fillColor: MapManager.getColor(r.currentDelay, true) });
                 llmr.layer.redraw();
+                llmr.layer2.redraw();
             }
         };
         MapManager.prototype.centerMap = function () {
@@ -66,35 +72,23 @@ var MapManagement;
             }
         };
         MapManager.prototype.initializePathPopup = function (path, route) {
-            path.bindPopup(route.name + " (" + route.distance + "m)", {});
+            path.bindPopup("\n                " + route.name + " (" + route.distance + "m)\n                <br>\n                  <span class=\"label label-info time\" data-time=\"" + route.averageCurrentTravelTime + "\">\n                      " + route.averageCurrentTravelTime + "\n                  </span>                  \n                  <span class=\"label time label-delay\" data-time=\"" + route.currentDelay + "\">\n                    " + route.currentDelay + "\n                  </span>\n                  <div class=\"pull-right\">\n                        <a href='detail/" + route.id + "'>Detail</a>\n                  </div>\n            ", {});
+            path.on("popupopen", function () {
+                // todo beter afhandelen
+                window.labelDelays();
+                window.formatTimes();
+            });
         };
-        MapManager.getColorFromTrafficDelayPercentage = function (delayPercentage) {
-            var r1 = 84;
-            var g1 = 228;
-            var b1 = 98;
-            var r2 = 240;
-            var g2 = 76;
-            var b2 = 80;
-            delayPercentage *= 3;
-            if (delayPercentage > 1)
-                delayPercentage = 1;
-            if (delayPercentage < 0)
-                delayPercentage = 0;
-            var r = Math.floor(r1 + delayPercentage * (r2 - r1));
-            var g = Math.floor(g1 + delayPercentage * (g2 - g1));
-            var b = Math.floor(b1 + delayPercentage * (b2 - b1));
-            return "rgb(" + r + ", " + g + ", " + b + ")";
-            if (delayPercentage >= 0 && delayPercentage < 0.10)
-                return "green";
-            else if (delayPercentage >= 0.1 && delayPercentage < 0.50)
-                return "orange";
-            else if (delayPercentage >= 0.1 && delayPercentage < 0.50)
-                return "orange";
-            else if (delayPercentage >= 0.5 && delayPercentage < 0.90)
-                return "red";
-            else if (delayPercentage >= 0.9)
-                return "brown";
-            return "green";
+        MapManager.getColor = function (delay, dark) {
+            var level = window.getDelayLevel(delay);
+            // spijtig genoeg zijn paths met svg en kunnen er geen css klassen gebruikt worden
+            if (level == 0)
+                return dark ? "#306e30" : "#5cb85c";
+            else if (level == 1)
+                return dark ? "#df8a13" : "#f0ad4e";
+            else if (level == 2)
+                return dark ? "#b52b27" : "#d9534f";
+            return "#5cb85c";
         };
         MapManager.convertWaypointsToLatLng = function (waypoints) {
             var latlngs = [];
@@ -106,12 +100,18 @@ var MapManagement;
         };
         MapManager.prototype.setRouteVisibility = function (id, visible) {
             var path = this.leafletMapRouteById[id].layer;
+            var path2 = this.leafletMapRouteById[id].layer2;
             // great Open source (TM): https://github.com/Leaflet/Leaflet/issues/2662
             var element = path._path;
-            if (visible)
+            var element2 = path2._path;
+            if (visible) {
                 $(element).show();
-            else
+                $(element2).show();
+            }
+            else {
                 $(element).hide();
+                $(element2).hide();
+            }
         };
         return MapManager;
     })();

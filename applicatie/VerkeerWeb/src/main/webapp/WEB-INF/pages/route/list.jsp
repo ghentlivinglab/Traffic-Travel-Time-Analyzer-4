@@ -43,7 +43,7 @@
                             <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
                                 <tr>
                                     <td>
-                                        <a href="detail?id=${routeSummaryEntry.route.id}">
+                                        <a href="detail/${routeSummaryEntry.route.id}">
                                             ${routeSummaryEntry.route.name}
                                         </a>
                                     </td>
@@ -101,8 +101,8 @@
                                         </div>                      
                                     </div>
                                     Naam</th>
-                                <th>Afstand<br/>m</th>
-                                <th>Normale Reistijd</th>
+                                <th>Afstand</th>
+                                <th>Huidige Reistijd</th>
                                 <th>Gem. Vertraging</th>
                                 <th class="provider-header provider-hr" data-provider="0">
                                     <img class="header" src="<c:url value="/static/images/tomtom.png" />"/>
@@ -182,7 +182,7 @@
                             <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
                                 <tr>
                                     <td>
-                                        <a href="detail?id=${routeSummaryEntry.route.id}">
+                                        <a href="detail/${routeSummaryEntry.route.id}">
                                             ${routeSummaryEntry.route.name}
                                         </a>
                                     </td>
