@@ -36,9 +36,9 @@ $(function () {
     var getRouteData = function getRouteData() {
         $.ajax({
                 method: "GET",
-                url: "routedata",
+                url: "../routedata",
                 data: {
-                    id: getUrlParameter('id'),
+                    id: $("#routeId").val(),
                     startDate: $("#datetimepicker-begin").data("DateTimePicker").date().toDate(),
                     endDate: $("#datetimepicker-end").data("DateTimePicker").date().toDate()
                 }

@@ -43,7 +43,7 @@
                             <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
                                 <tr>
                                     <td>
-                                        <a href="detail?id=${routeSummaryEntry.route.id}">
+                                        <a href="detail/${routeSummaryEntry.route.id}">
                                             ${routeSummaryEntry.route.name}
                                         </a>
                                     </td>
@@ -182,7 +182,7 @@
                             <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
                                 <tr>
                                     <td>
-                                        <a href="detail?id=${routeSummaryEntry.route.id}">
+                                        <a href="detail/${routeSummaryEntry.route.id}">
                                             ${routeSummaryEntry.route.name}
                                         </a>
                                     </td>

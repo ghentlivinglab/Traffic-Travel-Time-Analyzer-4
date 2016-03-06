@@ -12,6 +12,7 @@
 <body>
 <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
 <div class="container">
+    <input type="hidden" id="routeId" value="${detail.id}" />
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
