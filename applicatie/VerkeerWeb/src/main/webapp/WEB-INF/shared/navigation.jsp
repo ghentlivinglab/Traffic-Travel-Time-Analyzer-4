@@ -16,8 +16,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="<c:url value="/route/list" />">Traject Overzicht <span class="sr-only">(current)</span></a></li>
-                <li><a href="<c:url value="/route/map" />">Traject Map</a></li>
+                <li><a href="<c:url value="/route/list" />">Overzicht <span class="sr-only">(current)</span></a></li>
+                <li><a href="<c:url value="/route/map" />">Kaartweergave</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

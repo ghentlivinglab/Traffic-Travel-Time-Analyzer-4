@@ -14,6 +14,8 @@ namespace MapManagement {
         id: number;
         name: string;
         distance: number;
+        averageCurrentTravelTime:number;
+        currentDelay:number;
         trafficDelayPercentage: number;
         waypoints: MapWaypoint[];
     }
@@ -23,7 +25,7 @@ namespace MapManagement {
     }
 
     class LeafletMapRoute {
-        constructor(public layer: L.Path, public route: MapRoute, public points: L.LatLng[]) { }
+        constructor(public layer: L.Path, public layer2:L.Path, public route: MapRoute, public points: L.LatLng[]) { }
     }
 
     class MapManager {
@@ -49,21 +51,26 @@ namespace MapManagement {
 
                 let latLngs = MapManager.convertWaypointsToLatLng(r.waypoints);
 
-                let color = MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage);
-
-                let path = L.polyline(latLngs, { color: color, });
-
+                let color = MapManager.getColor(r.currentDelay, false);
+                let colordark = MapManager.getColor(r.currentDelay, true);
+                let path = L.polyline(latLngs, { stroke:true, weight:5, color: color, opacity:1, });
+                let path2 = L.polyline(latLngs, { stroke:true, weight:3, color: colordark, opacity:1, className:"animated-polyline" });
+                
                 this.initializePathPopup(path, r);
 
                 this.map.addLayer(path, false);
-                llmr = new LeafletMapRoute(path, r, latLngs);
+                this.map.addLayer(path2, false);
+                
+                llmr = new LeafletMapRoute(path, path2, r, latLngs);
                 this.leafletMapRouteById[r.id] = llmr;
             }
             else {
                 // already exists, update layer
                 llmr = this.leafletMapRouteById[r.id];
-                llmr.layer.setStyle({ fillColor: MapManager.getColorFromTrafficDelayPercentage(r.trafficDelayPercentage) });
+                llmr.layer.setStyle({ fillColor: MapManager.getColor(r.currentDelay, false) });
+                llmr.layer2.setStyle({ fillColor: MapManager.getColor(r.currentDelay, true) });
                 llmr.layer.redraw();
+                llmr.layer2.redraw();
             }
         }
 
@@ -92,22 +99,37 @@ namespace MapManagement {
 
 
         private initializePathPopup(path: L.Path, route: MapRoute) {
-            path.bindPopup(`${route.name} (${route.distance}m)`, {});
+            path.bindPopup(`
+                ${route.name} (${route.distance}m)
+                <br>
+                  <span class="label label-info time" data-time="${route.averageCurrentTravelTime}">
+                      ${route.averageCurrentTravelTime}
+                  </span>                  
+                  <span class="label time label-delay" data-time="${route.currentDelay}">
+                    ${route.currentDelay}
+                  </span>
+                  <div class="pull-right">
+                        <a href='detail/${route.id}'>Detail</a>
+                  </div>
+            `, {});
+            path.on("popupopen", () => {
+                // todo beter afhandelen
+                 (<any>window).labelDelays();
+                 (<any>window).formatTimes();
+            });
         }
 
-        private static getColorFromTrafficDelayPercentage(delayPercentage: number): string {
-            if (delayPercentage >= 0 && delayPercentage < 0.10)
-                return "green";
-            else if (delayPercentage >= 0.1 && delayPercentage < 0.30)
-                return "yellow";
-            else if (delayPercentage >= 0.3 && delayPercentage < 0.60)
-                return "orange";
-            else if (delayPercentage >= 0.6 && delayPercentage < 0.90)
-                return "red";
-            else if (delayPercentage >= 0.9)
-                return "brown";
-
-            return "green";
+        private static getColor(delay: number, dark:boolean): string {
+            let level:number = (<any>window).getDelayLevel(delay);
+            // spijtig genoeg zijn paths met svg en kunnen er geen css klassen gebruikt worden
+            if(level == 0)
+                return dark ? "#306e30" : "#5cb85c";
+            else if(level == 1)
+                return dark ? "#df8a13" : "#f0ad4e";
+            else if(level == 2) 
+                return dark ? "#b52b27" : "#d9534f";
+            
+            return "#5cb85c";
         }
 
         private static convertWaypointsToLatLng(waypoints: MapWaypoint[]): L.LatLng[] {
@@ -120,12 +142,18 @@ namespace MapManagement {
 
         setRouteVisibility(id: number, visible: boolean) {
             let path = (<LeafletMapRoute>this.leafletMapRouteById[id]).layer;
+            let path2 = (<LeafletMapRoute>this.leafletMapRouteById[id]).layer2;
             // great Open source (TM): https://github.com/Leaflet/Leaflet/issues/2662
             let element = <HTMLElement>(<any>path)._path;
-            if (visible)
+            let element2 = <HTMLElement>(<any>path2)._path;
+            if (visible) {
                 $(element).show();
-            else
+                $(element2).show();
+            }
+            else {
                 $(element).hide();
+                $(element2).hide();
+            }
 
         }
     }

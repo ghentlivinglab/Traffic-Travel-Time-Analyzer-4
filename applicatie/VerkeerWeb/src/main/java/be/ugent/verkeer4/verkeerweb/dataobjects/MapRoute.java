@@ -8,6 +8,8 @@ public class MapRoute {
     private int id;
     private String name;
     private double distance;
+    private double currentDelay;
+    private double averageCurrentTravelTime;
     private double trafficDelayPercentage;
 
     private List<MapWaypoint> waypoints;
@@ -84,5 +86,33 @@ public class MapRoute {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    /**
+     * @return the currentDelay
+     */
+    public double getCurrentDelay() {
+        return currentDelay;
+    }
+
+    /**
+     * @param currentDelay the currentDelay to set
+     */
+    public void setCurrentDelay(double currentDelay) {
+        this.currentDelay = currentDelay;
+    }
+
+    /**
+     * @return the averageCurrentTravelTime
+     */
+    public double getAverageCurrentTravelTime() {
+        return averageCurrentTravelTime;
+    }
+
+    /**
+     * @param averageCurrentTravelTime the averageCurrentTravelTime to set
+     */
+    public void setAverageCurrentTravelTime(double averageCurrentTravelTime) {
+        this.averageCurrentTravelTime = averageCurrentTravelTime;
     }
 }

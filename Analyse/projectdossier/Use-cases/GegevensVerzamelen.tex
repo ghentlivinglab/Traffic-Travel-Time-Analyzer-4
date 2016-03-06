@@ -1,0 +1,28 @@
+\noindent
+\begin{longtable}{|>{\raggedleft\hsize=.7\hsize\bfseries}X|
+    >{\arraybackslash\hsize=1.3\hsize}X|} \hline
+\multicolumn{1}{|l|}{\textbf{Use Case}} &  Verzamel reistijdgegevens\\ \hline
+Primaire actor & Polling Service \\ \hline
+Stakeholders & \\ \hline
+Preconditie &  Er zijn minimaal 5 minuten verstreken sinds de laatste aanvraag van reisdata gegevens. 
+
+Er zijn routes beschikbaar in de database.\\  \hline
+Postconditie &  De reistijden van elke route zijn voor elke provider geüpdatet. \\ \hline
+\multicolumn{1}{|l|}{\textbf{Normaal verloop}} & \\ \hline
+1. & De polling service wenst recente reistijd gegevens op te halen. \\ \hline
+2. & Het systeem haalt alle beschikbare routes op. \\ \hline
+3. & Het systeem scrapet de reistijden en vertragingen van hun respectievelijke websites.\\ \hline
+5. & De polling service verwerkt de verzamelde gegevens en slaat deze op in de databank.\\ \hline
+6. & De polling service vraagt (parallel) aan alle per-route providers de recenste reistijden per route.\\ \hline
+7. & Het systeem scraped de reistijden en vertraging van hun respectievelijke website. \\ \hline
+8. & De polling service wacht tot alle resultaten bekend zijn, verwerkt de gegevens en slaat deze op in de databank. \\ \hline
+\multicolumn{1}{|l|}{\textbf{Alternatief verloop}} & \\ \hline
+& Voor TomTom en Here maps:\\ \hline
+6A. & De reistijd gegevens kunnen niet opgevraagd worden via scraping. \\ \hline
+6A1. & De provider vraagt de reistijd gegevens op aan de API van de provider met de opgeslagen API keys\\ \hline
+6A2. & Ga naar stap 7\\ \hline
+\multicolumn{1}{|l|}{\textbf{Domeinspecifieke regels}} & \\ \hline
+\multicolumn{1}{|l|}{\textbf{Op te klaren punten}} & \\ \hline
+\caption{UC: Reistijd gegevens verzamelen \label{uc:gegevensverzamelen}}
+\end{longtable}
+%

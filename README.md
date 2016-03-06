@@ -6,13 +6,42 @@
 * /applicatie/verkeer*: De verschillende netbeans projecten van het project. Het 'verkeer' project is het overkoepelend project.
 * /db: bevat een dump van de database
 * /docs: bevat de aangeleverde documentatie
-* /build: [//TODO] Bevat de war file van de website en de jar file van de verkeer polling service.
+* /build: Bevat de war file van de website en de jar file van de verkeer polling service.
 
 # Opzetten test omgeving
 
+Er wordt gebruik gemaakt van een databank, dus de database die je onder /db kan vinden moet eerst gerestored worden.
+
 Zowel in de war als jar file zit een application.conf bestand dat de configuratie bevat. Hierin staat o.a de API keys en het pad naar de scrapers map. 
-Er is ook een database-dev.conf bestand dat de database configuratie bevat (wanneer general.inProduction = false).
-// TODO verder uitschrijven
+```
+general.inProduction=true
+APIKeys.TomTom = "5j7n539vbsbf6frb7kwzxtc6"
+APIKeys.Here.AppId = "rT5jJhpUtSJEYrkEXFSd"
+APIKeys.Here.AppCode = "MDfihaAj-_kw7eMW2dIb-A"
+APIKeys.Google.AppCode = "AIzaSyDSFudE3RU-uIFK4ID8i32bnq-rGRRtpGw"
+APIKeys.BingMaps = "Al2KtFQ_rRUJ7fHbjzEMRiYMIa0Kz-XAcrg47_u1wduJ_BbNY8rcwP3WoCusE5-n"
+ScrapePath = "/scrapers/"
+PerlPath = "/usr/bin/perl"
+```
+Er is ook een database-prod.conf bestand dat de database configuratie bevat (database-dev.conf wordt gebruikt wanneer general.inProduction=false is aangegeven):
+```
+database {  
+      user = "root"
+      password = ""
+      connection = "//localhost:3306/verkeer"
+}
+```
+
+Zodra de juiste configuratie is ingesteld volstaat het de war te deployen op glassfish en naar de website te surfen. Om de polling service te starten kan je via de command line hetvolgende uitvoeren:
+```
+java -jar VerkeerPollService-1.0-SNAPSHOT.jar
+```
+
+Vanuit netbeans kan je ook het project starten, alle projecten zijn maven projecten die je kan openen in netbeans. Er is ook een overkoepelend project verkeer dat gebruikt kan worden om 'build with dependencies' uit te voeren. Daarna volstaat het ofwel VerkeerWeb of VerkeerPollService te starten
+
+# Documentatie
+
+[Structuur & requirements van scrapers](https://github.ugent.be/iii-vop2016/verkeer-4/wiki/Documentatie-Scrapers)
 
 
 # Groepsleden

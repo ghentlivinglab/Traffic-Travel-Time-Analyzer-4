@@ -1,0 +1,44 @@
+table {
+        width: 100%;
+    }
+
+thead, tbody, tr, td, th { display: block; }
+
+tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+thead th {
+    height: 60px;
+
+    /*text-align: left;*/
+}
+
+tbody {
+    height: 750px;
+    overflow-y: auto;
+}
+
+thead {
+    /* fallback */
+}
+
+
+tbody td, thead th {
+    
+    float: left;
+}
+
+th, td {
+    width: 75px;
+}
+
+th:nth-child(1), td:nth-child(1) {
+    width: 180px;
+}
+th:last-child,td:last-child {
+    width:inherit;
+}
