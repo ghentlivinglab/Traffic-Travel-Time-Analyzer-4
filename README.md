@@ -41,7 +41,12 @@ Vanuit netbeans kan je ook het project starten, alle projecten zijn maven projec
 
 # Documentatie
 
+[Projectdossier](https://github.ugent.be/iii-vop2016/verkeer-4/blob/master/Analyse/projectdossier-vop.pdf)
+[Algemene Analyse](https://github.ugent.be/iii-vop2016/verkeer-4/wiki/Analyse)
+[Gedetailleerde Klassendiagrammen](https://github.ugent.be/iii-vop2016/verkeer-4/wiki/Gedetailleerde-Klassendiagrammen)
 [Structuur & requirements van scrapers](https://github.ugent.be/iii-vop2016/verkeer-4/wiki/Documentatie-Scrapers)
+
+
 
 
 # Groepsleden
