@@ -1,5 +1,7 @@
 package be.ugent.verkeer4.verkeerweb.dataobjects;
 
+import be.ugent.verkeer4.verkeerdomain.data.POICategoryEnum;
+
 
 public class MapPOI {
     
@@ -7,6 +9,7 @@ public class MapPOI {
     private double latitude;
     private double longitude;
     private String info;
+    private int category;
 
     /**
      * @return the id
@@ -62,5 +65,19 @@ public class MapPOI {
      */
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    /**
+     * @return the category
+     */
+    public int getCategory() {
+        return category;
+    }
+
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(int category) {
+        this.category = category;
     }
 }

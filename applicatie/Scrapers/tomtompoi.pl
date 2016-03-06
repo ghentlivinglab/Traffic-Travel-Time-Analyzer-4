@@ -1,5 +1,6 @@
 use strict;
 use JSON;
+binmode(STDOUT, ":utf8");
 
 if(scalar @ARGV < 4) {
 	print "Usage: tomtompoi min_lat min_lng max_lat max_lng\n";
@@ -123,7 +124,7 @@ sub printPOI {
 	
 	#print "Traffic model id: " . $trafficModelId;
 	#http://api.internal.tomtom.com/lbs/services/trafficIcons/3/s3/50.98022,3.62719,51.19782,3.83324/13/1456502762951/json?jsonp=jsonp1456502809288&key=dvbfcb88hkrje9ur2fs84uxn&projection=EPSG4326&language=en&style=s3&expandCluster=true
-	my $url = 'http://api.internal.tomtom.com/lbs/services/trafficIcons/3/s3/' . $fromLat . ',' . $fromLng . ',' . $toLat . ',' . $toLng . '/13/' . $trafficModelId . '/json?&key=' . $apiKey . '&projection=EPSG4326&language=nl&style=s3&expandCluster=true';
+	my $url = 'http://api.internal.tomtom.com/lbs/services/trafficIcons/3/s3/' . $fromLat . ',' . $fromLng . ',' . $toLat . ',' . $toLng . '/13/' . $trafficModelId . '/json?&key=' . $apiKey . '&projection=EPSG4326&language=nl&style=s3&expandCluster=true&originalPosition=true';
 	
 	#print $url;
 	
@@ -145,7 +146,18 @@ sub printPOI {
 		print ";";
 		print $p->{"p"}->{"x"};
 		print ";";
-		print $iconMeaning{$p->{"ic"}};
+		if($iconMeaning{$p->{"ic"}} eq "jam") {
+			print "3"; # traffic jam
+		}
+		elsif($iconMeaning{$p->{"ic"}} eq "accident" || $iconMeaning{$p->{"ic"}} eq "lane_closed" || $iconMeaning{$p->{"ic"}} eq "road_closed") {
+			print "2"; # incident
+		}
+		elsif($iconMeaning{$p->{"ic"}} eq "road_works") {
+			print "1"; #construction
+		}
+		else {
+			print "0"; # unknown
+		}		
 		print ";";
 		print $tyMeaning{$p->{"ty"}};
 		print ";";

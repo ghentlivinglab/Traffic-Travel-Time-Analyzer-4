@@ -46,13 +46,14 @@ public class ProviderService extends BaseService implements IProviderService {
         TomTomProvider tomtomProvider = new TomTomProvider();
         BeMobileProvider beMobileProvider = new BeMobileProvider();
         HereMapsProvider hereMapsProvider = new HereMapsProvider();
+        WazeProvider wazeProvider = new WazeProvider();
 
         this.perRouteProviders = new ArrayList<>();
         perRouteProviders.add(tomtomProvider);
         perRouteProviders.add(beMobileProvider);;
         perRouteProviders.add(hereMapsProvider);
         perRouteProviders.add(new GoogleProvider());
-        perRouteProviders.add(new WazeProvider());
+        perRouteProviders.add(wazeProvider);
         perRouteProviders.add(new ViaMichelinProvider());
         perRouteProviders.add(new BingMapsProvider());
 
@@ -63,6 +64,7 @@ public class ProviderService extends BaseService implements IProviderService {
         this.poiProviders.add(tomtomProvider);
         this.poiProviders.add(hereMapsProvider);
         this.poiProviders.add(beMobileProvider);
+        this.poiProviders.add(wazeProvider);
     }
 
     private synchronized void saveRouteData(RouteData data) {

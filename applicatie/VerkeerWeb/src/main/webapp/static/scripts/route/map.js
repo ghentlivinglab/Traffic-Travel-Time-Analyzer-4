@@ -5,6 +5,13 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var MapManagement;
 (function (MapManagement) {
+    var POICategoryEnum;
+    (function (POICategoryEnum) {
+        POICategoryEnum[POICategoryEnum["Unknown"] = 0] = "Unknown";
+        POICategoryEnum[POICategoryEnum["Construction"] = 1] = "Construction";
+        POICategoryEnum[POICategoryEnum["Incident"] = 2] = "Incident";
+        POICategoryEnum[POICategoryEnum["TrafficJam"] = 3] = "TrafficJam";
+    })(POICategoryEnum || (POICategoryEnum = {}));
     var LeafletMapRoute = (function () {
         function LeafletMapRoute(layer, layer2, route, points) {
             this.layer = layer;
@@ -62,8 +69,22 @@ var MapManagement;
             var llmp;
             if (!this.leafletMapPOIById[p.id]) {
                 var latLng = new L.LatLng(p.latitude, p.longitude);
-                var color = "blue";
-                var circle = L.circle(latLng, 30, { color: color });
+                var color;
+                switch (p.category) {
+                    case POICategoryEnum.Incident:
+                        color = "blue";
+                        break;
+                    case POICategoryEnum.Construction:
+                        color = "yellow";
+                        break;
+                    case POICategoryEnum.TrafficJam:
+                        color = "red";
+                        break;
+                    case POICategoryEnum.Unknown:
+                        color = "black";
+                        break;
+                }
+                var circle = L.circle(latLng, 20, { stroke: false, fill: true, fillColor: color, fillOpacity: 0.8 });
                 this.initializePOIPopup(circle, p);
                 this.map.addLayer(circle, false);
                 llmp = new LeafletMapPOI(circle, p, latLng);
@@ -76,7 +97,7 @@ var MapManagement;
             }
         };
         MapManager.prototype.initializePOIPopup = function (circle, poi) {
-            circle.bindPopup("" + poi.info, {});
+            circle.bindPopup("\n                " + poi.info + "\n            ", {});
         };
         MapManager.prototype.centerMap = function () {
             var allPoints = [];

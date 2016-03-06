@@ -1,5 +1,6 @@
 use strict;
 use JSON;
+binmode(STDOUT, ":utf8");
 
 if(scalar @ARGV < 4) {
 	print "Usage: bemobilepoi min_lat min_lng max_lat max_lng\n";
@@ -40,7 +41,18 @@ for my $item (@items) {
 			print ";";
 			print $lng;
 			print ";";
-			print $categories{$item->{"C"}};
+			if($categories{$item->{"C"}} eq "trafficjam") {
+				print "3"; # traffic jam
+			}
+			elsif($categories{$item->{"C"}} eq "incident") {
+				print "2"; # incident
+			}
+			elsif($categories{$item->{"C"}} eq "construction") {
+				print "1"; #construction
+			}
+			else {
+				print "0"; # unknown
+			}
 			print ";";
 			print "";
 			print ";";

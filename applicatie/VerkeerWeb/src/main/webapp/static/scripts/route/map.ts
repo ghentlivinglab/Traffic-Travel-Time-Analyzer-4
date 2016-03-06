@@ -16,6 +16,14 @@ namespace MapManagement {
         info:string;
         latitude:number;
         longitude:number;
+        category:POICategoryEnum;
+    }
+    
+    enum POICategoryEnum {
+        Unknown = 0,
+        Construction = 1,
+        Incident = 2,
+        TrafficJam = 3
     }
     
     interface MapRoute {
@@ -94,9 +102,23 @@ namespace MapManagement {
 
                 let latLng = new L.LatLng(p.latitude,p.longitude);
 
-                let color = "blue";
-
-                let circle = L.circle(latLng, 30, { color: color, });
+                let color:string;
+                switch (p.category) {
+                    case POICategoryEnum.Incident:
+                        color = "blue";
+                        break;
+                    case POICategoryEnum.Construction:
+                        color = "yellow";
+                        break;
+                    case POICategoryEnum.TrafficJam:
+                        color = "red";
+                        break;
+                        
+                    case POICategoryEnum.Unknown:
+                        color = "black";
+                        break;    
+                }
+                let circle = L.circle(latLng, 20, { stroke:false, fill:true, fillColor: color, fillOpacity:0.8 });
 
                 this.initializePOIPopup(circle, p);
               
@@ -112,7 +134,9 @@ namespace MapManagement {
         }
        
         private initializePOIPopup(circle: L.Circle, poi: MapPOI) {
-            circle.bindPopup(`${poi.info}`, {});
+            circle.bindPopup(`
+                ${poi.info}
+            `, {});
         }
         
         centerMap(): void {

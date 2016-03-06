@@ -17,7 +17,7 @@ public class POI {
     private double longitude;
     
     private String info;
-    private POICategoryEnum category;
+    private int category;
 
     /**
      * @return the id
@@ -121,14 +121,14 @@ public class POI {
      * @return the category
      */
     public POICategoryEnum getCategory() {
-        return category;
+        return POICategoryEnum.fromInt(category);
     }
 
     /**
      * @param category the category to set
      */
     public void setCategory(POICategoryEnum category) {
-        this.category = category;
+        this.category = category.getValue();
     }
 
       /**

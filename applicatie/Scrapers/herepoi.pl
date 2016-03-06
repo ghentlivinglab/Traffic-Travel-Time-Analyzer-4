@@ -1,5 +1,6 @@
 use strict;
 use JSON;
+binmode(STDOUT, ":utf8");
 
 my $cachename = "here.cache";
 
@@ -120,33 +121,47 @@ sub getAppCodeAndId {
 sub printPOI {
 	(my $appCode, my $appId) = @_;
 	
-	my $url = 'https://traffic.cit.api.here.com/traffic/6.0/incidents.json?bbox=' . $toLat . '%2C' . $fromLng . '%3B' . $fromLat . '%2C' . $toLng . '&criticality=0,1,2&app_id=' . $appId .'&app_code=' . $appCode . '';
+	my $url = 'https://traffic.cit.api.here.com/traffic/6.1/incidents.json?bbox=' . $toLat . '%2C' . $fromLng . '%3B' . $fromLat . '%2C' . $toLng . '&criticality=0,1,2&app_id=' . $appId .'&app_code=' . $appCode . '';
 	
 	#print $url;
 	
 	my $json = `curl --insecure -s -o - "$url"`;
+	
 	my $response = from_json($json);
 	
 	#print $response;
-	my @items = @{ $response->{"TRAFFICITEMS"}->{"TRAFFICITEM"} };
+	my @items = @{ $response->{"TRAFFIC_ITEMS"}->{"TRAFFIC_ITEM"} };
 	
 	print "id;lat;lng;type;traffictype;comments";
 	print "\n";
 	
 	for my $item (@items) {
 		
-		print $item->{"TRAFFICITEMID"};
+		print $item->{"TRAFFIC_ITEM_ID"};
 		print ";";
 		print $item->{"LOCATION"}->{"GEOLOC"}->{"ORIGIN"}->{"LATITUDE"};
 		print ";";
 		print $item->{"LOCATION"}->{"GEOLOC"}->{"ORIGIN"}->{"LONGITUDE"};
 		print ";";
-		print $item->{"TRAFFICITEMTYPEDESC"};
+		if($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "LANE_RESTRICTION" ||
+		   $item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "ROAD_CLOSURE") {
+			print "2"; # incident
+		}
+		elsif($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "CONGESTION") {
+			print "3"; # traffic jam
+		}		
+		elsif($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "CONSTRUCTION") {
+			print "1"; #construction
+		}
+		else {
+			print "0"; # unknown
+		}
+		
 		print ";";
 		print $item->{"CRITICALITY"}->{"DESCRIPTION"};
 		print ";";
-		if($item->{"COMMENTS"} || $item->{"COMMENTS"} eq "") {
-			print $item->{"RDSTMCLOCATIONS"}->{"RDSTMC"}->[0]->{"ALERTC"}->{"DESCRIPTION"};
+		if(!$item->{"COMMENTS"} || $item->{"COMMENTS"} eq "") {
+			print $item->{"RDS-TMC_LOCATIONS"}->{"RDS-TMC"}->[0]->{"ALERTC"}->{"DESCRIPTION"};
 		}
 		else {
 			print $item->{"COMMENTS"};

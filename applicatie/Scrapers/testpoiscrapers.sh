@@ -14,3 +14,6 @@ perl herepoi.pl $minLat $minLng $maxLat $maxLng
 
 echo "Be-mobile:"
 perl bemobilepoi.pl $minLat $minLng $maxLat $maxLng
+
+echo "Waze:"
+perl wazepoi.pl $minLat $minLng $maxLat $maxLng

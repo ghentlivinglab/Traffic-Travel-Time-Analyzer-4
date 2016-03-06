@@ -277,6 +277,7 @@ public class RouteController {
             mp.setLatitude(poi.getLatitude());
             mp.setLongitude(poi.getLongitude());
             mp.setInfo(poi.getInfo());
+            mp.setCategory(poi.getCategory().getValue());
             data.getPois().add(mp);
         }
         

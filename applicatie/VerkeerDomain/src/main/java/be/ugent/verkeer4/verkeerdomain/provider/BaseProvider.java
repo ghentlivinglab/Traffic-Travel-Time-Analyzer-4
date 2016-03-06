@@ -84,14 +84,14 @@ public abstract class BaseProvider {
 
         pb.directory(baseDir);
         java.lang.Process p = pb.start();
+
+        BufferedReader errReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        List<POI> pois = parseScrapePOIOutput(reader);
+
         int errCode = p.waitFor();
-
-        if (errCode == 0) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            return parseScrapePOIOutput(reader);
-        }
-
-        return null;
+        return pois;
     }
 
     protected List<POI> parseScrapePOIOutput(BufferedReader reader) throws IOException, Exception, NumberFormatException {
@@ -110,7 +110,10 @@ public abstract class BaseProvider {
             p.setProvider(this.provider);
             p.setLatitude(Double.parseDouble(parts[1]));
             p.setLongitude(Double.parseDouble(parts[2]));
-            p.setCategory(POICategoryEnum.Unknown); //TODO
+
+            POICategoryEnum type = POICategoryEnum.fromInt(Integer.parseInt(parts[3]));
+            p.setCategory(type);
+
             p.setSince(new Date());
             p.setInfo(parts[5]);
 
