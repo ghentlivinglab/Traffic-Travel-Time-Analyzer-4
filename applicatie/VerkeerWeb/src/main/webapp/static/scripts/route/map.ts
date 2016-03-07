@@ -57,6 +57,7 @@ namespace MapManagement {
                 let path2 = L.polyline(latLngs, { stroke:true, weight:3, color: colordark, opacity:1, className:"animated-polyline" });
                 
                 this.initializePathPopup(path, r);
+                this.initializePathPopup(path2, r);
 
                 this.map.addLayer(path, false);
                 this.map.addLayer(path2, false);
