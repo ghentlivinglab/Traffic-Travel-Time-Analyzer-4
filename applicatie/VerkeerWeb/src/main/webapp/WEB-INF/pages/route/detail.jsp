@@ -48,12 +48,12 @@
                         <dt>Tot</dt>
                         <dd>${detail.toAddress}</dd>
                     </dl>
+                    <a href="${pageContext.servletContext.contextPath}/route/edit/${detail.id}">Traject aanpassen</a>
                 </div>
                 <div class="col-md-8">
                     <div id="map" style="height:500px">
                     </div>
                 </div>
-                <a href="${pageContext.servletContext.contextPath}/route/edit/${detail.id}">Traject aanpassen</a>
             </div>
         </div>
     </div>
