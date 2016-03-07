@@ -44,14 +44,14 @@ public class RouteDataDbSet extends DbSet<RouteData> {
     }
 
     private List<RouteData> getMostRecentSummaries(String condition, Map<String, Object> parameters) {
-        // http://stackoverflow.com/a/8757062/694640 want inner join is veel te traag door disk seek
         try (org.sql2o.Connection con = sql2o.open()) {
 
-            String query = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd group by routeId, provider) ";
+            String where = "";
             if (condition != null) {
-                query += "and " + condition + " ";
+                where += "WHERE " + condition + " ";
             }
-
+            String query = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd " + where + " group by routeId, provider) ";
+            
             Query q = con.createQuery(query);
 
             if (parameters != null) {
