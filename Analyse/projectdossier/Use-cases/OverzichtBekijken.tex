@@ -1,0 +1,20 @@
+\noindent
+\begin{longtable}{|>{\raggedleft\hsize=.7\hsize\bfseries}X|
+    >{\arraybackslash\hsize=1.3\hsize}X|} \hline
+\multicolumn{1}{|l|}{\textbf{Use Case}} & Bekijk trajectoverzicht \\ \hline
+Primaire actor & Gebruiker \\ \hline
+Stakeholders & Operator \\ \hline
+Preconditie &  Trajecten zitten in de database. \\ \hline
+Postconditie &  Een overzicht van de trajecten wordt getoond.\\ \hline
+\multicolumn{1}{|l|}{\textbf{Normaal verloop}} & \\ \hline
+1. & De gebruiker wenst het trajectoverzicht te bekijken. \\ \hline
+2. & Het systeem haalt de trajecten op en geeft een overzicht.\\ \hline
+
+\multicolumn{1}{|l|}{\textbf{Alternatief verloop}} & \\ \hline
+2A. & Het systeem kan de trajecten niet op halen. \\ \hline
+2A1. & Het systeem toont een correcte boodschap. \\ \hline
+2A2. & Postconditie wordt niet bereikt. \\ \hline
+\multicolumn{1}{|l|}{\textbf{Domeinspecifieke regels}} & \\ \hline
+\multicolumn{1}{|l|}{\textbf{Op te klaren punten}} & \\ \hline
+\caption{UC: Trajectoverzicht bekijken \label{uc:overzichtbekijken}}
+\end{longtable}

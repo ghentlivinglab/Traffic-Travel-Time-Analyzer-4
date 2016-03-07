@@ -47,13 +47,10 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         // http://stackoverflow.com/a/8757062/694640 want inner join is veel te traag door disk seek
         try (org.sql2o.Connection con = sql2o.open()) {
 
-            String query = "select rd.id as id, rd.routeId as routeId, rd.provider as provider, max(rd.Timestamp) as timestamp, " +
-                    "rd.traveltime as traveltime, rd.delay as delay "
-                    + "from " + getTableName() + " rd ";
+            String query = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd group by routeId, provider) ";
             if (condition != null) {
-                query += "where " + condition + " ";
+                query += "and " + condition + " ";
             }
-            query += "group by rd.routeId, rd.provider desc ";
 
             Query q = con.createQuery(query);
 
