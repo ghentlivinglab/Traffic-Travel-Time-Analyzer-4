@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var MapManagement;
-(function (MapManagement) {
+(function (MapManagement, verkeer) {
     var LeafletMapRoute = (function () {
         function LeafletMapRoute(layer, layer2, route, points) {
             this.layer = layer;
@@ -81,7 +81,7 @@ var MapManagement;
             });
         };
         MapManager.getColor = function (delay, dark) {
-            var level = window.getDelayLevel(delay);
+            var level = verkeer.getDelayLevel(delay);
             // spijtig genoeg zijn paths met svg en kunnen er geen css klassen gebruikt worden
             if (level == 0)
                 return dark ? "#306e30" : "#5cb85c";
@@ -147,4 +147,4 @@ var MapManagement;
         return mgr;
     }
     MapManagement.intializeRouteMap = intializeRouteMap;
-})(MapManagement || (MapManagement = {}));
+})(MapManagement || (MapManagement = {}), verkeer);

@@ -1,4 +1,4 @@
-$(function () {
+(function (trajectDetail, $) {
     "use strict";
 
     var routeChart;
@@ -9,7 +9,7 @@ $(function () {
     const delayTitle = "Vertraging per provider";
 
     $(document).ready(function () {
-        markExtremeProviders();
+        trajectDetail.markExtremeProviders();
         $("#datetimepicker-begin").datetimepicker({
             format: 'DD/MM/YYYY HH:mm',
             showTodayButton: true,
@@ -26,14 +26,14 @@ $(function () {
             }
         );
 
-        $("#update-btn").click(getRouteData);
-        $("#toggle-btn").click(toggleChart);
-        buildChart();
+        $("#update-btn").click(trajectDetail.getRouteData);
+        $("#toggle-btn").click(trajectDetail.toggleChart);
+        trajectDetail.buildChart();
         // Fill table with the default filters
-        getRouteData();
+        trajectDetail.getRouteData();
     });
 
-    var getRouteData = function getRouteData() {
+    trajectDetail.getRouteData = function() {
         $.ajax({
                 method: "GET",
                 url: "../routedata",
@@ -46,25 +46,25 @@ $(function () {
             .done(function (routeData) {
                 showingDelayChart = false;
                 routeChart.setTitle({text: travelTimeTitle});
-                setTableData("#data-table", "#data-table-body", routeData);
-                combineRouteData(routeData, "travelTime", combinedTravelTimes);
-                combineRouteData(routeData, "delay", combinedDelays);
-                setChartData(combinedTravelTimes);
+                trajectDetail.setTableData("#data-table", "#data-table-body", routeData);
+                trajectDetail.combineRouteData(routeData, "travelTime", combinedTravelTimes);
+                trajectDetail.combineRouteData(routeData, "delay", combinedDelays);
+                trajectDetail.setChartData(combinedTravelTimes);
             });
     };
 
-    var setTableData = function setTableData(tableId, tableBodyId, routeData) {
+    trajectDetail.setTableData = function(tableId, tableBodyId, routeData) {
         $(tableBodyId).empty();
         routeData.forEach(function (ele) {
             var date = new Date(ele.timestamp);
-            var delayLevel = getDelayLevel(ele.delay);
-            var label = getBootstrapLabelDelay(delayLevel);
+            var delayLevel = verkeer.getDelayLevel(ele.delay);
+            var label = verkeer.getBootstrapLabelDelay(delayLevel);
             var row = "<tr>"
                 + "<td>" + moment(date).format("D/MM/YYYY") + "</td>"
                 + "<td>" + moment(date).format("HH:mm:ss") + "</td>"
                 + "<td>" + ele.provider + "</td>"
-                + "<td>" + secondsToText(ele.travelTime) + "</td>"
-                + "<td><span class='" + label + "'>" + secondsToText(ele.delay) + "</span></td>"
+                + "<td>" + verkeer.secondsToText(ele.travelTime) + "</td>"
+                + "<td><span class='" + label + "'>" + verkeer.secondsToText(ele.delay) + "</span></td>"
                 + "</tr>";
             $(tableBodyId).append(row);
         });
@@ -75,7 +75,7 @@ $(function () {
         $(tableId).trigger("sorton", [sorting]);
     };
 
-    var buildChart = function buildChart() {
+    trajectDetail.buildChart = function() {
         $('#container').highcharts({
             chart: {
                 zoomType: 'x'
@@ -111,7 +111,7 @@ $(function () {
         routeChart = $('#container').highcharts();
     };
 
-    var clearAllChartData = function clearAllChartData() {
+    trajectDetail.clearAllChartData = function() {
         if (!routeChart || !routeChart.series) return;
 
         while (routeChart.series.length > 0) {
@@ -121,8 +121,8 @@ $(function () {
         routeChart.redraw();
     };
 
-    var setChartData = function setChartData(series) {
-        clearAllChartData();
+    trajectDetail.setChartData = function(series) {
+        trajectDetail.clearAllChartData();
 
         if (series && series.length > 0) {
             // Put new data on chart
@@ -133,7 +133,7 @@ $(function () {
         }
     };
 
-    var combineRouteData = function combineRouteData(routeData, xAxisProperty, container) {
+    trajectDetail.combineRouteData = function(routeData, xAxisProperty, container) {
         var dict = {}; // <provider name, provider object>
 
         // combine all data in one object per provider
@@ -157,42 +157,42 @@ $(function () {
         }
     };
 
-    var toggleChart = function toggleChart() {
+    trajectDetail.toggleChart = function() {
         if (showingDelayChart) {
-            setChartData(combinedTravelTimes);
+            trajectDetail.setChartData(combinedTravelTimes);
             routeChart.setTitle({text: travelTimeTitle});
         } else {
-            setChartData(combinedDelays);
+            trajectDetail.setChartData(combinedDelays);
             routeChart.setTitle({text: delayTitle});
         }
         showingDelayChart = !showingDelayChart;
     };
 
-    var getSecondsFromSummaryRow = function getSecondsFromSummaryRow(row) {
+    trajectDetail.getSecondsFromSummaryRow = function(row) {
         var td = row.children[1]; // second td, the traveltime
         var span = td.children[0]; // the span
         return parseInt(span.getAttribute("data-time"));
     };
 
-    var markExtremeProviders = function markExtremeProviders() {
+    trajectDetail.markExtremeProviders = function() {
         var table = document.getElementById("summary-table-body");
 
         var travelTimes = [];
         var rowLength = table.rows.length;
         for (var i = 0; i < rowLength; i += 1) {
             var row = table.rows[i];
-            travelTimes.push(getSecondsFromSummaryRow(row));
+            travelTimes.push(trajectDetail.getSecondsFromSummaryRow(row));
         }
 
-        var m = mean(travelTimes);
-        var vrnc = variance(m, travelTimes);
-        var stdev = standardDeviation(vrnc);
+        var mean = verkeer.mean(travelTimes);
+        var variance = verkeer.variance(mean, travelTimes);
+        var stdev = verkeer.standardDeviation(variance);
 
         for (i = 0; i < rowLength; i += 1) {
             row = table.rows[i];
-            if (!withinStd(travelTimes[i], m, stdev, 1)) {
+            if (!verkeer.withinStd(travelTimes[i], mean, stdev, 1)) {
                 row.className += " danger";
             }
         }
     };
-});
+}(window.verkeer.trajectDetail = window.verkeer.trajectDetail || {}, jQuery));
