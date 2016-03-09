@@ -51,6 +51,7 @@ var MapManagement;
                 var path = L.polyline(latLngs, { stroke: true, weight: 5, color: color, opacity: 1 });
                 var path2 = L.polyline(latLngs, { stroke: true, weight: 3, color: colordark, opacity: 1, className: "animated-polyline" });
                 this.initializePathPopup(path, r);
+                this.initializePathPopup(path2, r);
                 this.map.addLayer(path, false);
                 this.map.addLayer(path2, false);
                 llmr = new LeafletMapRoute(path, path2, r, latLngs);

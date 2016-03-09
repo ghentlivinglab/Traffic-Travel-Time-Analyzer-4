@@ -68,7 +68,7 @@
 
                         <div class="panel-footer">
                             <button type="submit" class="btn btn-primary">Opslaan</button>
-                            <a href="${pageContext.servletContext.contextPath}/route/detail?id=${routeEdit.id}">Traject details</a>
+                            <a href="${pageContext.servletContext.contextPath}/route/detail/${routeEdit.id}">Traject details</a>
                         </div>
                     </form:form>
                 </div>
