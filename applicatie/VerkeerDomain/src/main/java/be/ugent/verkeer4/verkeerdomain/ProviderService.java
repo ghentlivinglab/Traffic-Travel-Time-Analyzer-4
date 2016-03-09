@@ -1,5 +1,7 @@
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.provider.BeMobileProvider;
@@ -7,6 +9,7 @@ import be.ugent.verkeer4.verkeerdomain.provider.BingMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.CoyoteProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.GoogleProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.HereMapsProvider;
+import be.ugent.verkeer4.verkeerdomain.provider.IPOIProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.IProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.ISummaryProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.TomTomProvider;
@@ -14,7 +17,9 @@ import be.ugent.verkeer4.verkeerdomain.provider.ViaMichelinProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WazeProvider;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
@@ -30,21 +35,38 @@ public class ProviderService extends BaseService implements IProviderService {
     private final List<IProvider> perRouteProviders;
     private final List<ISummaryProvider> summaryProviders;
     private final IRouteService routeService;
+    private final List<IPOIProvider> poiProviders;
+    private final IPOIService poiService;
 
-    public ProviderService(IRouteService routeService) throws ClassNotFoundException {
+    public ProviderService(IRouteService routeService, IPOIService poiService) throws ClassNotFoundException {
         super();
         this.routeService = routeService;
+        this.poiService = poiService;
+
+        TomTomProvider tomtomProvider = new TomTomProvider();
+        BeMobileProvider beMobileProvider = new BeMobileProvider();
+        HereMapsProvider hereMapsProvider = new HereMapsProvider();
+        WazeProvider wazeProvider = new WazeProvider();
+        CoyoteProvider coyoteProvider = new CoyoteProvider(routeService);
+
         this.perRouteProviders = new ArrayList<>();
-        perRouteProviders.add(new TomTomProvider());
-        perRouteProviders.add(new BeMobileProvider());
-        perRouteProviders.add(new HereMapsProvider());
+        perRouteProviders.add(tomtomProvider);
+        perRouteProviders.add(beMobileProvider);;
+        perRouteProviders.add(hereMapsProvider);
         perRouteProviders.add(new GoogleProvider());
-        perRouteProviders.add(new WazeProvider());
+        perRouteProviders.add(wazeProvider);
         perRouteProviders.add(new ViaMichelinProvider());
         perRouteProviders.add(new BingMapsProvider());
 
         this.summaryProviders = new ArrayList<>();
-        summaryProviders.add(new CoyoteProvider(routeService));
+        summaryProviders.add(coyoteProvider);
+
+        this.poiProviders = new ArrayList<>();
+        this.poiProviders.add(tomtomProvider);
+        this.poiProviders.add(hereMapsProvider);
+        this.poiProviders.add(beMobileProvider);
+        this.poiProviders.add(wazeProvider);
+        this.poiProviders.add(coyoteProvider);
     }
 
     private synchronized void saveRouteData(RouteData data) {
@@ -122,5 +144,55 @@ public class ProviderService extends BaseService implements IProviderService {
     @Override
     public List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to) {
         return repo.getRouteDataSet().getItemsForRoute(routeId, from, to);
+    }
+
+    @Override
+    public void pollPOI(BoundingBox bbox) throws ClassNotFoundException {
+        ExecutorService pool = Executors.newFixedThreadPool(6);
+
+        List<Future> futures = new ArrayList<>();
+
+        for (IPOIProvider prov : poiProviders) {
+            futures.add(pool.submit(() -> {
+
+                // vraag bestaande active POI's op van de provider
+                Map<String, POI> existingPOIsByReferenceId = poiService.getActivePOIPerReferenceIdForProvider(prov.getProvider());
+                List<POI> pois = prov.pollPOI(bbox);
+                if (pois != null) {
+                    for (POI poi : pois) {
+                        if (existingPOIsByReferenceId.containsKey(poi.getReferenceId())) {
+                            // poi bestaat al, update waarden?
+                            POI oldPOI = existingPOIsByReferenceId.get(poi.getReferenceId());
+                            poi.setId(oldPOI.getId());
+                            poiService.update(poi);
+
+                        } else {
+                            // nieuwe poi
+                            poiService.insert(poi);
+                        }
+                        existingPOIsByReferenceId.remove(poi.getReferenceId());
+                    }
+
+                    // overblijvende poi's komen niet meer voor, sluit ze af door Until in te vullen
+                    for (POI poi : existingPOIsByReferenceId.values()) {
+                        poi.setUntil(new Date());
+                        poiService.update(poi);
+                    }
+                }
+            }));
+        }
+
+        for (Future future : futures) {
+            try {
+                future.get(60, TimeUnit.SECONDS);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExecutionException ex) {
+                Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (TimeoutException ex) {
+                Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        futures.clear();
     }
 }
