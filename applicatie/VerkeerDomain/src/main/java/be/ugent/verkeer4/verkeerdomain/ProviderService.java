@@ -47,6 +47,7 @@ public class ProviderService extends BaseService implements IProviderService {
         BeMobileProvider beMobileProvider = new BeMobileProvider();
         HereMapsProvider hereMapsProvider = new HereMapsProvider();
         WazeProvider wazeProvider = new WazeProvider();
+        CoyoteProvider coyoteProvider = new CoyoteProvider(routeService);
 
         this.perRouteProviders = new ArrayList<>();
         perRouteProviders.add(tomtomProvider);
@@ -58,13 +59,14 @@ public class ProviderService extends BaseService implements IProviderService {
         perRouteProviders.add(new BingMapsProvider());
 
         this.summaryProviders = new ArrayList<>();
-        summaryProviders.add(new CoyoteProvider(routeService));
+        summaryProviders.add(coyoteProvider);
 
         this.poiProviders = new ArrayList<>();
         this.poiProviders.add(tomtomProvider);
         this.poiProviders.add(hereMapsProvider);
         this.poiProviders.add(beMobileProvider);
         this.poiProviders.add(wazeProvider);
+        this.poiProviders.add(coyoteProvider);
     }
 
     private synchronized void saveRouteData(RouteData data) {
@@ -160,6 +162,9 @@ public class ProviderService extends BaseService implements IProviderService {
                     for (POI poi : pois) {
                         if (existingPOIsByReferenceId.containsKey(poi.getReferenceId())) {
                             // poi bestaat al, update waarden?
+                            POI oldPOI = existingPOIsByReferenceId.get(poi.getReferenceId());
+                            poi.setId(oldPOI.getId());
+                            poiService.update(poi);
 
                         } else {
                             // nieuwe poi

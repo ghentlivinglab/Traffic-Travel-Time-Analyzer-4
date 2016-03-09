@@ -30,7 +30,7 @@ public class BeMobileProvider extends BaseProvider implements IProvider, IPOIPro
       @Override
     public List<POI> pollPOI(BoundingBox bbox) {
         try {
-            return super.scrapePOI(bbox, "bemobilepoi.pl");
+            return POIHelper.scrapePOI(bbox, ProviderEnum.BeMobile,"bemobilepoi.pl");
         } catch (IOException ex) {
             Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
             return null;

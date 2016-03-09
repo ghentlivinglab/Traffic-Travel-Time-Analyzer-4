@@ -1,9 +1,10 @@
 use strict;
 use JSON;
-#binmode(STDOUT, ":utf8");
+use utf8; 
+binmode(STDOUT, ":utf8");
 
 if(scalar @ARGV < 4) {
-	print "Usage: bemobilepoi min_lat min_lng max_lat max_lng\n";
+	print "Usage: wazepoi min_lat min_lng max_lat max_lng\n";
 	exit(1);
 }
 
@@ -25,7 +26,9 @@ my $response = from_json($json);
 
 my @items = @{ $response->{"alerts"} };
 
-my %categories = ( "ACCIDENT" => "2", "ROAD_CLOSED" => "2", "JAM" => "3", "POLICE" => "0", "CONSTRUCTION" => "1", "HAZARD" => "0" );
+my @jams = @{ $response->{"alerts"} };
+
+my %categories = ( "ACCIDENT" => "8", "ROAD_CLOSED" => "5", "JAM" => "3", "POLICE" => "6", "CONSTRUCTION" => "1", "HAZARD" => "7" );
 
 print "id;lat;lng;type;traffictype;comments";
 print "\n";
@@ -41,7 +44,12 @@ for my $item (@items) {
 	print ";";
 	print $lng;
 	print ";";
-	print $categories{$item->{"type"}};
+	if(!exists $categories{$item->{"type"}}) {
+		print "0";
+	}
+	else {
+		print $categories{$item->{"type"}};
+	}
 	print ";";
 	print "";
 	print ";";
@@ -52,5 +60,4 @@ for my $item (@items) {
 		print $item->{"reportDescription"};
 	}
 	print "\n";
-
 }

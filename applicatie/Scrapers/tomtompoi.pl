@@ -1,5 +1,6 @@
 use strict;
 use JSON;
+use utf8; 
 binmode(STDOUT, ":utf8");
 
 if(scalar @ARGV < 4) {
@@ -13,7 +14,8 @@ my $toLat = @ARGV[2]; #"51.038768";
 my $toLng = @ARGV[3]; #"3.736953";
 
 
-my %iconMeaning = ( 	0 => "unknown", 1 => "accident", 2 => "fog", 3 => "dangerous_conditions", 4 => "rain", 5 => "ice", 6 => "jam", 7 => "lane_closed", 8 => "road_closed", 9 => "road_works",
+my %iconMeaning = ( 	0 => "unknown", 1 => "accident", 2 => "fog", 3 => "dangerous_conditions", 
+						4 => "rain", 5 => "ice", 6 => "jam", 7 => "lane_closed", 8 => "road_closed", 9 => "road_works",
 						10 => "wind", 11 => "flooding", 12 => "detour", 13 => "cluster");
 				
 my %tyMeaning = ( 0 => "unknown", 1 => "minor", 2 => "moderate", 3 => "major", 4 => "undefined" );
@@ -149,8 +151,14 @@ sub printPOI {
 		if($iconMeaning{$p->{"ic"}} eq "jam") {
 			print "3"; # traffic jam
 		}
-		elsif($iconMeaning{$p->{"ic"}} eq "accident" || $iconMeaning{$p->{"ic"}} eq "lane_closed" || $iconMeaning{$p->{"ic"}} eq "road_closed") {
-			print "2"; # incident
+		elsif($iconMeaning{$p->{"ic"}} eq "accident") {
+			print "8"; # accident
+		}
+		elsif($iconMeaning{$p->{"ic"}} eq "lane_closed") {
+			print "4"; # lane closed
+		}
+		elsif($iconMeaning{$p->{"ic"}} eq "road_closed") {
+			print "5"; # road closed
 		}
 		elsif($iconMeaning{$p->{"ic"}} eq "road_works") {
 			print "1"; #construction
@@ -161,7 +169,12 @@ sub printPOI {
 		print ";";
 		print $tyMeaning{$p->{"ty"}};
 		print ";";
-		print $p->{"d"};
+		if(!$p->{"d"} || $p->{"d"} eq "") {
+			print $iconMeaning{$p->{"ic"}};
+		}
+		else {
+			print $p->{"d"};
+		}
 		print "\n";
 	}
 }

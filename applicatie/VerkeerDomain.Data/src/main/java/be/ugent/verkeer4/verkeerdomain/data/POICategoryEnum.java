@@ -6,7 +6,12 @@ public enum POICategoryEnum {
     Unknown(0),
     Construction(1),
     Incident(2),
-    TrafficJam(3);
+    TrafficJam(3),
+    LaneClosed(4),
+    RoadClosed(5),
+    PoliceTrap(6),
+    Hazard(7),
+    Accident(8);
     
     private final int _value;
 

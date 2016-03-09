@@ -17,16 +17,17 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
     public HereMapsProvider() {
         super(ProviderEnum.HereMaps);
     }
-    
+
     @Override
     public RouteData poll(Route route) {
 
         try {
-            RouteData result =  scrape(route, "here.pl");
-            if(result == null)
+            RouteData result = scrape(route, "here.pl");
+            if (result == null) {
                 return useAPI(route);
-            else
+            } else {
                 return result;
+            }
         } catch (Exception ex) {
             Logger.getLogger(HereMapsProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId() + ", falling back to API", ex);
 
@@ -41,9 +42,9 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
 
             if (response.getRoute().size() > 0) {
                 be.ugent.verkeer4.verkeerdomain.provider.here.Route hereRoute = response.getRoute().get(0);
-                
+
                 int delay = hereRoute.getSummary().getTrafficTime() - hereRoute.getSummary().getBaseTime();
-                
+
                 RouteData rd = setRouteData(route,
                         hereRoute.getSummary().getDistance(),
                         hereRoute.getSummary().getTrafficTime(),
@@ -58,11 +59,11 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
             return null;
         }
     }
-    
-      @Override
+
+    @Override
     public List<POI> pollPOI(BoundingBox bbox) {
         try {
-            return super.scrapePOI(bbox, "herepoi.pl");
+            return POIHelper.scrapePOI(bbox, ProviderEnum.HereMaps, "herepoi.pl");
         } catch (IOException ex) {
             Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -76,5 +77,4 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
     public ProviderEnum getProvider() {
         return ProviderEnum.HereMaps;
     }
-   
 }

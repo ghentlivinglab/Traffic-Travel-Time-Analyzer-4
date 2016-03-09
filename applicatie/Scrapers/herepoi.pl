@@ -143,15 +143,20 @@ sub printPOI {
 		print ";";
 		print $item->{"LOCATION"}->{"GEOLOC"}->{"ORIGIN"}->{"LONGITUDE"};
 		print ";";
-		if($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "LANE_RESTRICTION" ||
-		   $item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "ROAD_CLOSURE") {
-			print "2"; # incident
+		if($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "LANE_RESTRICTION") {
+			print "4"; # laneclosed
+		}
+		elsif($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "ROAD_CLOSURE") {
+			print "5"; # routeclosed
 		}
 		elsif($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "CONGESTION") {
 			print "3"; # traffic jam
 		}		
 		elsif($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "CONSTRUCTION") {
 			print "1"; #construction
+		}
+		elsif($item->{"TRAFFIC_ITEM_TYPE_DESC"} eq "ACCIDENT") {
+			print "8"; #accident
 		}
 		else {
 			print "0"; # unknown

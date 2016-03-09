@@ -1,5 +1,8 @@
 /// <reference path="typings/jquery/jquery.d.ts"/>
 /// <reference path="jquery.tablesorter.js"/>
+
+var MAIN_ROOT = "/VerkeerWeb";
+
 $(document).ready(function () {
 
     $(".sortable").tablesorter({

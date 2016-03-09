@@ -62,7 +62,7 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
     @Override
     public List<POI> pollPOI(BoundingBox bbox) {
         try {
-            return super.scrapePOI(bbox, "tomtompoi.pl");
+            return POIHelper.scrapePOI(bbox, ProviderEnum.TomTom, "tomtompoi.pl");
         } catch (IOException ex) {
             Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
             return null;

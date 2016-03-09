@@ -17,3 +17,6 @@ perl bemobilepoi.pl $minLat $minLng $maxLat $maxLng
 
 echo "Waze:"
 perl wazepoi.pl $minLat $minLng $maxLat $maxLng
+
+echo "Coyote:"
+perl coyotepoi.pl $minLat $minLng $maxLat $maxLng

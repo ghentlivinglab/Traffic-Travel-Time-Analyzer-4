@@ -53,7 +53,7 @@ public abstract class BaseProvider {
         }
 
         // totalDistanceMeters;totalTimeSeconds;totalDelaySeconds
-        String[] parts = results.split(";");
+        String[] parts = results.split(";",-1);
 
         int totalDistance = Integer.parseInt(parts[0]);
         int totalTimeSeconds = Integer.parseInt(parts[1]);
@@ -73,52 +73,4 @@ public abstract class BaseProvider {
         return rd;
     }
 
-    protected List<POI> scrapePOI(BoundingBox bbox, String scriptName) throws InterruptedException, IOException, Exception {
-
-        File baseDir = new File(Settings.getInstance().getScrapePath());
-
-        File script = new File(baseDir, scriptName);
-
-        ProcessBuilder pb = new ProcessBuilder(Settings.getInstance().getPerlPath(), script.toPath().toString(),
-                bbox.getMinLatitude() + "", bbox.getMinLongitude() + "", bbox.getMaxLatitude() + "", bbox.getMaxLongitude() + "");
-
-        pb.directory(baseDir);
-        java.lang.Process p = pb.start();
-
-        BufferedReader errReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        List<POI> pois = parseScrapePOIOutput(reader);
-
-        int errCode = p.waitFor();
-        return pois;
-    }
-
-    protected List<POI> parseScrapePOIOutput(BufferedReader reader) throws IOException, Exception, NumberFormatException {
-        String headers = reader.readLine();
-
-        String line;
-
-        List<POI> lst = new ArrayList<>();
-        while ((line = reader.readLine()) != null) {
-
-            // id;lat;lng;type;traffictype;comments;
-            String[] parts = line.split(";");
-
-            POI p = new POI();
-            p.setReferenceId(parts[0]);
-            p.setProvider(this.provider);
-            p.setLatitude(Double.parseDouble(parts[1]));
-            p.setLongitude(Double.parseDouble(parts[2]));
-
-            POICategoryEnum type = POICategoryEnum.fromInt(Integer.parseInt(parts[3]));
-            p.setCategory(type);
-
-            p.setSince(new Date());
-            p.setInfo(parts[5]);
-
-            lst.add(p);
-        }
-        return lst;
-    }
 }

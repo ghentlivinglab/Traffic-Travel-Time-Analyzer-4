@@ -30,7 +30,7 @@ public class WazeProvider extends BaseProvider implements IProvider, IPOIProvide
     @Override
     public List<POI> pollPOI(BoundingBox bbox) {
         try {
-            return super.scrapePOI(bbox, "wazepoi.pl");
+            return POIHelper.scrapePOI(bbox, ProviderEnum.Waze, "wazepoi.pl");
         } catch (IOException ex) {
             Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
             return null;

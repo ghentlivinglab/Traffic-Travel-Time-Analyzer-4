@@ -1,6 +1,7 @@
 package be.ugent.verkeer4.verkeerweb.dataobjects;
 
 import be.ugent.verkeer4.verkeerdomain.data.POICategoryEnum;
+import java.util.Date;
 
 
 public class MapPOI {
@@ -10,6 +11,8 @@ public class MapPOI {
     private double longitude;
     private String info;
     private int category;
+    private String source;
+    private String since;
 
     /**
      * @return the id
@@ -79,5 +82,33 @@ public class MapPOI {
      */
     public void setCategory(int category) {
         this.category = category;
+    }
+
+    /**
+     * @return the source
+     */
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * @param source the source to set
+     */
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    /**
+     * @return the since
+     */
+    public String getSince() {
+        return since;
+    }
+
+    /**
+     * @param since the since to set
+     */
+    public void setSince(String since) {
+        this.since = since;
     }
 }

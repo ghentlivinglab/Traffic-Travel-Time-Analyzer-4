@@ -1,5 +1,6 @@
 use strict;
 use JSON;
+use utf8; 
 binmode(STDOUT, ":utf8");
 
 if(scalar @ARGV < 4) {
@@ -22,7 +23,12 @@ my $response = from_json($json);
 
 my @items = @{ $response->{"LI"} };
 
-my %categories = ( 0 => "0", 1 => "trafficjam", 2 => "2", 3 => "incident", 4 => "construction", 5 => "5" );
+my %categories = ( "0" => "0", 
+				   "1" => "3", # traffic jam
+				   "2" => "8", # accident
+				   "3" => "2", #incident
+				   "4" => "1", # construction
+				   "5" => "6"); # police trap 
 
 print "id;lat;lng;type;traffictype;comments";
 print "\n";
@@ -41,17 +47,11 @@ for my $item (@items) {
 			print ";";
 			print $lng;
 			print ";";
-			if($categories{$item->{"C"}} eq "trafficjam") {
-				print "3"; # traffic jam
-			}
-			elsif($categories{$item->{"C"}} eq "incident") {
-				print "2"; # incident
-			}
-			elsif($categories{$item->{"C"}} eq "construction") {
-				print "1"; #construction
+			if(!$categories{$item->{"C"}}) {
+				print "0";
 			}
 			else {
-				print "0"; # unknown
+				print $categories{$item->{"C"}};
 			}
 			print ";";
 			print "";
