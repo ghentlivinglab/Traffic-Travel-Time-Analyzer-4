@@ -15,6 +15,7 @@ var MapManagement;
         POICategoryEnum[POICategoryEnum["RoadClosed"] = 5] = "RoadClosed";
         POICategoryEnum[POICategoryEnum["PoliceTrap"] = 6] = "PoliceTrap";
         POICategoryEnum[POICategoryEnum["Hazard"] = 7] = "Hazard";
+        POICategoryEnum[POICategoryEnum["Accident"] = 8] = "Accident";
     })(POICategoryEnum || (POICategoryEnum = {}));
     var LeafletMapRoute = (function () {
         function LeafletMapRoute(layer, layer2, route, points) {
@@ -113,6 +114,10 @@ var MapManagement;
                     case POICategoryEnum.Hazard:
                         color = "red";
                         iconUrl += "hazard.png";
+                        break;
+                    case POICategoryEnum.Accident:
+                        color = "red";
+                        iconUrl += "accident.png";
                         break;
                     case POICategoryEnum.Unknown:
                         color = "black";

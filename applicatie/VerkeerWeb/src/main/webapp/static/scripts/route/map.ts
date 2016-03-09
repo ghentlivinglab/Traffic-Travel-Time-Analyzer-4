@@ -30,7 +30,8 @@ namespace MapManagement {
         LaneClosed = 4,
         RoadClosed = 5,
         PoliceTrap = 6,
-        Hazard = 7
+        Hazard = 7,
+        Accident = 8
     }
 
     interface MapRoute {
@@ -156,6 +157,10 @@ namespace MapManagement {
                         color = "red";
                         iconUrl += "hazard.png";
                         break;
+                    case POICategoryEnum.Accident:
+                        color = "red";
+                        iconUrl += "accident.png";
+                        break;                        
                     case POICategoryEnum.Unknown:
                         color = "black";
                         iconUrl += "unknown.png";
