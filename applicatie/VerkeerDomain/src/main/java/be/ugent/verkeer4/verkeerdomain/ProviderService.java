@@ -164,7 +164,9 @@ public class ProviderService extends BaseService implements IProviderService {
                         if (existingPOIsByReferenceId.containsKey(poi.getReferenceId())) {
                             // poi bestaat al, update waarden?
                             POI oldPOI = existingPOIsByReferenceId.get(poi.getReferenceId());
+                            // id & matched overnemen
                             poi.setId(oldPOI.getId());
+                            poi.setMatchedWithRoutes(oldPOI.isMatchedWithRoutes());
                             poiService.update(poi);
 
                         } else {
