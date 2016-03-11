@@ -3,17 +3,14 @@ package be.ugent.verkeer4.verkeerdomain;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.POINearRoute;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
-import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
-import com.sun.javafx.binding.Logging;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javafx.geometry.Point3D;
 
 public class POIService extends BaseService implements IPOIService {
@@ -49,6 +46,13 @@ public class POIService extends BaseService implements IPOIService {
         return repo.getPOISet().getActivePOI();
     }
 
+    @Override
+    public List<POI> getPOIsNearRoute(int routeId, Date from, Date to) {
+        // voeg de actieve toe als de huidige tijd in de range zit
+        boolean includeActive = to.getTime() > new Date().getTime();
+        return repo.getPOISet().getPOIsNearRoute(routeId, from, to, includeActive);
+    }
+    
     private class Waypoint {
 
         private RouteWaypoint routeWaypoint;

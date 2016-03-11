@@ -3,6 +3,7 @@ package be.ugent.verkeer4.verkeerdal;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.POINearRoute;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,27 @@ public class POIDbSet extends DbSet<POI> {
         }
     }
 
+    public List<POI> getPOIsNearRoute(int routeId, Date from, Date to, boolean includeActive) {
+          try (org.sql2o.Connection con = sql2o.open()) {
+              
+              String query = "SELECT p.* FROM poinearroute pnr " +
+                             "JOIN poi p ON pnr.poiid = p.id AND pnr.routeId = :RouteId AND p.Since <= :To and (p.Until >= :From";
+              
+              if(includeActive)
+                  query +="or p.Until is null)";
+              else
+                  query += ")";
+              
+            Query q = con.createQuery(query);
+
+            q.addParameter("RouteId", routeId);
+            q.addParameter("From", from);
+            q.addParameter("To", to);
+            List<POI> lst = q.executeAndFetch(POI.class);
+            return lst;
+        }
+    }
+    
     public void insertPOINearRoute(POINearRoute near) {
         try (org.sql2o.Connection con = sql2o.open()) {
             Query q = con.createQuery("INSERT INTO poinearroute (POIId, RouteId, Distance) VALUES (:POIId, :RouteId, :Distance)");
