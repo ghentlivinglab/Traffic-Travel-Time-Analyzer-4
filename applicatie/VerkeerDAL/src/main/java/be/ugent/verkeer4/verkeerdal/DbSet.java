@@ -69,8 +69,10 @@ public class DbSet<T> {
         try (org.sql2o.Connection con = sql2o.open()) {
             Query q = con.createQuery("SELECT * from " + getTableName() + " WHERE " + condition);
 
-            for (Entry<String, Object> parameter : parameters.entrySet()) {
-                q.addParameter(parameter.getKey(), parameter.getValue());
+            if (parameters != null) {
+                for (Entry<String, Object> parameter : parameters.entrySet()) {
+                    q.addParameter(parameter.getKey(), parameter.getValue());
+                }
             }
 
             List<T> lst = q.executeAndFetch(this.type);
@@ -129,8 +131,8 @@ public class DbSet<T> {
             Query q = con.createQuery(updateQuery);
 
             for (Field field : this.type.getDeclaredFields()) {
-                    field.setAccessible(true);
-                    q.addParameter(field.getName(), field.get(object));
+                field.setAccessible(true);
+                q.addParameter(field.getName(), field.get(object));
             }
 
             q.executeUpdate();

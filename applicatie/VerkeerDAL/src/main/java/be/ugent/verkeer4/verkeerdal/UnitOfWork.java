@@ -33,10 +33,9 @@ public class UnitOfWork extends BaseRepository implements IUnitOfWork {
     public RouteWaypointDbSet getRouteWaypointSet() {
         return this.routeWaypoints;
     }
-    
+
     @Override
     public POIDbSet getPOISet() {
         return this.pois;
     }
-
 }

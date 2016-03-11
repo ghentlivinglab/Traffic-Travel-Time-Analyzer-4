@@ -131,9 +131,10 @@ public class ProviderService extends BaseService implements IProviderService {
             futures.clear();
 
             long diff = new Date().getTime() - curTime;
-            if (diff > 0 && diff < 7000) { // sleep resterende van de 7 seconden
+            if (diff > 0 && diff < 5000) { // sleep resterende van de 5 seconden
                 try {
-                    Thread.sleep(diff);
+                    Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Waiting for " + (5000 - diff) + "ms before continuing");
+                    Thread.sleep(5000 - diff);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -163,7 +164,9 @@ public class ProviderService extends BaseService implements IProviderService {
                         if (existingPOIsByReferenceId.containsKey(poi.getReferenceId())) {
                             // poi bestaat al, update waarden?
                             POI oldPOI = existingPOIsByReferenceId.get(poi.getReferenceId());
+                            // id & matched overnemen
                             poi.setId(oldPOI.getId());
+                            poi.setMatchedWithRoutes(oldPOI.isMatchedWithRoutes());
                             poiService.update(poi);
 
                         } else {

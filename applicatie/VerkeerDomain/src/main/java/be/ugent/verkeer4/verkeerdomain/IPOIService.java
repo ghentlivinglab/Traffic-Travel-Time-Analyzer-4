@@ -16,4 +16,7 @@ public interface IPOIService {
 
     public List<POI> getActivePOIs();
     
+    
+    public void matchPOIsWithRoute() throws ClassNotFoundException;
+    
 }
