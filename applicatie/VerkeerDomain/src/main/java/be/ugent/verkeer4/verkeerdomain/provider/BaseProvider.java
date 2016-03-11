@@ -1,7 +1,9 @@
 package be.ugent.verkeer4.verkeerdomain.provider;
 
-import be.ugent.verkeer4.verkeerdomain.ProviderService;
 import be.ugent.verkeer4.verkeerdomain.Settings;
+import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.POI;
+import be.ugent.verkeer4.verkeerdomain.data.POICategoryEnum;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
@@ -9,9 +11,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 
 public abstract class BaseProvider {
 
@@ -43,26 +45,20 @@ public abstract class BaseProvider {
     }
 
     protected RouteData parseScrapeOutput(BufferedReader reader, Route route) throws IOException, Exception, NumberFormatException {
-       // Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Reading header from scrape result");
         String headers = reader.readLine();
-        
-        //Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Header line is " + headers);
-        //Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Reading result line from scrape result");
         String results = reader.readLine();
-        
-       // Logger.getLogger(BaseProvider.class.getName()).log(Level.INFO, "Result line is " + results);
-        
+
         if (results.equalsIgnoreCase("")) {
             throw new Exception("Invalid scrape data");
         }
-        
+
         // totalDistanceMeters;totalTimeSeconds;totalDelaySeconds
-        String[] parts = results.split(";");
-        
+        String[] parts = results.split(";",-1);
+
         int totalDistance = Integer.parseInt(parts[0]);
         int totalTimeSeconds = Integer.parseInt(parts[1]);
         int totalDelaySeconds = Integer.parseInt(parts[2]);
-        
+
         return setRouteData(route, totalDistance, totalTimeSeconds, totalDelaySeconds);
     }
 

@@ -1,5 +1,6 @@
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
@@ -22,4 +23,6 @@ public interface IRouteService {
     public List<RouteWaypoint> getRouteWaypointsForRoute(int id);
 
     public List<RouteData> getMostRecentRouteSummariesForRoute(int id);
+
+    public BoundingBox getBoundingBoxOfAllRoutes();
 }

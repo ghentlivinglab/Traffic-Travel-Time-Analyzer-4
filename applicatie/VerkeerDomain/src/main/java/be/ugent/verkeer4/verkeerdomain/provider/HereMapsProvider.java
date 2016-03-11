@@ -1,29 +1,33 @@
 package be.ugent.verkeer4.verkeerdomain.provider;
 
+import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.provider.here.HereMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.here.Response;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class HereMapsProvider extends BaseProvider implements IProvider {
+public class HereMapsProvider extends BaseProvider implements IProvider, IPOIProvider {
 
     public HereMapsProvider() {
         super(ProviderEnum.HereMaps);
     }
-    
+
     @Override
     public RouteData poll(Route route) {
 
         try {
-            RouteData result =  scrape(route, "here.pl");
-            if(result == null)
+            RouteData result = scrape(route, "here.pl");
+            if (result == null) {
                 return useAPI(route);
-            else
+            } else {
                 return result;
+            }
         } catch (Exception ex) {
             Logger.getLogger(HereMapsProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId() + ", falling back to API", ex);
 
@@ -38,9 +42,9 @@ public class HereMapsProvider extends BaseProvider implements IProvider {
 
             if (response.getRoute().size() > 0) {
                 be.ugent.verkeer4.verkeerdomain.provider.here.Route hereRoute = response.getRoute().get(0);
-                
+
                 int delay = hereRoute.getSummary().getTrafficTime() - hereRoute.getSummary().getBaseTime();
-                
+
                 RouteData rd = setRouteData(route,
                         hereRoute.getSummary().getDistance(),
                         hereRoute.getSummary().getTrafficTime(),
@@ -55,7 +59,22 @@ public class HereMapsProvider extends BaseProvider implements IProvider {
             return null;
         }
     }
-    
-    
-   
+
+    @Override
+    public List<POI> pollPOI(BoundingBox bbox) {
+        try {
+            return POIHelper.scrapePOI(bbox, ProviderEnum.HereMaps, "herepoi.pl");
+        } catch (IOException ex) {
+            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (Exception ex) {
+            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
+    public ProviderEnum getProvider() {
+        return ProviderEnum.HereMaps;
+    }
 }

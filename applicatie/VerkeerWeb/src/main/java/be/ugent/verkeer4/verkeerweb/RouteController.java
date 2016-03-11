@@ -57,6 +57,7 @@ public class RouteController {
         }
         Date maxDate = mostRecentRouteSummaries.stream().map(rs -> rs.getTimestamp()).max(Date::compareTo).get();
         overview.setRecentRouteDateFrom(maxDate);
+
         // overloop alle recente route data en steek vul de routesummaryentry object aan
         for (RouteData sum : mostRecentRouteSummaries) {
 
@@ -91,14 +92,17 @@ public class RouteController {
     public List<RouteData> ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
             throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IProviderService providerService = new ProviderService(routeService);
+        IPOIService poiService = new POIService();
+        IProviderService providerService = new ProviderService(routeService, poiService);
         List<RouteData> data = providerService.getRouteDataForRoute(id, startDate, endDate);
         return data;
     }
 
+
     @RequestMapping(value = "route/detail/{id}", method = RequestMethod.GET)
     public ModelAndView getDetail(@PathVariable("id")int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
+        IPOIService poiService = new POIService();
         Route route = routeService.getRoute(id);
 
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
@@ -243,6 +247,7 @@ public class RouteController {
 
     private MapData getAllRouteMapData() throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
+        IPOIService poiService = new POIService();
         // vraag alle trajecten met hun waypoints op
         List<Route> routes = routeService.getRoutes();
         List<RouteWaypoint> waypoints = routeService.getRouteWaypoints();
@@ -264,6 +269,20 @@ public class RouteController {
             lst.add(summary);
         }
 
+        List<POI> pois = poiService.getActivePOIs();
+        // TODO group pois on same location
+        for (POI poi : pois) {
+            MapPOI mp = new MapPOI();
+            mp.setId(poi.getId());
+            mp.setLatitude(poi.getLatitude());
+            mp.setLongitude(poi.getLongitude());
+            mp.setInfo(poi.getInfo());
+            mp.setCategory(poi.getCategory().getValue());
+            mp.setSince(poi.getSince().toString());
+            mp.setSource(poi.getProvider().toString());
+            data.getPois().add(mp);
+        }
+        
         // overloop alle trajecten en bereken aan de hand van de verzamelde route data's in
         // de map de gemiddelde delay & percentage
         for (Route r : routes) {

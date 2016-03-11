@@ -1,5 +1,6 @@
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
@@ -95,6 +96,11 @@ public class RouteService extends BaseService implements IRouteService {
     @Override
     public List<RouteData> getMostRecentRouteSummariesForRoute(int id) {
         return repo.getRouteDataSet().getMostRecentSummaryForRoute(id);
+    }
+
+    @Override
+    public BoundingBox getBoundingBoxOfAllRoutes() {
+        return repo.getRouteWaypointSet().getBoundingBox();
     }
 
 }

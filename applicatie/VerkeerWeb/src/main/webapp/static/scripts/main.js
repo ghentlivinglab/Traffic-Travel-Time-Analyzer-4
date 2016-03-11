@@ -1,9 +1,13 @@
 /// <reference path="typings/jquery/jquery.d.ts"/>
 /// <reference path="jquery.tablesorter.js"/>
+
 (function (verkeer, $) {
+
+    verkeer.MAIN_ROOT = "/VerkeerWeb";
+
     "use strict";
     $(document).ready(function () {
-
+        
         $(".sortable").tablesorter({
             theme: 'bootstrap'
         });
@@ -24,9 +28,11 @@
 
     verkeer.secondsToText = function (seconds) {
         var min = Math.floor(seconds / 60) + "";
-        if (min.length == 1) min = "0" + min;
+        if (min.length == 1)
+            min = "0" + min;
         var sec = (seconds % 60) + "";
-        if (sec.length == 1) sec = "0" + sec;
+        if (sec.length == 1)
+            sec = "0" + sec;
         return min + "' " + sec + "''";
     };
 

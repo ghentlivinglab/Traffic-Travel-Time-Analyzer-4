@@ -4,7 +4,19 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var MapManagement;
-(function (MapManagement, verkeer) {
+(function (MapManagement) {
+    var POICategoryEnum;
+    (function (POICategoryEnum) {
+        POICategoryEnum[POICategoryEnum["Unknown"] = 0] = "Unknown";
+        POICategoryEnum[POICategoryEnum["Construction"] = 1] = "Construction";
+        POICategoryEnum[POICategoryEnum["Incident"] = 2] = "Incident";
+        POICategoryEnum[POICategoryEnum["TrafficJam"] = 3] = "TrafficJam";
+        POICategoryEnum[POICategoryEnum["LaneClosed"] = 4] = "LaneClosed";
+        POICategoryEnum[POICategoryEnum["RoadClosed"] = 5] = "RoadClosed";
+        POICategoryEnum[POICategoryEnum["PoliceTrap"] = 6] = "PoliceTrap";
+        POICategoryEnum[POICategoryEnum["Hazard"] = 7] = "Hazard";
+        POICategoryEnum[POICategoryEnum["Accident"] = 8] = "Accident";
+    })(POICategoryEnum || (POICategoryEnum = {}));
     var LeafletMapRoute = (function () {
         function LeafletMapRoute(layer, layer2, route, points) {
             this.layer = layer;
@@ -14,10 +26,20 @@ var MapManagement;
         }
         return LeafletMapRoute;
     })();
+    var LeafletMapPOI = (function () {
+        function LeafletMapPOI(marker, poi, point) {
+            this.marker = marker;
+            this.poi = poi;
+            this.point = point;
+        }
+        return LeafletMapPOI;
+    })();
     var MapManager = (function () {
         function MapManager(mapElementId) {
             this.mapElementId = mapElementId;
             this.leafletMapRouteById = {};
+            this.leafletMapPOIById = {};
+            this.markerCluster = null;
             this.initialize();
         }
         MapManager.prototype.initialize = function () {
@@ -50,6 +72,74 @@ var MapManagement;
                 llmr.layer2.redraw();
             }
         };
+        MapManager.prototype.showPOIs = function (pois) {
+            this.markerCluster = L.markerClusterGroup({ disableClusteringAtZoom: 13 });
+            for (var _i = 0; _i < pois.length; _i++) {
+                var p = pois[_i];
+                this.showPOI(p);
+            }
+            this.map.addLayer(this.markerCluster);
+        };
+        MapManager.prototype.showPOI = function (p) {
+            var llmp;
+            if (!this.leafletMapPOIById[p.id]) {
+                var latLng = new L.LatLng(p.latitude, p.longitude);
+                var color;
+                var iconUrl = verkeer.MAIN_ROOT + "/static/images/poi_";
+                switch (p.category) {
+                    case POICategoryEnum.Incident:
+                        color = "blue";
+                        iconUrl += "incident.png";
+                        break;
+                    case POICategoryEnum.Construction:
+                        color = "yellow";
+                        iconUrl += "construction.png";
+                        break;
+                    case POICategoryEnum.TrafficJam:
+                        color = "red";
+                        iconUrl += "jam.png";
+                        break;
+                    case POICategoryEnum.LaneClosed:
+                        color = "red";
+                        iconUrl += "laneclosed.png";
+                        break;
+                    case POICategoryEnum.RoadClosed:
+                        color = "red";
+                        iconUrl += "roadclosed.png";
+                        break;
+                    case POICategoryEnum.PoliceTrap:
+                        color = "red";
+                        iconUrl += "police.png";
+                        break;
+                    case POICategoryEnum.Hazard:
+                        color = "red";
+                        iconUrl += "hazard.png";
+                        break;
+                    case POICategoryEnum.Accident:
+                        color = "red";
+                        iconUrl += "accident.png";
+                        break;
+                    case POICategoryEnum.Unknown:
+                        color = "black";
+                        iconUrl += "unknown.png";
+                        break;
+                }
+                var icon = L.icon({ iconSize: new L.Point(24, 24), iconUrl: iconUrl });
+                var marker = L.marker(latLng, { icon: icon, clickable: true });
+                this.markerCluster.addLayer(marker);
+                this.initializePOIPopup(marker, p);
+                llmp = new LeafletMapPOI(marker, p, latLng);
+                this.leafletMapRouteById[p.id] = llmp;
+            }
+            else {
+                // already exists, update layer
+                llmp = this.leafletMapRouteById[p.id];
+                llmp.marker.update();
+            }
+        };
+        MapManager.prototype.initializePOIPopup = function (marker, poi) {
+            marker.bindPopup("\n                " + poi.info + "\n                <br/>\n                Since: " + poi.since + "\n                <br/>\n                Provided by: " + poi.source + "\n            ", {});
+        };
         MapManager.prototype.centerMap = function () {
             var allPoints = [];
             for (var id in this.leafletMapRouteById) {
@@ -73,11 +163,11 @@ var MapManagement;
             }
         };
         MapManager.prototype.initializePathPopup = function (path, route) {
-            path.bindPopup("\n                " + route.name + " (" + route.distance + "m)\n                <br>\n                  <span class=\"label label-info time\" data-time=\"" + route.averageCurrentTravelTime + "\">\n                      " + route.averageCurrentTravelTime + "\n                  </span>                  \n                  <span class=\"label time label-delay\" data-time=\"" + route.currentDelay + "\">\n                    " + route.currentDelay + "\n                  </span>\n                  <div class=\"pull-right\">\n                        <a href='detail/" + route.id + "'>Detail</a>\n                  </div>\n            ", {});
+            path.bindPopup("\n                " + route.name + " (" + route.distance + "m)\n                <br>\n                  <span class=\"label label-info time\" data-time=\"" + route.averageCurrentTravelTime + "\">\n                      " + route.averageCurrentTravelTime + "\n                  </span>                  \n                  <span class=\"label time label-delay\" data-time=\"" + route.currentDelay + "\">\n                    " + route.currentDelay + "\n                  </span>\n                  <div class=\"pull-right\">\n                        <a href='" + verkeer.MAIN_ROOT + "/route/detail/" + route.id + "'>Detail</a>\n                  </div>\n            ", {});
             path.on("popupopen", function () {
                 // todo beter afhandelen
-                window.labelDelays();
-                window.formatTimes();
+                verkeer.labelDelays();
+                verkeer.formatTimes();
             });
         };
         MapManager.getColor = function (delay, dark) {
@@ -129,6 +219,7 @@ var MapManagement;
                 dataType: "json",
                 success: function (data) {
                     _this.showRoutes(data);
+                    _this.showPOIs(data.pois);
                     _this.centerMap();
                 }
             });
@@ -147,4 +238,4 @@ var MapManagement;
         return mgr;
     }
     MapManagement.intializeRouteMap = intializeRouteMap;
-})(MapManagement || (MapManagement = {}), verkeer);
+})(MapManagement || (MapManagement = {}));

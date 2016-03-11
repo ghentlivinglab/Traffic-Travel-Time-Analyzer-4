@@ -2,6 +2,8 @@ package be.ugent.verkeer4.verkeerdomain.provider;
 
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
 import be.ugent.verkeer4.verkeerdomain.Settings;
+import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
@@ -17,9 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class CoyoteProvider implements ISummaryProvider {
+public class CoyoteProvider implements ISummaryProvider, IPOIProvider {
 
-    private IRouteService routeService;
+    private final IRouteService routeService;
 
     public CoyoteProvider(IRouteService routeService) {
         this.routeService = routeService;
@@ -56,10 +58,10 @@ public class CoyoteProvider implements ISummaryProvider {
                 int totalDelaySeconds = Integer.parseInt(parts[2]);
                 String name = parts[3];
                 String[] nameParts = name.split(" - ");
-                
-                if(routeByLowerCaseName.containsKey(nameParts[0].toLowerCase())) {
+
+                if (routeByLowerCaseName.containsKey(nameParts[0].toLowerCase())) {
                     Route r = routeByLowerCaseName.get(nameParts[0].toLowerCase());
-                
+
                     RouteData rd = new RouteData();
                     rd.setProvider(ProviderEnum.Coyote);
                     rd.setTimestamp(new Date());
@@ -68,8 +70,7 @@ public class CoyoteProvider implements ISummaryProvider {
                     rd.setDistance(totalDistance);
                     rd.setRouteId(r.getId());
                     lst.add(rd);
-                }
-                else {
+                } else {
                     Logger.getLogger(CoyoteProvider.class.getName()).log(Level.WARNING, "''{0}'' IS NOT FOUND IN THE ROUTE LIST", nameParts[0]);
                 }
             }
@@ -93,4 +94,21 @@ public class CoyoteProvider implements ISummaryProvider {
         }
     }
 
+    @Override
+    public List<POI> pollPOI(BoundingBox bbox) {
+        try {
+            return POIHelper.scrapePOI(bbox, ProviderEnum.Coyote, "coyotepoi.pl");
+        } catch (IOException ex) {
+            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (Exception ex) {
+            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
+    public ProviderEnum getProvider() {
+        return ProviderEnum.Coyote;
+    }
 }
