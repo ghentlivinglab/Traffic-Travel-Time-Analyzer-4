@@ -92,7 +92,7 @@ public class RouteController {
     public List<RouteData> ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
             throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService();
+        IPOIService poiService = new POIService(routeService);
         IProviderService providerService = new ProviderService(routeService, poiService);
         List<RouteData> data = providerService.getRouteDataForRoute(id, startDate, endDate);
         return data;
@@ -102,7 +102,7 @@ public class RouteController {
     @RequestMapping(value = "route/detail/{id}", method = RequestMethod.GET)
     public ModelAndView getDetail(@PathVariable("id")int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService();
+        IPOIService poiService = new POIService(routeService);
         Route route = routeService.getRoute(id);
 
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
@@ -247,7 +247,7 @@ public class RouteController {
 
     private MapData getAllRouteMapData() throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService();
+        IPOIService poiService = new POIService(routeService);
         // vraag alle trajecten met hun waypoints op
         List<Route> routes = routeService.getRoutes();
         List<RouteWaypoint> waypoints = routeService.getRouteWaypoints();
