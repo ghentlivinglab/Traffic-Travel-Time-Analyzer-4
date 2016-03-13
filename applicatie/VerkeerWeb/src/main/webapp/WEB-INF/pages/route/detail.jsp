@@ -16,7 +16,7 @@
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Traject ${detail.name}</h3>
+                <h3 class="panel-title">Route ${detail.name}</h3>
             </div>
             <div class="panel-body">
                 <div class="col-md-4">
@@ -25,8 +25,8 @@
                             <thead>
                             <tr>
                                 <th>Provider</th>
-                                <th>Reistijd</th>
-                                <th>Vertraging</th>
+                                <th>Travel time</th>
+                                <th>Delay</th>
                             </tr>
                             </thead>
                             <tbody id="summary-table-body">
@@ -39,16 +39,16 @@
                             </c:forEach>
                             </tbody>
                         </table>
-                        <dt>Normale reistijd</dt>
+                        <dt>Standard Travel Time</dt>
                         <dd><span class="humanize" data-time=${detail.defaultTravelTime}></span></dd>
-                        <dt>Afstand</dt>
+                        <dt>Distance</dt>
                         <dd>${detail.distance} meter</dd>
-                        <dt>Vanaf</dt>
+                        <dt>From</dt>
                         <dd>${detail.fromAddress}</dd>
-                        <dt>Tot</dt>
+                        <dt>To</dt>
                         <dd>${detail.toAddress}</dd>
                     </dl>
-                    <a href="${pageContext.servletContext.contextPath}/route/edit/${detail.id}">Traject aanpassen</a>
+                    <a href="${pageContext.servletContext.contextPath}/route/edit/${detail.id}">Edit Route</a>
                 </div>
                 <div class="col-md-8">
                     <div id="map" style="height:500px">
@@ -60,11 +60,11 @@
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Filteropties</h3>
+                <h3 class="panel-title">Filteroptions</h3>
             </div>
             <div class="panel-body">
                 <div class="col-md-6">
-                    <label>Begindatum</label>
+                    <label>Start Date</label>
                     <div class="form-group">
                         <div class='input-group date' id='datetimepicker-begin'>
                             <input type='text' class="form-control"/>
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label>Einddatum</label>
+                    <label>End Date</label>
                     <div class="form-group">
                         <div class='input-group date' id='datetimepicker-end'>
                             <input type='text' class="form-control"/>
@@ -94,7 +94,7 @@
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Historiek</h3>
+                <h3 class="panel-title">History</h3>
             </div>
             <div class="panel-body">
                 <div class="container">
@@ -104,11 +104,11 @@
                 <table id="data-table" class="table table-striped table-condensed sortable">
                     <thead>
                     <tr>
-                        <th>Datum</th>
-                        <th>Tijd</th>
+                        <th>Date</th>
+                        <th>Time</th>
                         <th>Provider</th>
-                        <th>Reistijd</th>
-                        <th>Vertraging</th>
+                        <th>Travel Time</th>
+                        <th>Delay</th>
                     </tr>
                     </thead>
                     <tbody id="data-table-body"></tbody>
