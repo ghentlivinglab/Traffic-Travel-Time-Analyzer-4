@@ -3,7 +3,7 @@ use strict;
 my $cachename = "here.cache";
 
 if(scalar @ARGV < 4) {
-	print "Usage: here fromlat fromlng tolat tolng\n";
+	print "Usage: here fromlat fromlng tolat tolng avoidHighways\n";
 	exit(1);
 }
 
@@ -11,7 +11,10 @@ my $fromLat = @ARGV[0]; #"51.05633";
 my $fromLng = @ARGV[1]; #"3.69485";
 my $toLat = @ARGV[2]; #"51.038768";
 my $toLng = @ARGV[3]; #"3.736953";
-
+my $avoidHighways = 0;
+if(scalar @ARGV >= 5) {
+	$avoidHighways = @ARGV[4];
+}
 main();
 
 sub main {
@@ -118,7 +121,11 @@ sub getAppCodeAndId {
 sub printRouteData {
 	(my $appCode, my $appId) = @_;
 	
-	my $url = 'https://route.api.here.com/routing/7.2/calculateroute.json?alternatives=0&app_code=' . $appCode .'&app_id=' . $appId . '&jsonAttributes=41&language=en_US&legattributes=all&linkattributes=none,sh,ds,rn,ro,nl,pt,ns,le,fl&maneuverattributes=all&metricSystem=metric&mode=fastest;car;traffic:enabled;&routeattributes=none,sh,wp,sm,bb,lg,no,li,tx,la&transportModeType=car&waypoint0=geo!' . $fromLat . ',' . $fromLng . '&waypoint1=geo!' . $toLat . ',' . $toLng . '';
+	my $motorways = "";
+	if($avoidHighways) {
+		$motorways = "motorway:-2";
+	}
+	my $url = 'https://route.api.here.com/routing/7.2/calculateroute.json?alternatives=0&app_code=' . $appCode .'&app_id=' . $appId . '&jsonAttributes=41&language=en_US&legattributes=all&linkattributes=none,sh,ds,rn,ro,nl,pt,ns,le,fl&maneuverattributes=all&metricSystem=metric&mode=fastest;car;traffic:enabled;' .$motorways . '&routeattributes=none,sh,wp,sm,bb,lg,no,li,tx,la&transportModeType=car&waypoint0=geo!' . $fromLat . ',' . $fromLng . '&waypoint1=geo!' . $toLat . ',' . $toLng . '';
 	
 	#print $url;
 	

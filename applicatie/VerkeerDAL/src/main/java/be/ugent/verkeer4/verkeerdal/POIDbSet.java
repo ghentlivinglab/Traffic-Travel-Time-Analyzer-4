@@ -56,7 +56,7 @@ public class POIDbSet extends DbSet<POI> {
           try (org.sql2o.Connection con = sql2o.open()) {
               
               String query = "SELECT p.* FROM poinearroute pnr " +
-                             "JOIN poi p ON pnr.poiid = p.id AND pnr.routeId = :RouteId AND p.Since <= :To and (p.Until >= :From";
+                             "JOIN poi p ON pnr.poiid = p.id AND pnr.routeId = :RouteId AND p.Since <= :To and (p.Until >= :From ";
               
               if(includeActive)
                   query +="or p.Until is null)";

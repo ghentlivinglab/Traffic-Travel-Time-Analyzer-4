@@ -19,7 +19,7 @@ class UpdateTrajectenFromTomTomData {
 
             for (Route r : routes.getRoutes()) {
 
-                CalculateRouteResponse response = TomTomClient.GetRoute(r.getFromLatitude(), r.getFromLongitude(), r.getToLatitude(), r.getToLongitude(), false);
+                CalculateRouteResponse response = TomTomClient.GetRoute(r.getFromLatitude(), r.getFromLongitude(), r.getToLatitude(), r.getToLongitude(), false, r.getAvoidHighwaysOrUseShortest());
 
                 System.out.println("Processing route " + r.getName());
 

@@ -7,9 +7,14 @@
 
     "use strict";
     $(document).ready(function () {
-        
+
         $(".sortable").tablesorter({
             theme: 'bootstrap'
+        });
+
+        $(".nodefault").click(function (e) {
+            e.preventDefault();
+            return false;
         });
 
         verkeer.labelDelays();
@@ -48,6 +53,8 @@
         }
     };
 
+
+    verkeer.delayClasses = [60, 420];
     /*
      Pass the delay in seconds and it returns a level that represents the delay:
      0: no delay (e.g. green)
@@ -57,9 +64,9 @@
     verkeer.getDelayLevel = function (delay) {
         var level;
 
-        if (delay <= 60) {
+        if (delay <= verkeer.delayClasses[0]) {
             level = 0;
-        } else if (delay <= 420) { // 7 minutes
+        } else if (delay <= verkeer.delayClasses[1]) { // 7 minutes
             level = 1;
         } else {
             level = 2;
@@ -95,6 +102,38 @@
         }
         return labelClass;
     };
+
+    verkeer.getDelayGradient = function (delay) {
+        var r1 = 92;
+        var g1 = 184;
+        var b1 = 92;
+        
+        var r2 = 240;
+        var g2 = 173;
+        var b2 = 74;
+        
+        var r3 = 217;
+        var g3 = 83;
+        var b3 = 79;
+        
+        if (delay <= verkeer.delayClasses[0]) {
+            var alpha = (delay - 0) / (verkeer.delayClasses[0] - 0);
+            var r = Math.floor(r1 * (1-alpha) + r2 * alpha);
+            var g = Math.floor(g1 * (1-alpha) + g2 * alpha);
+            var b = Math.floor(b1 * (1-alpha) + b2 * alpha);
+            
+            return "rgb(" + r + ", " + g + "," + b + ")";
+        } else if (delay <= verkeer.delayClasses[1]) { // 7 minutes
+            var alpha = (delay - verkeer.delayClasses[0]) / (verkeer.delayClasses[1] - verkeer.delayClasses[0]);
+            var r = Math.floor(r3 * alpha + r2 * (1-alpha));
+            var g = Math.floor(g3 * alpha + g2 * (1-alpha));
+            var b = Math.floor(b3 * alpha + b2 * (1-alpha));
+            
+            return "rgb(" + r + ", " + g + "," + b + ")";
+        } else {
+            return "rgb(" + r3 + ", " + g3 + "," + b3 + ")";
+        }
+    }
 
     verkeer.mean = function (data) {
         var sum = 0;

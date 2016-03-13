@@ -13,7 +13,7 @@
     </head>
     <body>
         <jsp:include page="/WEB-INF/shared/navigation.jsp" />
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="panel panel-primary">
                     <div class="panel-heading">

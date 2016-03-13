@@ -17,11 +17,9 @@ import be.ugent.verkeer4.verkeerdomain.provider.ViaMichelinProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WazeProvider;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -51,7 +49,7 @@ public class ProviderService extends BaseService implements IProviderService {
 
         this.perRouteProviders = new ArrayList<>();
         perRouteProviders.add(tomtomProvider);
-        perRouteProviders.add(beMobileProvider);;
+        perRouteProviders.add(beMobileProvider);
         perRouteProviders.add(hereMapsProvider);
         perRouteProviders.add(new GoogleProvider());
         perRouteProviders.add(wazeProvider);

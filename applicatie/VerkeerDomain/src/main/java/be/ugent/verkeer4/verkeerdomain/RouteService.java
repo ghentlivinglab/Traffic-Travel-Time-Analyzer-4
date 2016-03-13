@@ -55,7 +55,7 @@ public class RouteService extends BaseService implements IRouteService {
 
     private void updateWayPoints(Route r) throws IOException, Exception {
         repo.getRouteWaypointSet().deleteFromRoute(r.getId());
-        CalculateRouteResponse response = TomTomClient.GetRoute(r.getFromLatitude(), r.getFromLongitude(), r.getToLatitude(), r.getToLongitude(), false);
+        CalculateRouteResponse response = TomTomClient.GetRoute(r.getFromLatitude(), r.getFromLongitude(), r.getToLatitude(), r.getToLongitude(), false, r.getAvoidHighwaysOrUseShortest());
         be.ugent.verkeer4.verkeerdomain.provider.tomtom.Route tomtomRoute = response.getRoutes().get(0);
         r.setDistance(tomtomRoute.getSummary().getLengthInMeters());
         r.setDefaultTravelTime(tomtomRoute.getSummary().getTravelTimeInSeconds());

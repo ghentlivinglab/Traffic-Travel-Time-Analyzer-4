@@ -39,7 +39,7 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
     private RouteData useAPI(Route route) {
         try {
             // haal route gegevens op
-            CalculateRouteResponse response = TomTomClient.GetRoute(route.getFromLatitude(), route.getFromLongitude(), route.getToLatitude(), route.getToLongitude(), true);
+            CalculateRouteResponse response = TomTomClient.GetRoute(route.getFromLatitude(), route.getFromLongitude(), route.getToLatitude(), route.getToLongitude(), true, route.getAvoidHighwaysOrUseShortest());
 
             if (response.getRoutes().size() > 0) {
                 be.ugent.verkeer4.verkeerdomain.provider.tomtom.Route tomtomRoute = response.getRoutes().get(0);

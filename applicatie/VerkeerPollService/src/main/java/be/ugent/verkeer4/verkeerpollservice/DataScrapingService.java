@@ -31,6 +31,7 @@ public class DataScrapingService  extends BaseService {
           try {
             Logger.getLogger(Main.class.getName()).log(Level.INFO, "Starting poll for POI..");
             BoundingBox bbox = routeService.getBoundingBoxOfAllRoutes();
+            bbox.inflate(0.002); // increase lat,lng with 0.002 padding on each side
             providerService.pollPOI(bbox);
             
         } catch (Exception ex) {

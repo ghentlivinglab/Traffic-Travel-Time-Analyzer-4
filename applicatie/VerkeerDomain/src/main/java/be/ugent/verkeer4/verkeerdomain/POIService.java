@@ -49,7 +49,7 @@ public class POIService extends BaseService implements IPOIService {
     @Override
     public List<POI> getPOIsNearRoute(int routeId, Date from, Date to) {
         // voeg de actieve toe als de huidige tijd in de range zit
-        boolean includeActive = to.getTime() > new Date().getTime();
+        boolean includeActive = to.getTime() >= new Date().getTime();
         return repo.getPOISet().getPOIsNearRoute(routeId, from, to, includeActive);
     }
     

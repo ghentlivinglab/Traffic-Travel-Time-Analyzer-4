@@ -30,7 +30,7 @@ public class GoogleProvider extends BaseProvider implements IProvider {
     public RouteData poll(Route route) {
         try {
             // haal route gegevens op
-            Row row = GoogleMapsClient.GetRoute(route.getFromLatitude(), route.getFromLongitude(), route.getToLatitude(), route.getToLongitude());
+            Row row = GoogleMapsClient.GetRoute(route.getFromLatitude(), route.getFromLongitude(), route.getToLatitude(), route.getToLongitude(), route.getAvoidHighwaysOrUseShortest());
           
             if (row != null) {
                 Element googleRoute = row.getElements().get(0);

@@ -5,10 +5,10 @@ declare namespace L {
 }
 
 declare namespace verkeer {
-     var MAIN_ROOT:string;
-     function labelDelays();
-     function formatTimes();
-     function getDelayLevel(delay:number);
+    var MAIN_ROOT: string;
+    function labelDelays();
+    function formatTimes();
+    function getDelayLevel(delay: number);
 }
 
 namespace MapManagement {
@@ -23,8 +23,8 @@ namespace MapManagement {
         latitude: number;
         longitude: number;
         category: POICategoryEnum;
-        source:string;
-        since:string;
+        source: string;
+        since: string;
     }
 
     enum POICategoryEnum {
@@ -36,7 +36,8 @@ namespace MapManagement {
         RoadClosed = 5,
         PoliceTrap = 6,
         Hazard = 7,
-        Accident = 8
+        Accident = 8,
+        MAX = 9
     }
 
     interface MapRoute {
@@ -68,7 +69,12 @@ namespace MapManagement {
 
         private map: L.Map;
 
-        private markerCluster: L.MarkerClusterGroup = null;
+        // poi cluster enum to 5 different clusters to reduce clutter
+        private clusterMapping: number[] = [0, 1, 2, 5, 1, 1, 3, 2, 4];
+        private clusterIconMapping: number[] = [0, 5, 2, 6, 8, 3];
+        private nrOfClusters = 6;
+
+        private markerClusters: L.MarkerClusterGroup[] = null;
 
         constructor(private mapElementId: string) {
             this.initialize();
@@ -116,13 +122,67 @@ namespace MapManagement {
 
         protected showPOIs(pois: MapPOI[]) {
 
-            this.markerCluster = (<any>L).markerClusterGroup({ disableClusteringAtZoom: 13});
+            this.markerClusters = [];
+
+            let self = this;
+            for (let i = 0; i < this.nrOfClusters; i++) {
+
+                let func = (function(cat) {
+                    return function(cluster) {
+                        return L.divIcon({ html: ("<div class='map-cluster'><img src='" + self.getIconForMarker(self.clusterIconMapping[cat], true) + "'></img>") + '<b>' + cluster.getChildCount() + '</b></div>' });
+                    };
+                } (i));
+
+                this.markerClusters.push((<any>L).markerClusterGroup({
+                    disableClusteringAtZoom: 15,
+                    iconCreateFunction: func
+                }));
+            }
+
 
             for (let p of pois)
                 this.showPOI(p);
 
-            this.map.addLayer(this.markerCluster);
+            for (let i = 0; i < this.nrOfClusters; i++)
+                this.map.addLayer(this.markerClusters[i]);
 
+        }
+
+        private getIconForMarker(category: POICategoryEnum, cluster: boolean): string {
+            let iconUrl: string = verkeer.MAIN_ROOT + "/static/images/poi_";
+            switch (category) {
+                case POICategoryEnum.Incident:
+                    iconUrl += "incident";
+                    break;
+                case POICategoryEnum.Construction:
+                    iconUrl += "construction";
+                    break;
+                case POICategoryEnum.TrafficJam:
+                    iconUrl += "jam";
+                    break;
+                case POICategoryEnum.LaneClosed:
+                    iconUrl += "laneclosed";
+                    break;
+                case POICategoryEnum.RoadClosed:
+                    iconUrl += "roadclosed";
+                    break;
+                case POICategoryEnum.PoliceTrap:
+                    iconUrl += "police";
+                    break;
+                case POICategoryEnum.Hazard:
+                    iconUrl += "hazard";
+                    break;
+                case POICategoryEnum.Accident:
+                    iconUrl += "accident";
+                    break;
+                case POICategoryEnum.Unknown:
+                    iconUrl += "unknown";
+                    break;
+            }
+            if (cluster)
+                iconUrl += "cluster";
+            iconUrl += ".png"
+            return iconUrl;
         }
 
         protected showPOI(p: MapPOI) {
@@ -131,60 +191,21 @@ namespace MapManagement {
 
                 let latLng = new L.LatLng(p.latitude, p.longitude);
 
-                let color: string;
-                let iconUrl: string = verkeer.MAIN_ROOT + "/static/images/poi_";
-                switch (p.category) {
-                    case POICategoryEnum.Incident:
-                        color = "blue";
-                        iconUrl += "incident.png";
-                        break;
-                    case POICategoryEnum.Construction:
-                        color = "yellow";
-                        iconUrl += "construction.png";
-                        break;
-                    case POICategoryEnum.TrafficJam:
-                        color = "red";
-                        iconUrl += "jam.png";
-                        break;
-                    case POICategoryEnum.LaneClosed:
-                        color = "red";
-                        iconUrl += "laneclosed.png";
-                        break;
-                    case POICategoryEnum.RoadClosed:
-                        color = "red";
-                        iconUrl += "roadclosed.png";
-                        break;
-                    case POICategoryEnum.PoliceTrap:
-                        color = "red";
-                        iconUrl += "police.png";
-                        break;
-                    case POICategoryEnum.Hazard:
-                        color = "red";
-                        iconUrl += "hazard.png";
-                        break;
-                    case POICategoryEnum.Accident:
-                        color = "red";
-                        iconUrl += "accident.png";
-                        break;                        
-                    case POICategoryEnum.Unknown:
-                        color = "black";
-                        iconUrl += "unknown.png";
-                        break;
-                }
 
+                let iconUrl: string = this.getIconForMarker(p.category, false);
                 let icon = L.icon({ iconSize: new L.Point(24, 24), iconUrl: iconUrl })
                 let marker = L.marker(latLng, { icon: icon, clickable: true });
 
-                this.markerCluster.addLayer(marker);
+                this.markerClusters[this.clusterMapping[p.category]].addLayer(marker);
 
                 this.initializePOIPopup(marker, p);
 
                 llmp = new LeafletMapPOI(marker, p, latLng);
-                this.leafletMapRouteById[p.id] = llmp;
+                this.leafletMapPOIById[p.id] = llmp;
             }
             else {
                 // already exists, update layer
-                llmp = this.leafletMapRouteById[p.id];
+                llmp = this.leafletMapPOIById[p.id];
                 llmp.marker.update();
             }
         }
