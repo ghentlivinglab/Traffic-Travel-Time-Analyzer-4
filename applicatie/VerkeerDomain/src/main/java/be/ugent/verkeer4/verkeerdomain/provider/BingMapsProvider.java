@@ -27,7 +27,7 @@ public class BingMapsProvider extends BaseProvider implements IProvider {
     public RouteData useAPI(Route route) {
         try {
             // haal route gegevens op
-            ResourceSet resourceSet = BingMapsClient.GetRoute(route.getFromLatitude(), route.getFromLongitude(), route.getToLatitude(), route.getToLongitude(), true);
+            ResourceSet resourceSet = BingMapsClient.GetRoute(route.getFromLatitude(), route.getFromLongitude(), route.getToLatitude(), route.getToLongitude(), true, route.getAvoidHighwaysOrUseShortest());
 
             //controleer of er routes zijn
             if (resourceSet.getResources().size() > 0) {

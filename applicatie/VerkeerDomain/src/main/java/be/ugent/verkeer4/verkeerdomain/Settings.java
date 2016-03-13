@@ -33,7 +33,7 @@ public class Settings {
         String configName = inProduction() ? DB_PROD_CONFIG : DB_DEV_CONFIG;
         Config conf = ConfigFactory.load(configName);
         return conf.getString("database.user");
-        
+
     }
 
     public String getDatabasePassword() {
@@ -45,15 +45,20 @@ public class Settings {
 
     public String getScrapePath() {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
-       return conf.getString("ScrapePath");
+        return conf.getString("ScrapePath");
     }
-    
+
     public String getPerlPath() {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
-       return conf.getString("PerlPath");
+        return conf.getString("PerlPath");
     }
     
-    
+    double getMaxDistanceForPOIRouteMatching() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        // in kilometers
+        return Double.parseDouble(conf.getString("MaxDistanceForPOIRouteMatching"));
+    }
+
     public boolean inProduction() {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
         return conf.getBoolean("general.inProduction");
@@ -78,5 +83,5 @@ public class Settings {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
         return conf.getString("APIKeys.BingMaps");
     }
-    
+
 }

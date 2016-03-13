@@ -38,7 +38,7 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
     public RouteData useAPI(Route route) {
         try {
             // haal route gegevens op
-            Response response = HereMapsClient.GetRoute(route.getFromLatitude(), route.getFromLongitude(), route.getToLatitude(), route.getToLongitude(), true);
+            Response response = HereMapsClient.GetRoute(route.getFromLatitude(), route.getFromLongitude(), route.getToLatitude(), route.getToLongitude(), true, route.getAvoidHighwaysOrUseShortest());
 
             if (response.getRoute().size() > 0) {
                 be.ugent.verkeer4.verkeerdomain.provider.here.Route hereRoute = response.getRoute().get(0);

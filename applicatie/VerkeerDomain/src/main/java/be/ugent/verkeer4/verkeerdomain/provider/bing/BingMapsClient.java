@@ -1,10 +1,7 @@
 package be.ugent.verkeer4.verkeerdomain.provider.bing;
 
 import be.ugent.verkeer4.verkeerdomain.Settings;
-import be.ugent.verkeer4.verkeerdomain.provider.BingMapsProvider;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 
@@ -14,7 +11,7 @@ import retrofit2.Retrofit;
  */
 public class BingMapsClient {
 
-    public static ResourceSet GetRoute(double vanLat, double vanLng, double totLat, double totLng, boolean includeTraffic) throws IOException {
+    public static ResourceSet GetRoute(double vanLat, double vanLng, double totLat, double totLng, boolean includeTraffic, boolean avoidHighways) throws IOException {
 
         String api_key = Settings.getInstance().getBingRoutingAPIKey();
         String waypoint0 = vanLat + "," + vanLng;
@@ -36,7 +33,13 @@ public class BingMapsClient {
         optimize is by default de snelste route
         viaWaypoint.n vwp.n => extra waypoints toevoegen als de route niet correct is
         */
-        BingClient client =  service.calculateRoute(api_key, waypoint0, waypoint1).execute().body();
+        
+        String avoid = null;
+        if(avoidHighways) {
+            avoid = "highways";
+        }
+        
+        BingClient client =  service.calculateRoute(api_key, waypoint0, waypoint1, avoid).execute().body();
 
 
         return client.getResourceSets().get(0);

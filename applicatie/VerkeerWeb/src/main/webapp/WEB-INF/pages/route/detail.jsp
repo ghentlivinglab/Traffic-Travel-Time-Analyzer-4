@@ -11,7 +11,7 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
-<div class="container">
+<div class="container-fluid">
     <input type="hidden" id="routeId" value="${detail.id}" />
     <div class="row">
         <div class="panel panel-primary">

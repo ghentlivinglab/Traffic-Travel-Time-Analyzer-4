@@ -6,7 +6,7 @@ my $toLat = @ARGV[2]; #"51.038768";
 my $toLng = @ARGV[3]; #"3.736953";
 
 
-my $params = '{"FR":{"COORD":{"LA":' . $fromLat .',"LO":' . $fromLng . '},"TD":""},"M":["car"],"ST":"\/Date(' . time . '+0200)\/","EC":"","O":"","RC":"","TO":{"COORD":{"LA":' . $toLat . ',"LO":' . $toLng . '},"TD":""}}';
+my $params = '{"FR":{"COORD":{"LA":' . $fromLat .',"LO":' . $fromLng . '},"TD":""},"M":["car"],"ST":"\/Date(' . time . '+0200)\/","EC":"rs","O":"","RC":"os","TO":{"COORD":{"LA":' . $toLat . ',"LO":' . $toLng . '},"TD":""}}';
 
 
 my $exec;

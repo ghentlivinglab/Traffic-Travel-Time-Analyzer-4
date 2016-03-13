@@ -22,6 +22,9 @@ public class RouteEditVM {
     @Size(min = 1, max = 255, message = "Naar positie is verplicht")
     private String toLatLng;
     
+    
+    private boolean avoidHighwaysOrUseShortest;
+    
     /**
      * @return the name
      */
@@ -104,6 +107,20 @@ public class RouteEditVM {
      */
     public void setToLatLng(String toLatLng) {
         this.toLatLng = toLatLng;
+    }
+
+    /**
+     * @return the avoidHighwaysOrUseShortest
+     */
+    public boolean getAvoidHighwaysOrUseShortest() {
+        return avoidHighwaysOrUseShortest;
+    }
+
+    /**
+     * @param avoidHighwaysOrUseShortest the avoidHighwaysOrUseShortest to set
+     */
+    public void setAvoidHighwaysOrUseShortest(boolean avoidHighwaysOrUseShortest) {
+        this.avoidHighwaysOrUseShortest = avoidHighwaysOrUseShortest;
     }
 
 }

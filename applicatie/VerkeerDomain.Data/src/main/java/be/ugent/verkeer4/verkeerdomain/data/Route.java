@@ -18,6 +18,7 @@ public class Route {
     
     private double defaultTravelTime;
     
+    private boolean avoidHighwaysOrUseShortest;
     
     /**
      * @return the id
@@ -157,5 +158,19 @@ public class Route {
      */
     public void setDefaultTravelTime(double defaultTravelTime) {
         this.defaultTravelTime = defaultTravelTime;
+    }
+
+    /**
+     * @return the avoidHighwaysOrUseShortest
+     */
+    public boolean getAvoidHighwaysOrUseShortest() {
+        return avoidHighwaysOrUseShortest;
+    }
+
+    /**
+     * @param avoidHighwaysOrUseShortest the avoidHighwaysOrUseShortest to set
+     */
+    public void setAvoidHighwaysOrUseShortest(boolean avoidHighwaysOrUseShortest) {
+        this.avoidHighwaysOrUseShortest = avoidHighwaysOrUseShortest;
     }
 }

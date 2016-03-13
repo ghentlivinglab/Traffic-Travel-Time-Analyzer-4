@@ -17,11 +17,9 @@ import be.ugent.verkeer4.verkeerdomain.provider.ViaMichelinProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WazeProvider;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -51,7 +49,7 @@ public class ProviderService extends BaseService implements IProviderService {
 
         this.perRouteProviders = new ArrayList<>();
         perRouteProviders.add(tomtomProvider);
-        perRouteProviders.add(beMobileProvider);;
+        perRouteProviders.add(beMobileProvider);
         perRouteProviders.add(hereMapsProvider);
         perRouteProviders.add(new GoogleProvider());
         perRouteProviders.add(wazeProvider);
@@ -131,9 +129,10 @@ public class ProviderService extends BaseService implements IProviderService {
             futures.clear();
 
             long diff = new Date().getTime() - curTime;
-            if (diff > 0 && diff < 7000) { // sleep resterende van de 7 seconden
+            if (diff > 0 && diff < 5000) { // sleep resterende van de 5 seconden
                 try {
-                    Thread.sleep(diff);
+                    Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Waiting for " + (5000 - diff) + "ms before continuing");
+                    Thread.sleep(5000 - diff);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -163,7 +162,9 @@ public class ProviderService extends BaseService implements IProviderService {
                         if (existingPOIsByReferenceId.containsKey(poi.getReferenceId())) {
                             // poi bestaat al, update waarden?
                             POI oldPOI = existingPOIsByReferenceId.get(poi.getReferenceId());
+                            // id & matched overnemen
                             poi.setId(oldPOI.getId());
+                            poi.setMatchedWithRoutes(oldPOI.isMatchedWithRoutes());
                             poiService.update(poi);
 
                         } else {

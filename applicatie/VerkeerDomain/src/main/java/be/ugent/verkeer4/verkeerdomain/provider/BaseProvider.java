@@ -30,7 +30,7 @@ public abstract class BaseProvider {
         File script = new File(baseDir, scriptName);
 
         ProcessBuilder pb = new ProcessBuilder(Settings.getInstance().getPerlPath(), script.toPath().toString(), route.getFromLatitude() + "", route.getFromLongitude() + "",
-                route.getToLatitude() + "", route.getToLongitude() + "");
+                route.getToLatitude() + "", route.getToLongitude() + "", route.getAvoidHighwaysOrUseShortest() ? "1" : "0");
 
         pb.directory(baseDir);
         java.lang.Process p = pb.start();

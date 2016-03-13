@@ -1,8 +1,8 @@
 use JSON;
 use strict;
 
-if(scalar @ARGV < 4) {
-	print "Usage: waze.pl fromlat fromlng tolat tolng\n";
+if(scalar @ARGV < 5) {
+	print "Usage: waze.pl fromlat fromlng tolat tolng avoidPrimaries\n";
 	exit(1);
 }
 
@@ -10,9 +10,16 @@ my $fromLat = @ARGV[0]; #"51.05633";
 my $fromLng = @ARGV[1]; #"3.69485";
 my $toLat = @ARGV[2]; #"51.038768";
 my $toLng = @ARGV[3]; #"3.736953";
-
+my $avoidPrimaries = 0;
+if(scalar @ARGV >= 5) {
+	$avoidPrimaries = @ARGV[4];
+}
 
 my $url = 'https://www.waze.com/row-RoutingManager/routingRequest?from=x%3A' . $fromLng . '+y%3A' . $fromLat .'&to=x%3A' . $toLng . '+y%3A' . $toLat . '&at=0&returnJSON=true&returnGeometries=true&returnInstructions=true&timeout=60000&nPaths=1&clientVersion=4.0.0&options=AVOID_TRAILS%3At%2CALLOW_UTURNS%3At';
+
+if($avoidPrimaries) {
+	$url = $url . '%2CAVOID_PRIMARIES%3At';
+}
 
 #print $url;
 #print "\n";

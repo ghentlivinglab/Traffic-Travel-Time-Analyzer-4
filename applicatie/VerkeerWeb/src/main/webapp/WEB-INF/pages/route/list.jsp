@@ -13,7 +13,7 @@
     </head>
     <body>
         <jsp:include page="/WEB-INF/shared/navigation.jsp" />
-        <div class="container">
+        <div class="container-fluid">
             <h1>Traject Overzicht</h1>
 
             <span>Laatste gegevens van ${overview.recentRouteDateFrom}</span>
@@ -60,7 +60,7 @@
                                             ${routeSummaryEntry.averageCurrentTravelTime}
                                         </span>                                        
                                     </td>
-                                    <td>
+                                    <td class="delay-column">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.trafficDelayPercentage}">
                                         </div>                                                                                
                                         <span class="time" data-time="${routeSummaryEntry.delay}">
@@ -88,15 +88,15 @@
                                                 <span class="glyphicon glyphicon-cog"></span>
                                                 <span class="caret"></span>
                                             </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#" class="small" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="0" type="checkbox"/>&nbsp;TomTom</a></li>
-                                                <li><a href="#" class="small" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="5" type="checkbox"/>&nbsp;Waze</a></li>
-                                                <li><a href="#" class="small" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="2" type="checkbox"/>&nbsp;Google</a></li>
-                                                <li><a href="#" class="small" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="1" type="checkbox"/>&nbsp;Here</a></li>
-                                                <li><a href="#" class="small" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="3" type="checkbox"/>&nbsp;Coyote</a></li>
-                                                <li><a href="#" class="small" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="4" type="checkbox"/>&nbsp;Be-mobile</a></li>
-                                                <li><a href="#" class="small" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="6" type="checkbox"/>&nbsp;Bing</a></li>
-                                                <li><a href="#" class="small" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="7" type="checkbox"/>&nbsp;Via Michelin</a></li>
+                                            <ul class="dropdown-menu filterlist">
+                                                <li><a class="small" class="nodefault" tabIndex="-1"><label><input class="chkProviderFilter" checked="checked" data-provider="0" type="checkbox"/>&nbsp;TomTom</label></a></li>
+                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="5" type="checkbox"/>&nbsp;Waze</a></li>
+                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="2" type="checkbox"/>&nbsp;Google</a></li>
+                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="1" type="checkbox"/>&nbsp;Here</a></li>
+                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="3" type="checkbox"/>&nbsp;Coyote</a></li>
+                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="4" type="checkbox"/>&nbsp;Be-mobile</a></li>
+                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="6" type="checkbox"/>&nbsp;Bing</a></li>
+                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="7" type="checkbox"/>&nbsp;Via Michelin</a></li>                                                
                                             </ul>
                                         </div>                      
                                     </div>
@@ -109,7 +109,7 @@
                                     <br/>
                                     HR
                                 </th>
-                                <th class="provider-header provider-v" data-provider="0">
+                                <th class="provider-header provider-v delay-column" data-provider="0">
                                     <br/>
                                     V
                                 </th>
@@ -118,7 +118,7 @@
                                     <br/>
                                     HR
                                 </th>
-                                <th class="provider-header provider-v" data-provider="5">
+                                <th class="provider-header provider-v delay-column" data-provider="5">
                                     <br/>
                                     V
                                 </th>
@@ -127,7 +127,7 @@
                                     </br>
                                     HR
                                 </th>
-                                <th class="provider-header provider-v" data-provider="2">
+                                <th class="provider-header provider-v delay-column" data-provider="2">
                                     <br/>
                                     V
                                 </th>
@@ -136,7 +136,7 @@
                                     <br/>
                                     HR
                                 </th> 
-                                <th class="provider-header provider-v" data-provider="1">
+                                <th class="provider-header provider-v delay-column" data-provider="1">
                                     <br/>
                                     V
                                 </th>
@@ -145,7 +145,7 @@
                                     <br/>
                                     HR
                                 </th>
-                                <th class="provider-header provider-v" data-provider="3">
+                                <th class="provider-header provider-v delay-column" data-provider="3">
                                     <br/>
                                     V
                                 </th>
@@ -154,7 +154,7 @@
                                     <br/>
                                     HR
                                 </th>
-                                <th class="provider-header provider-v" data-provider="4">
+                                <th class="provider-header provider-v delay-column" data-provider="4">
                                     <br/>
                                     V
                                 </th>
@@ -163,7 +163,7 @@
                                     <br/>
                                     HR
                                 </th>
-                                <th class="provider-header provider-v" data-provider="6">
+                                <th class="provider-header provider-v delay-column" data-provider="6">
                                     <br/>
                                     V
                                 </th>                                
@@ -172,7 +172,7 @@
                                     <br/>
                                     HR
                                 </th>
-                                <th class="provider-header provider-v" data-provider="7">
+                                <th class="provider-header provider-v delay-column" data-provider="7">
                                     <br/>
                                     V
                                 </th>
@@ -204,7 +204,7 @@
                                             ${routeSummaryEntry.getTravelTimeForProvider(0)} 
                                         </span>                                                                                                                        
                                     </td>
-                                    <td class="provider-cell provider-v" data-provider="0">
+                                    <td class="provider-cell provider-v delay-column" data-provider="0">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.getTrafficPercentageForProvider(0)}">
                                         </div>                                        
                                         <span class="time" data-time="${routeSummaryEntry.getDelayForProvider(0)}">
@@ -216,7 +216,7 @@
                                             ${routeSummaryEntry.getTravelTimeForProvider(5)}
                                         </span>                                                                                                                        
                                     </td>
-                                    <td class="provider-cell provider-v" data-provider="5">
+                                    <td class="provider-cell provider-v delay-column" data-provider="5">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.getTrafficPercentageForProvider(5)}">
                                         </div>                                        
                                         <span class="time" data-time="${routeSummaryEntry.getDelayForProvider(5)}">
@@ -228,7 +228,7 @@
                                             ${routeSummaryEntry.getTravelTimeForProvider(2)}
                                         </span>
                                     </td>
-                                    <td class="provider-cell provider-v" data-provider="2">
+                                    <td class="provider-cell provider-v delay-column" data-provider="2">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.getTrafficPercentageForProvider(2)}">
                                         </div>                                        
                                         <span class="time" data-time="${routeSummaryEntry.getDelayForProvider(2)}">
@@ -240,7 +240,7 @@
                                             ${routeSummaryEntry.getTravelTimeForProvider(1)}
                                         </span>
                                     </td>
-                                    <td class="provider-cell provider-v" data-provider="1">
+                                    <td class="provider-cell provider-v delay-column" data-provider="1">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.getTrafficPercentageForProvider(1)}">
                                         </div>                                        
                                         <span class="time" data-time="${routeSummaryEntry.getDelayForProvider(1)}">
@@ -252,7 +252,7 @@
                                             ${routeSummaryEntry.getTravelTimeForProvider(3)}
                                         </span>
                                     </td>
-                                    <td class="provider-cell provider-v" data-provider="3">
+                                    <td class="provider-cell provider-v delay-column" data-provider="3">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.getTrafficPercentageForProvider(3)}">
                                         </div>                                        
                                         <span class="time" data-time="${routeSummaryEntry.getDelayForProvider(3)}">
@@ -264,7 +264,7 @@
                                             ${routeSummaryEntry.getTravelTimeForProvider(4)}
                                         </span>
                                     </td>
-                                    <td class="provider-cell provider-v" data-provider="4">
+                                    <td class="provider-cell provider-v delay-column" data-provider="4">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.getTrafficPercentageForProvider(4)}">
                                         </div>
                                         <span class="time" data-time="${routeSummaryEntry.getDelayForProvider(4)}">
@@ -276,7 +276,7 @@
                                             ${routeSummaryEntry.getTravelTimeForProvider(6)}
                                         </span>
                                     </td>
-                                    <td class="provider-cell provider-v" data-provider="6">
+                                    <td class="provider-cell provider-v delay-column" data-provider="6">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.getTrafficPercentageForProvider(6)}">
                                         </div>                                        
                                         <span class="time" data-time="${routeSummaryEntry.getDelayForProvider(6)}">
@@ -288,7 +288,7 @@
                                             ${routeSummaryEntry.getTravelTimeForProvider(7)}
                                         </span>
                                     </td>
-                                    <td class="provider-cell provider-v" data-provider="7">
+                                    <td class="provider-cell provider-v delay-column" data-provider="7">
                                         <div class="cell-background" style="opacity: ${routeSummaryEntry.getTrafficPercentageForProvider(7)}">
                                         </div>                                        
                                         <span class="time" data-time="${routeSummaryEntry.getDelayForProvider(7)}">

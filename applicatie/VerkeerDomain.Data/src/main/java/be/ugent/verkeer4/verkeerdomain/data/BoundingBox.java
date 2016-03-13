@@ -62,5 +62,13 @@ public class BoundingBox {
     public void setMaxLongitude(double maxLongitude) {
         this.maxLongitude = maxLongitude;
     }
+
+    public void inflate(double padding) {
+        // zolang greenwitch niet in de regio zit is dit geen probleem
+        setMinLatitude(minLatitude - padding);
+        setMaxLatitude(maxLatitude + padding);
+        setMinLongitude(minLongitude - padding);
+        setMaxLongitude(maxLongitude + padding);
+    }
     
 }

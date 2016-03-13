@@ -12,6 +12,8 @@ import be.ugent.verkeer4.verkeerweb.dataobjects.*;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetailsVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEditVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverviewVM;
+import java.time.Instant;
+import java.time.ZoneOffset;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,17 +94,16 @@ public class RouteController {
     public List<RouteData> ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
             throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService();
+        IPOIService poiService = new POIService(routeService);
         IProviderService providerService = new ProviderService(routeService, poiService);
         List<RouteData> data = providerService.getRouteDataForRoute(id, startDate, endDate);
         return data;
     }
 
-
     @RequestMapping(value = "route/detail/{id}", method = RequestMethod.GET)
-    public ModelAndView getDetail(@PathVariable("id")int id) throws ClassNotFoundException {
+    public ModelAndView getDetail(@PathVariable("id") int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService();
+        IPOIService poiService = new POIService(routeService);
         Route route = routeService.getRoute(id);
 
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
@@ -148,7 +149,7 @@ public class RouteController {
         re.setToAddress(r.getToAddress());
         re.setFromLatLng(r.getFromLatitude() + "," + r.getFromLongitude());
         re.setToLatLng(r.getToLatitude() + "," + r.getToLongitude());
-
+        re.setAvoidHighwaysOrUseShortest(r.getAvoidHighwaysOrUseShortest());
         ModelAndView model = new ModelAndView("route/edit");
         model.addObject("routeEdit", re);
 
@@ -193,7 +194,11 @@ public class RouteController {
 
             r.setName(route.getName());
 
-            boolean updateWaypoints = r.getFromLatitude() != fromLat || r.getFromLongitude() != fromLng || r.getToLatitude() != toLat || r.getToLongitude() != toLng;
+            boolean updateWaypoints = r.getFromLatitude() != fromLat
+                    || r.getFromLongitude() != fromLng
+                    || r.getToLatitude() != toLat
+                    || r.getToLongitude() != toLng
+                    || r.getAvoidHighwaysOrUseShortest() != route.getAvoidHighwaysOrUseShortest();
 
             r.setFromAddress(route.getFromAddress());
             r.setToAddress(route.getToAddress());
@@ -202,6 +207,7 @@ public class RouteController {
 
             r.setToLatitude(toLat);
             r.setToLongitude(toLng);
+            r.setAvoidHighwaysOrUseShortest(route.getAvoidHighwaysOrUseShortest());
 
             routeService.updateRoute(r, updateWaypoints);
 
@@ -213,12 +219,21 @@ public class RouteController {
     private MapData getRouteMapData(int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         Route r = routeService.getRoute(id);
+        IPOIService poiService = new POIService(routeService);
 
         List<RouteWaypoint> waypoints = routeService.getRouteWaypointsForRoute(id);
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
 
         MapData data = new MapData();
         MapRoute mr = getMapRoute(r, summaries);
+
+        Date from = Date.from(java.time.LocalDateTime.now().minusMinutes(5).toInstant(ZoneOffset.UTC));
+        Date to = Date.from(java.time.LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.UTC));
+        List<POI> pois = poiService.getPOIsNearRoute(r.getId(), from, to);
+        for (POI poi : pois) {
+            MapPOI mp = getMapPOIFromPOI(poi);
+            data.getPois().add(mp);
+        }
 
         data.getRoutes().add(mr);
 
@@ -247,7 +262,7 @@ public class RouteController {
 
     private MapData getAllRouteMapData() throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService();
+        IPOIService poiService = new POIService(routeService);
         // vraag alle trajecten met hun waypoints op
         List<Route> routes = routeService.getRoutes();
         List<RouteWaypoint> waypoints = routeService.getRouteWaypoints();
@@ -270,19 +285,11 @@ public class RouteController {
         }
 
         List<POI> pois = poiService.getActivePOIs();
-        // TODO group pois on same location
         for (POI poi : pois) {
-            MapPOI mp = new MapPOI();
-            mp.setId(poi.getId());
-            mp.setLatitude(poi.getLatitude());
-            mp.setLongitude(poi.getLongitude());
-            mp.setInfo(poi.getInfo());
-            mp.setCategory(poi.getCategory().getValue());
-            mp.setSince(poi.getSince().toString());
-            mp.setSource(poi.getProvider().toString());
+            MapPOI mp = getMapPOIFromPOI(poi);
             data.getPois().add(mp);
         }
-        
+
         // overloop alle trajecten en bereken aan de hand van de verzamelde route data's in
         // de map de gemiddelde delay & percentage
         for (Route r : routes) {
@@ -306,6 +313,18 @@ public class RouteController {
         }
 
         return data;
+    }
+
+    private MapPOI getMapPOIFromPOI(POI poi) {
+        MapPOI mp = new MapPOI();
+        mp.setId(poi.getId());
+        mp.setLatitude(poi.getLatitude());
+        mp.setLongitude(poi.getLongitude());
+        mp.setInfo(poi.getInfo());
+        mp.setCategory(poi.getCategory().getValue());
+        mp.setSince(poi.getSince().toString());
+        mp.setSource(poi.getProvider().toString());
+        return mp;
     }
 
     private MapRoute getMapRoute(Route r, List<RouteData> routeSummaries) {
