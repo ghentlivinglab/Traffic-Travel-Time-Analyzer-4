@@ -194,7 +194,7 @@
                                             ${routeSummaryEntry.averageCurrentTravelTime}
                                         </span>                                                                                
                                     </td>
-                                    <td>
+                                    <td class="delay-column">
                                         <span class="time" data-time="${routeSummaryEntry.delay}">
                                             ${routeSummaryEntry.delay}
                                         </span>                                                                                                                        

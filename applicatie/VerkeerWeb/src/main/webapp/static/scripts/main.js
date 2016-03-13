@@ -3,7 +3,7 @@
 
 (function (verkeer, $) {
 
-    verkeer.MAIN_ROOT = "/VerkeerWeb";
+    verkeer.MAIN_ROOT = "";
 
     "use strict";
     $(document).ready(function () {
