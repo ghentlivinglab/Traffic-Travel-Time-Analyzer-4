@@ -16,7 +16,7 @@
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Route ${detail.name}</h3>
+                <h3 class="panel-title">${detail.name}</h3>
             </div>
             <div class="panel-body">
                 <div class="col-md-4">
@@ -39,7 +39,7 @@
                         </tbody>
                     </table>
                     <dl>
-                        <dt>Standard Travel Time</dt>
+                        <dt>Standard travel time</dt>
                         <dd><span class="humanize" data-time=${detail.defaultTravelTime}></span></dd>
                         <dt>Distance</dt>
                         <dd>${detail.distance} meter</dd>
@@ -60,7 +60,7 @@
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Filteroptions</h3>
+                <h3 class="panel-title">Filter options</h3>
             </div>
             <div class="panel-body">
                 <div class="col-md-6">
