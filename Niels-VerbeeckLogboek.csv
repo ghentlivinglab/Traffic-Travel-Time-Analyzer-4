@@ -22,3 +22,11 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 06/03/16,18:40,19:15,Thuis,"Q&A opgesomt en in document gegoten.",,
 06/03/16,20:02,20:40,Thuis,"Nalezen PPT en Use cases + verbeteren fouten",,
 07/03/16,20:15,20:45,Thuis,"Voorbereiding Presentatie. PPT nagelezen en documenten overlopen",,
+08/03/16,08:15,12:15,School,"Scrum Meeting. Presentatie Klant + meeting met klant over aanpassingen Sprint 1",,
+08/03/16,15:30,16:00,School,"Q&A geupdate met antwoorden en vragen die zijn gesteld tijdens meeting met klant op 08/03/16"
+11/03/16,15:30,18:00,Thuis,"Onderzoek naar openWheaterMaps en implementatie van testproject om data te verkrijgen. (Onderzoek is vastgelopen omdat er niet genoeg weerstations beschikbaar waren in openWheaterMaps.)",67,
+13/03/16,10:30,12:30,Thuis,"onderzoek naar andere wheater apis. (undergroundweather heeft veel meer weer stations in gent. Maar na enkele tests blijkt dat deze geen regen informatie geven. Wat dus niet nuttig is om te linken aan bepaalde files).",67,
+13/03/16,13:30,15:30,Thuis,"Verdere tests met undergroundWeather om data op te vragen op locatie (lat/lng) zijn gelukt.",67,
+13/03/16,16:00,18:00,Thuis,"Implementatie van API Client om weer op te vragen van undergroundWeather.",67,
+13/03/16,18:30,19:45,Thuis,"Debuggen en testen van API Client zodat deze data kan ophalen van API Server van undergroundWeather.",67,
+14/03/16,08:00,10:00,Thuis,"Tabel aanmaken in database en klassen schrijven om te verbinden met de database. + Debuggen en testen werkend systeem.",67,
