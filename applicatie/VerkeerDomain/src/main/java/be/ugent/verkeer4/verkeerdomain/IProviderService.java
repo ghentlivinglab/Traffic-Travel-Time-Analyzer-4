@@ -13,5 +13,6 @@ public interface IProviderService {
     
     
     public void pollPOI(BoundingBox bbox) throws ClassNotFoundException;
+    public void pollWeather(double lat, double lng) throws ClassNotFoundException;
     
 }

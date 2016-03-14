@@ -4,6 +4,7 @@ import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
+import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.provider.BeMobileProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.BingMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.CoyoteProvider;
@@ -12,9 +13,11 @@ import be.ugent.verkeer4.verkeerdomain.provider.HereMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.IPOIProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.IProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.ISummaryProvider;
+import be.ugent.verkeer4.verkeerdomain.provider.IWeatherProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.TomTomProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.ViaMichelinProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WazeProvider;
+import be.ugent.verkeer4.verkeerdomain.provider.WeatherProvider;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,11 +40,15 @@ public class ProviderService extends BaseService implements IProviderService {
     private final IRouteService routeService;
     private final List<IPOIProvider> poiProviders;
     private final IPOIService poiService;
+    
+    private final IWeatherService weatherService;
+    private final IWeatherProvider weatherProvider;
 
-    public ProviderService(IRouteService routeService, IPOIService poiService) throws ClassNotFoundException {
+    public ProviderService(IRouteService routeService, IPOIService poiService, IWeatherService weatherService) throws ClassNotFoundException {
         super();
         this.routeService = routeService;
         this.poiService = poiService;
+        this.weatherService = weatherService;
 
         TomTomProvider tomtomProvider = new TomTomProvider();
         BeMobileProvider beMobileProvider = new BeMobileProvider();
@@ -67,6 +74,8 @@ public class ProviderService extends BaseService implements IProviderService {
         this.poiProviders.add(beMobileProvider);
         this.poiProviders.add(wazeProvider);
         this.poiProviders.add(coyoteProvider);
+        
+        this.weatherProvider = new WeatherProvider();
     }
 
     private synchronized void saveRouteData(RouteData data) {
@@ -194,5 +203,20 @@ public class ProviderService extends BaseService implements IProviderService {
             }
         }
         futures.clear();
+    }
+
+    @Override
+    public void pollWeather(double lat, double lng) throws ClassNotFoundException {
+        
+        WeatherData data = weatherProvider.poll(lat, lng);
+        if (data != null) {
+            repo.getWeatherSet().insert(data);
+        } 
+        else {
+            Logger.getLogger(WeatherService.class.getName()).log(Level.WARNING, "Could not fetch weather");
+        }
+        
+        
+        
     }
 }

@@ -9,4 +9,6 @@ public interface IUnitOfWork {
     public RouteWaypointDbSet getRouteWaypointSet();
 
     public POIDbSet getPOISet();
+    
+    public WeatherDbSet getWeatherSet();
 }
