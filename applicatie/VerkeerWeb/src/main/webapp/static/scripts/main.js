@@ -48,7 +48,7 @@
         var tag = $(".humanize");
         for (var i = 0; i < tag.length; i++) {
             var milliSec = parseInt($(tag[i]).attr("data-time")) * 1000; //works with millisec only
-            var humanTime = humanizeDuration(milliSec, {language: 'nl'});
+            var humanTime = humanizeDuration(milliSec);
             $(tag[i]).text(humanTime);
         }
     };
@@ -133,7 +133,7 @@
         } else {
             return "rgb(" + r3 + ", " + g3 + "," + b3 + ")";
         }
-    }
+    };
 
     verkeer.mean = function (data) {
         var sum = 0;

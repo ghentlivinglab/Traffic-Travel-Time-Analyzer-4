@@ -5,8 +5,8 @@
     var combinedTravelTimes = [];
     var combinedDelays = [];
     var showingDelayChart = false;
-    const travelTimeTitle = "Reistijden per provider";
-    const delayTitle = "Vertraging per provider";
+    const travelTimeTitle = "Travel time per provider";
+    const delayTitle = "Delay per provider";
 
     $(document).ready(function () {
         trajectDetail.markExtremeProviders();
@@ -85,17 +85,17 @@
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
-                    'Klik en sleep op de grafiek om te zoomen' : 'Pinch op de grafiek om te zoomen'
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
             },
             xAxis: {
                 title: {
-                    text: 'Tijdstip'
+                    text: 'Timestamp'
                 },
                 type: "datetime"
             },
             yAxis: {
                 title: {
-                    text: 'Duur (s)'
+                    text: 'Duration (s)'
                 }
             },
             tooltip: {
