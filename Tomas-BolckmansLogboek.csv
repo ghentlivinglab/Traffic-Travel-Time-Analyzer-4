@@ -26,4 +26,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 08/03/16,08:15,12:30,School,"Standup meeting, bespreking met klant en vragen gesteld aan klant voor verloop sprint 2, gewerkt aan issue 39",,
 08/03/16,14:35,15:35,School,"LogEntry klasse aangemaakt met getters en setters + merge conflicten in GIT opgelost",39,
 08/03/16,19:15,20:35,Thuis,"Nieuwe tabel aangemaakt in de database met de benodigde kolommen en deze geëxporteerd naar een SQL file",39,
-14/03/16,22:00;22:45,Thuis,"Log tabel in database hernoemd en getest, enkele kolommen hernoemd, test geschreven die logs kan inserten en opvragen",39,
+14/03/16,22:00,22:45,Thuis,"Log tabel in database hernoemd en getest; enkele kolommen hernoemd; test geschreven die logs kan inserten en opvragen",39,
