@@ -46,33 +46,10 @@
             .done(function (routeData) {
                 showingDelayChart = false;
                 routeChart.setTitle({text: travelTimeTitle});
-                trajectDetail.setTableData("#data-table", "#data-table-body", routeData);
                 trajectDetail.combineRouteData(routeData, "travelTime", combinedTravelTimes);
                 trajectDetail.combineRouteData(routeData, "delay", combinedDelays);
                 trajectDetail.setChartData(combinedTravelTimes);
             });
-    };
-
-    trajectDetail.setTableData = function(tableId, tableBodyId, routeData) {
-        $(tableBodyId).empty();
-        routeData.forEach(function (ele) {
-            var date = new Date(ele.timestamp);
-            var delayLevel = verkeer.getDelayLevel(ele.delay);
-            var label = verkeer.getBootstrapLabelDelay(delayLevel);
-            var row = "<tr>"
-                + "<td>" + moment(date).format("D/MM/YYYY") + "</td>"
-                + "<td>" + moment(date).format("HH:mm:ss") + "</td>"
-                + "<td>" + ele.provider + "</td>"
-                + "<td>" + verkeer.secondsToText(ele.travelTime) + "</td>"
-                + "<td><span class='" + label + "'>" + verkeer.secondsToText(ele.delay) + "</span></td>"
-                + "</tr>";
-            $(tableBodyId).append(row);
-        });
-        // Make sure to refresh sort again
-        $(tableId).trigger("update");
-        // set sorting column and direction
-        var sorting = [[0, 0], [1, 0], [2, 0]];
-        $(tableId).trigger("sorton", [sorting]);
     };
 
     trajectDetail.buildChart = function() {
