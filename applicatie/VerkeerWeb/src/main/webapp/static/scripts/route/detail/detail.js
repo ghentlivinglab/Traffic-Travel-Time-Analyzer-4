@@ -7,6 +7,16 @@
     var showingDelayChart = false;
     const travelTimeTitle = "Travel time per provider";
     const delayTitle = "Delay per provider";
+    const providerChartSettings = {
+        Coyote: {color: "#7cb5ec", symbol: "circle"},
+        BeMobile: {color: "#434348", symbol: "diamond"},
+        ViaMichelin: {color: "#90ed7d", symbol: "square"},
+        HereMaps: {color: "#f7a35c", symbol: "triangle"},
+        Bing: {color: "#8085e9", symbol: "triangle-down"},
+        Waze: {color: "#f15c80", symbol: "circle"},
+        TomTom: {color: "#e4d354", symbol: "diamond"},
+        GoogleMaps: {color: "#2b908f", symbol: "square"}
+    };
 
     $(document).ready(function () {
         trajectDetail.markExtremeProviders();
@@ -155,6 +165,10 @@
             if (!provider) {
                 provider = {
                     name: ele.provider,
+                    color: providerChartSettings[ele.provider].color,
+                    marker: {
+                        symbol: providerChartSettings[ele.provider].symbol
+                    },
                     data: []
                 };
                 dict[ele.provider] = provider;
@@ -168,6 +182,10 @@
         for (var providerKey in dict) {
             container.push(dict[providerKey]);
         }
+        // sort the providers by name
+        container.sort(function (a, b) {
+            return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+        });
     };
 
     trajectDetail.toggleChart = function () {
