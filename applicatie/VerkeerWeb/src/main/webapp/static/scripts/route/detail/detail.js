@@ -163,11 +163,12 @@
         routeData.forEach(function (ele) {
             var provider = dict[ele.provider];
             if (!provider) {
+                var providerSetting = providerChartSettings[ele.provider];
                 provider = {
                     name: ele.provider,
-                    color: providerChartSettings[ele.provider].color,
+                    color: providerSetting ? providerSetting.color : null,
                     marker: {
-                        symbol: providerChartSettings[ele.provider].symbol
+                        symbol: providerSetting ? providerSetting.symbol : null,
                     },
                     data: []
                 };
