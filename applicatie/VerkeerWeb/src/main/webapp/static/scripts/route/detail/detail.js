@@ -63,9 +63,10 @@
     };
 
     trajectDetail.buildChart = function () {
-        $('#container').highcharts({
+        routeChart = new Highcharts.Chart({
             chart: {
-                zoomType: 'x'
+                zoomType: 'x',
+                renderTo: 'container'
             },
             title: {
                 text: travelTimeTitle
@@ -104,7 +105,6 @@
                 borderWidth: 0
             }
         });
-        routeChart = $('#container').highcharts();
     };
 
     trajectDetail.getPointSymbol = function (point) {
@@ -168,7 +168,7 @@
                     name: ele.provider,
                     color: providerSetting ? providerSetting.color : null,
                     marker: {
-                        symbol: providerSetting ? providerSetting.symbol : null,
+                        symbol: providerSetting ? providerSetting.symbol : null
                     },
                     data: []
                 };
