@@ -33,7 +33,7 @@
         trajectDetail.getRouteData();
     });
 
-    trajectDetail.getRouteData = function() {
+    trajectDetail.getRouteData = function () {
         $.ajax({
                 method: "GET",
                 url: "../routedata",
@@ -52,7 +52,7 @@
             });
     };
 
-    trajectDetail.buildChart = function() {
+    trajectDetail.buildChart = function () {
         $('#container').highcharts({
             chart: {
                 zoomType: 'x'
@@ -72,11 +72,20 @@
             },
             yAxis: {
                 title: {
-                    text: 'Duration (s)'
+                    text: 'Duration'
+                },
+                labels: {
+                    formatter: function () {
+                        return verkeer.secondsToText(this.value);
+                    }
                 }
             },
             tooltip: {
-                valueSuffix: 's'
+                formatter: function () {
+                    var date = moment(this.x).format("dddd, MMMM Do, HH:mm:ss");
+                    return date + "<br/>" + '<span style="color:' + this.point.series.color + '">' + trajectDetail.getPointSymbol(this.point)
+                        + '</span> ' + this.series.name + ': <b>' + verkeer.secondsToText(this.point.y) + "</b>";
+                }
             },
             legend: {
                 layout: 'vertical',
@@ -88,7 +97,34 @@
         routeChart = $('#container').highcharts();
     };
 
-    trajectDetail.clearAllChartData = function() {
+    trajectDetail.getPointSymbol = function (point) {
+        var symbol = "";
+        if (point.series && point.series.symbol) {
+            switch (point.series.symbol) {
+                case 'circle':
+                    symbol = '●';
+                    break;
+                case 'diamond':
+                    symbol = '♦';
+                    break;
+                case 'square':
+                    symbol = '■';
+                    break;
+                case 'triangle':
+                    symbol = '▲';
+                    break;
+                case 'triangle-down':
+                    symbol = '▼';
+                    break;
+                default:
+                    symbol = "";
+                    break;
+            }
+        }
+        return symbol;
+    };
+
+    trajectDetail.clearAllChartData = function () {
         if (!routeChart || !routeChart.series) return;
 
         while (routeChart.series.length > 0) {
@@ -98,7 +134,7 @@
         routeChart.redraw();
     };
 
-    trajectDetail.setChartData = function(series) {
+    trajectDetail.setChartData = function (series) {
         trajectDetail.clearAllChartData();
 
         if (series && series.length > 0) {
@@ -110,7 +146,7 @@
         }
     };
 
-    trajectDetail.combineRouteData = function(routeData, xAxisProperty, container) {
+    trajectDetail.combineRouteData = function (routeData, xAxisProperty, container) {
         var dict = {}; // <provider name, provider object>
 
         // combine all data in one object per provider
@@ -134,7 +170,7 @@
         }
     };
 
-    trajectDetail.toggleChart = function() {
+    trajectDetail.toggleChart = function () {
         if (showingDelayChart) {
             trajectDetail.setChartData(combinedTravelTimes);
             routeChart.setTitle({text: travelTimeTitle});
@@ -145,13 +181,13 @@
         showingDelayChart = !showingDelayChart;
     };
 
-    trajectDetail.getSecondsFromSummaryRow = function(row) {
+    trajectDetail.getSecondsFromSummaryRow = function (row) {
         var td = row.children[1]; // second td, the traveltime
         var span = td.children[0]; // the span
         return parseInt(span.getAttribute("data-time"));
     };
 
-    trajectDetail.markExtremeProviders = function() {
+    trajectDetail.markExtremeProviders = function () {
         var table = document.getElementById("summary-table-body");
 
         var travelTimes = [];
