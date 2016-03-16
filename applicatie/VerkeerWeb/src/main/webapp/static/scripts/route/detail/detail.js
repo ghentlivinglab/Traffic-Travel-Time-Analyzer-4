@@ -5,9 +5,9 @@
     var combinedTravelTimes = [];
     var combinedDelays = [];
     var showingDelayChart = false;
-    const travelTimeTitle = "Travel time per provider";
-    const delayTitle = "Delay per provider";
-    const providerChartSettings = {
+    var travelTimeTitle = "Travel time per provider";
+    var delayTitle = "Delay per provider";
+    var providerChartSettings = {
         Coyote: {color: "#7cb5ec", symbol: "circle"},
         BeMobile: {color: "#434348", symbol: "diamond"},
         ViaMichelin: {color: "#90ed7d", symbol: "square"},
@@ -28,12 +28,12 @@
         });
 
         $("#datetimepicker-end").datetimepicker(
-            {
-                format: 'DD/MM/YYYY HH:mm',
-                showTodayButton: true,
-                showClear: true,
-                defaultDate: moment().endOf('day')
-            }
+                {
+                    format: 'DD/MM/YYYY HH:mm',
+                    showTodayButton: true,
+                    showClear: true,
+                    defaultDate: moment().endOf('day')
+                }
         );
 
         $("#update-btn").click(trajectDetail.getRouteData);
@@ -45,21 +45,22 @@
 
     trajectDetail.getRouteData = function () {
         $.ajax({
-                method: "GET",
-                url: "../routedata",
-                data: {
-                    id: $("#routeId").val(),
-                    startDate: $("#datetimepicker-begin").data("DateTimePicker").date().toDate(),
-                    endDate: $("#datetimepicker-end").data("DateTimePicker").date().toDate()
-                }
-            })
-            .done(function (routeData) {
-                showingDelayChart = false;
-                routeChart.setTitle({text: travelTimeTitle});
-                trajectDetail.combineRouteData(routeData, "travelTime", combinedTravelTimes);
-                trajectDetail.combineRouteData(routeData, "delay", combinedDelays);
-                trajectDetail.setChartData(combinedTravelTimes);
-            });
+            method: "GET",
+            url: "../routedata",
+            data: {
+                id: $("#routeId").val(),
+                startDate: $("#datetimepicker-begin").data("DateTimePicker").date().toDate(),
+                endDate: $("#datetimepicker-end").data("DateTimePicker").date().toDate()
+            }
+        })
+                .done(function (data) {
+                    showingDelayChart = false;
+                    routeChart.setTitle({text: travelTimeTitle});
+                    trajectDetail.combineRouteData(data.values, "travelTime", combinedTravelTimes);
+                    trajectDetail.combineRouteData(data.values, "delay", combinedDelays);
+                    trajectDetail.setChartData(combinedTravelTimes);
+                    trajectDetail.buildTrafficJamTable(data.jams);
+                });
     };
 
     trajectDetail.buildChart = function () {
@@ -73,7 +74,7 @@
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
-                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+                        'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
             },
             xAxis: {
                 title: {
@@ -95,7 +96,7 @@
                 formatter: function () {
                     var date = moment(this.x).format("dddd, MMMM Do, HH:mm:ss");
                     return date + "<br/>" + '<span style="color:' + this.point.series.color + '">' + trajectDetail.getPointSymbol(this.point)
-                        + '</span> ' + this.series.name + ': <b>' + verkeer.secondsToText(this.point.y) + "</b>";
+                            + '</span> ' + this.series.name + ': <b>' + verkeer.secondsToText(this.point.y) + "</b>";
                 }
             },
             legend: {
@@ -135,7 +136,8 @@
     };
 
     trajectDetail.clearAllChartData = function () {
-        if (!routeChart || !routeChart.series) return;
+        if (!routeChart || !routeChart.series)
+            return;
 
         while (routeChart.series.length > 0) {
             // todo bug? Repaints with false...
@@ -227,4 +229,35 @@
             }
         }
     };
+
+
+    trajectDetail.buildTrafficJamTable = function (jams) {
+        var table = document.getElementById("tblJamsBody");
+
+        var html = "";
+        for (var i = 0; i < jams.length; i++) {
+            var jam = jams[i];
+            var jamRow = "<tr>";
+
+            jamRow += "<td>" + moment(jam.trafficJam.from).format("DD/MM/YYYY HH:mm:ss") + "</td>";
+            jamRow += "<td>" + moment(jam.trafficJam.to).format("DD/MM/YYYY HH:mm:ss") + "</td>";
+            
+            var duration = moment.utc(moment(jam.trafficJam.to).diff(moment(jam.trafficJam.from))).format("HH:mm:ss");
+            jamRow += "<td>" + duration + "</td>";
+            
+            jamRow += "<td>" + verkeer.secondsToText(jam.trafficJam.avgDelay) + "</td>";
+            jamRow += "<td>" + verkeer.secondsToText(jam.trafficJam.maxDelay) + "</td>";
+
+            // TODO possible causes
+            jamRow += "<td>" + "" + "</td>";
+
+            jamRow += "</tr>";
+            html += jamRow;
+        }
+
+        html += "";
+
+        table.innerHTML = html;
+    };
+
 }(window.verkeer.trajectDetail = window.verkeer.trajectDetail || {}, jQuery));

@@ -1,5 +1,7 @@
 package be.ugent.verkeer4.verkeerdomain.data;
 
+import java.util.Date;
+
 
 public class Route {
     
@@ -19,6 +21,8 @@ public class Route {
     private double defaultTravelTime;
     
     private boolean avoidHighwaysOrUseShortest;
+    
+    private Date lastTrafficJamCheck;
     
     /**
      * @return the id
@@ -172,5 +176,13 @@ public class Route {
      */
     public void setAvoidHighwaysOrUseShortest(boolean avoidHighwaysOrUseShortest) {
         this.avoidHighwaysOrUseShortest = avoidHighwaysOrUseShortest;
+    }
+
+    public Date getLastTrafficJamCheck() {
+        return lastTrafficJamCheck;
+    }
+
+    public void setLastTrafficJamCheck(Date lastTrafficJamCheck) {
+        this.lastTrafficJamCheck = lastTrafficJamCheck;
     }
 }

@@ -12,7 +12,6 @@ import be.ugent.verkeer4.verkeerweb.dataobjects.*;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetailsVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEditVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverviewVM;
-import java.time.Instant;
 import java.time.ZoneOffset;
 
 import java.util.ArrayList;
@@ -91,22 +90,35 @@ public class RouteController {
 
     @ResponseBody
     @RequestMapping(value = "route/routedata", method = RequestMethod.GET)
-    public List<RouteData> ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
+    public RouteDetailData ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
             throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         IPOIService poiService = new POIService(routeService);
         IProviderService providerService = new ProviderService(routeService, poiService);
-        List<RouteData> data = providerService.getRouteDataForRoute(id, startDate, endDate);
+        
+        RouteDetailData data = new RouteDetailData();
+        
+        List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate);
+        data.setValues(routeData);
+        
+        List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);
+        List<RouteDetailTrafficJam> detailJams = new ArrayList<>();
+        for (RouteTrafficJam j : jams) {
+            RouteDetailTrafficJam detailJam = new RouteDetailTrafficJam(j);
+            detailJams.add(detailJam);
+        }
+        data.setJams(detailJams);
+        
         return data;
     }
 
     @RequestMapping(value = "route/detail/{id}", method = RequestMethod.GET)
     public ModelAndView getDetail(@PathVariable("id") int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService(routeService);
         Route route = routeService.getRoute(id);
 
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
+       
         RouteDetailsVM detail = new RouteDetailsVM(route, summaries);
         ModelAndView model = new ModelAndView("route/detail");
         model.addObject("detail", detail);
@@ -216,6 +228,8 @@ public class RouteController {
         }
     }
 
+    
+    
     private MapData getRouteMapData(int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         Route r = routeService.getRoute(id);

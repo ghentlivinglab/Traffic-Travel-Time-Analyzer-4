@@ -1,4 +1,4 @@
-package be.ugent.verkeer4.verkeerpollservice;
+package be.ugent.verkeer4.service;
 
 import be.ugent.verkeer4.verkeerdomain.IPOIService;
 import be.ugent.verkeer4.verkeerdomain.IProviderService;
