@@ -2,6 +2,7 @@
 package be.ugent.verkeer4.verkeerdal;
 
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJam;
+import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCause;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,5 +22,4 @@ public class RouteTrafficJamDbSet extends DbSet<RouteTrafficJam> {
         parameters.put("Until", until);
         return this.getItems("RouteId = :RouteId AND JamFrom <= :Until AND JamUntil >= :From", parameters);
     }
-    
 }

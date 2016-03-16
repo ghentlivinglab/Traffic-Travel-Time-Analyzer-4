@@ -168,7 +168,6 @@ public class RouteDataDbSet extends DbSet<RouteData> {
                         jam.setTo(entry.getTimestamp());
                         jam.setAvgDelay(totalTrafficDelay / nrOfItems);
                         jam.setMaxDelay(maxTrafficDelay);
-                        jam.setTotalDelay(totalTrafficDelay);
                         jams.add(jam);
                         curTrafficJam = entry.isTrafficjam();
                     }
@@ -193,7 +192,6 @@ public class RouteDataDbSet extends DbSet<RouteData> {
                 jam.setTo(lst.get(lst.size() - 1).getTimestamp());
                 jam.setAvgDelay(totalTrafficDelay / nrOfItems);
                 jam.setMaxDelay(maxTrafficDelay);
-                jam.setTotalDelay(totalTrafficDelay);
                 jams.add(jam);
             }
 

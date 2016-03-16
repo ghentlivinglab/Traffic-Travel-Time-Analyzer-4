@@ -1,9 +1,10 @@
 package be.ugent.verkeer4.verkeerdomain;
 
-import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJam;
+import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
 import java.util.Date;
 import java.util.List;
@@ -31,4 +32,6 @@ public interface IRouteService {
     public List<RouteTrafficJam> getRouteTrafficJamsForRouteBetween(int routeId, Date from, Date until);
 
     public void finalizeTrafficJams(Route route, Date today);
+
+    public List<RouteTrafficJamCause> getRouteTrafficJamCausesForRouteBetween(int id, Date startDate, Date endDate);
 }

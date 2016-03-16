@@ -249,7 +249,17 @@
             jamRow += "<td>" + verkeer.secondsToText(jam.trafficJam.maxDelay) + "</td>";
 
             // TODO possible causes
-            jamRow += "<td>" + "" + "</td>";
+            jamRow += "<td>";
+            
+            if(jam.causes !== null) {
+                for (var j = 0; j < jam.causes.length; j++) {                     
+                    jamRow += "Cause: C:" + jam.causes[j].category  + ", subcat: " + jam.causes[j].subCategory + ": " + (jam.causes[j].probability * 100).toFixed(2) + "%";
+                    if(j !== jam.causes.length - 1)
+                        jamRow += "<br/>"
+                }
+            }
+                    
+            jamRow += "</td>";
 
             jamRow += "</tr>";
             html += jamRow;

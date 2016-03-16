@@ -1,4 +1,4 @@
-package be.ugent.verkeer4.verkeerdomain.data;
+package be.ugent.verkeer4.verkeerdomain.data.composite;
 
 public class BoundingBox {
  

@@ -14,7 +14,6 @@ public class RouteTrafficJam {
     
     private double maxDelay;
     private double avgDelay;
-    private double totalDelay;
 
     /**
      * @return the id
@@ -98,15 +97,5 @@ public class RouteTrafficJam {
      */
     public void setAvgDelay(double avgDelay) {
         this.avgDelay = avgDelay;
-    }
-
-    public double getTotalDelay() {
-        return totalDelay;
-    }
-
-    public void setTotalDelay(double totalDelay) {
-        this.totalDelay = totalDelay;
-    }
-    
-    
+    }    
 }

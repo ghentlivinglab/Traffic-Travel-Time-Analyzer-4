@@ -4,6 +4,7 @@ import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.POINearRoute;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
+import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class POIService extends BaseService implements IPOIService {
     }
 
     @Override
-    public List<POI> getPOIsNearRoute(int routeId, Date from, Date to) {
+    public List<POIWithDistanceToRoute> getPOIsNearRoute(int routeId, Date from, Date to) {
         // voeg de actieve toe als de huidige tijd in de range zit
         boolean includeActive = to.getTime() >= new Date().getTime();
         return repo.getPOISet().getPOIsNearRoute(routeId, from, to, includeActive);

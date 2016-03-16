@@ -11,4 +11,7 @@ public interface IUnitOfWork {
     public POIDbSet getPOISet();
     
     public RouteTrafficJamDbSet getRouteTrafficJamSet();
+    
+    public RouteTrafficJamCauseDbSet getRouteTrafficJamCauseSet();
+    
 }

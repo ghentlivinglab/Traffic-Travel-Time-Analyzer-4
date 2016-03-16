@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import be.ugent.verkeer4.verkeerdomain.*;
 import be.ugent.verkeer4.verkeerdomain.data.*;
+import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import be.ugent.verkeer4.verkeerweb.dataobjects.*;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetailsVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEditVM;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -102,9 +104,19 @@ public class RouteController {
         data.setValues(routeData);
         
         List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);
+        List<RouteTrafficJamCause> causes = routeService.getRouteTrafficJamCausesForRouteBetween(id, startDate, endDate);
+        Map<Integer, List<RouteTrafficJamCause>> causesByTrafficJamId = causes.stream().collect(Collectors.groupingBy(c -> c.getRouteTrafficJamId()));
+        
+        
         List<RouteDetailTrafficJam> detailJams = new ArrayList<>();
         for (RouteTrafficJam j : jams) {
             RouteDetailTrafficJam detailJam = new RouteDetailTrafficJam(j);
+            
+            List<RouteTrafficJamCause> lst = causesByTrafficJamId.get(j.getId());
+            if(lst != null)
+                detailJam.setCauses(lst);
+            
+                        
             detailJams.add(detailJam);
         }
         data.setJams(detailJams);
@@ -243,7 +255,7 @@ public class RouteController {
 
         Date from = Date.from(java.time.LocalDateTime.now().minusMinutes(5).toInstant(ZoneOffset.UTC));
         Date to = Date.from(java.time.LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.UTC));
-        List<POI> pois = poiService.getPOIsNearRoute(r.getId(), from, to);
+        List<POIWithDistanceToRoute> pois = poiService.getPOIsNearRoute(r.getId(), from, to);
         for (POI poi : pois) {
             MapPOI mp = getMapPOIFromPOI(poi);
             data.getPois().add(mp);

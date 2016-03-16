@@ -1,6 +1,6 @@
 package be.ugent.verkeer4.verkeerdal;
 
-import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
 import java.util.HashMap;
 import java.util.List;
