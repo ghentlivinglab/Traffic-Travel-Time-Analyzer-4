@@ -89,14 +89,14 @@
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu filterlist">
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><label><input class="chkProviderFilter" checked="checked" data-provider="0" type="checkbox"/>&nbsp;TomTom</label></a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="5" type="checkbox"/>&nbsp;Waze</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="2" type="checkbox"/>&nbsp;Google</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="1" type="checkbox"/>&nbsp;Here</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="3" type="checkbox"/>&nbsp;Coyote</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="4" type="checkbox"/>&nbsp;Be-mobile</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="6" type="checkbox"/>&nbsp;Bing</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="7" type="checkbox"/>&nbsp;Via Michelin</a></li>                                                
+                                                <li><a class="small nodefault" tabIndex="-1"><label><input class="chkProviderFilter" checked="checked" data-provider="0" type="checkbox"/>&nbsp;TomTom</label></a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="5" type="checkbox"/>&nbsp;Waze</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="2" type="checkbox"/>&nbsp;Google</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="1" type="checkbox"/>&nbsp;Here</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="3" type="checkbox"/>&nbsp;Coyote</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="4" type="checkbox"/>&nbsp;Be-mobile</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="6" type="checkbox"/>&nbsp;Bing</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="7" type="checkbox"/>&nbsp;Via Michelin</a></li>
                                             </ul>
                                         </div>                      
                                     </div>
@@ -124,7 +124,7 @@
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="2">
                                     <img class="header" src="<c:url value="/static/images/gmaps.png" />"/>
-                                    </br>
+                                    <br>
                                     CTT
                                 </th>
                                 <th class="provider-header provider-v delay-column" data-provider="2">
