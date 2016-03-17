@@ -15,6 +15,6 @@ import retrofit2.http.Path;
  */
 public interface WeatherService {
     ///api/9cd758a0fe0cfc1d/conditions/q/50.997336,3.756638.json
-  @GET("api/{key}/conditions/q/{latitude},{longitude}.json")
-  Call<WeatherClient> getWeather(@Path("key") String apiKey, @Path("latitude") float latitude, @Path("longitude") float longitude);
+  @GET("api/{key}/conditions/q/pws:{station}.json")
+  Call<WeatherClient> getWeather(@Path("key") String apiKey, @Path("station") String station);
 }

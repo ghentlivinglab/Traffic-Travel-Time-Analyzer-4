@@ -42,7 +42,7 @@ public class WeatherTest {
     @Test
     public void testRoute() {
         WeatherProvider provider = new WeatherProvider();
-        WeatherData d = provider.poll(50.997336, 3.756638);
+        WeatherData d = provider.poll("IVLAAMSG103");
         
         if(d == null)
         {

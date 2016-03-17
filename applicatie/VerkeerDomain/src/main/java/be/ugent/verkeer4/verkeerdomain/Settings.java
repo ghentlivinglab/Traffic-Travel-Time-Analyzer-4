@@ -79,4 +79,9 @@ public class Settings {
         return conf.getString("APIKeys.BingMaps");
     }
     
+    public String getWeatherAPIKey() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        return conf.getString("APIKeys.Weather");
+    }
+    
 }

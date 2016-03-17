@@ -13,6 +13,6 @@ import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
  */
 public interface IWeatherProvider {
     
-    public WeatherData poll(double lat, double lng);
+    public WeatherData poll(String station);
     
 }

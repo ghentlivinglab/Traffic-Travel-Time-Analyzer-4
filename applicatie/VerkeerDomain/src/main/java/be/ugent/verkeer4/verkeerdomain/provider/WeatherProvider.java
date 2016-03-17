@@ -11,8 +11,10 @@ import be.ugent.verkeer4.verkeerdomain.data.WeatherDirectionEnum;
 import be.ugent.verkeer4.verkeerdomain.weather.CurrentObservation;
 import be.ugent.verkeer4.verkeerdomain.weather.WeatherDataClient;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +26,7 @@ public class WeatherProvider implements IWeatherProvider {
     
     static HashMap<String,WeatherConditionEnum> conditionMap = new HashMap<>();
     static HashMap<String,WeatherDirectionEnum> directionMap = new HashMap<>();
+    static List<String> stations = new ArrayList<>();
     
     public WeatherProvider()
     {
@@ -31,23 +34,25 @@ public class WeatherProvider implements IWeatherProvider {
     }
     
     @Override
-    public WeatherData poll(double lat, double lng)
+    public WeatherData poll(String station)
     {
         try {
             
             WeatherData data = new WeatherData();   
-            CurrentObservation current = WeatherDataClient.GetWeather(lat, lng);
+            CurrentObservation current = WeatherDataClient.GetWeather(station);
             
-            data.setLatitude(lat);
-            data.setLongitude(lng);
+            data.setLatitude(Double.parseDouble(current.getObservationLocation().getLatitude()));
+            data.setLongitude(Double.parseDouble(current.getObservationLocation().getLongitude()));
             data.setTemperature(current.getTempC());
             data.setWindSpeed(current.getWindKph());
             data.setWindDirection(directionMap.get(current.getWindDir()).getValue());
             data.setCondition(conditionMap.get(current.getWeather()).getValue());
+            data.setLocation(current.getObservationLocation().getCity());
             
             Date d = new Date(Long.parseLong(current.getObservationEpoch())*1000);      //Omvormen van unix naar miliseconden
-            data.setTimestamp(d);
-                      
+            data.setUpdateTime(d);
+            data.setTimestamp(new Date());
+            
             return data;
                   
         } catch (IOException ex) {
@@ -58,7 +63,7 @@ public class WeatherProvider implements IWeatherProvider {
     }
     
     private void init()
-    {
+    {      
         conditionMap.put("Light Drizzle", WeatherConditionEnum.LightDrizzle);
         conditionMap.put("Heavy Drizzle", WeatherConditionEnum.HeavyDrizzle);
         conditionMap.put("Light Rain", WeatherConditionEnum.LightRain);

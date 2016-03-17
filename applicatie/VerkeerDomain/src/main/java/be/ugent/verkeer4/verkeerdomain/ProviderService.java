@@ -206,17 +206,17 @@ public class ProviderService extends BaseService implements IProviderService {
     }
 
     @Override
-    public void pollWeather(double lat, double lng) throws ClassNotFoundException {
+    public void pollWeather(List<String> stations) throws ClassNotFoundException {
         
-        WeatherData data = weatherProvider.poll(lat, lng);
-        if (data != null) {
-            repo.getWeatherSet().insert(data);
-        } 
-        else {
-            Logger.getLogger(WeatherService.class.getName()).log(Level.WARNING, "Could not fetch weather");
-        }
-        
-        
-        
+        for(String station : stations)
+        {
+            WeatherData data = weatherProvider.poll(station);
+            if (data != null) {
+                repo.getWeatherSet().insert(data);
+            } 
+            else {
+                Logger.getLogger(WeatherService.class.getName()).log(Level.WARNING, "Could not fetch weather for station {0}", station);
+            } 
+        }      
     }
 }

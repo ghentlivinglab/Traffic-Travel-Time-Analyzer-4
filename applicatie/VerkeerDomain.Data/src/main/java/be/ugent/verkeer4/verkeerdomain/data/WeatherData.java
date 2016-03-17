@@ -14,12 +14,14 @@ public class WeatherData {
     //tijd, temp, type weer, windkracht, windrichting...
         private int Id;
         private Date timestamp;
+        private Date updateTime;
         private double longitude;
         private double latitude;
         private double temperature;
         private double windSpeed;
         private int windDirection;
         private int condition;
+        private String location;
 
     /**
      * @return the timestamp
@@ -131,5 +133,33 @@ public class WeatherData {
      */
     public void setId(int Id) {
         this.Id = Id;
+    }
+
+    /**
+     * @return the updateTime
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * @param updateTime the updateTime to set
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * @return the location
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

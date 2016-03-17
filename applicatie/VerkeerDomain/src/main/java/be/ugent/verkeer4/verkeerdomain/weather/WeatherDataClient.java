@@ -5,6 +5,7 @@
  */
 package be.ugent.verkeer4.verkeerdomain.weather;
 
+import be.ugent.verkeer4.verkeerdomain.Settings;
 import java.io.IOException;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
@@ -14,10 +15,8 @@ import retrofit2.Retrofit;
  * @author Niels
  */
 public class WeatherDataClient {
-    public static CurrentObservation GetWeather(double lat, double lng) throws IOException {
-        String key = "9cd758a0fe0cfc1d";
-        float latitude = (float)lat;
-        float longitude = (float)lng;    
+    public static CurrentObservation GetWeather(String station) throws IOException {
+        String key = Settings.getInstance().getWeatherAPIKey();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.wunderground.com/")
@@ -26,7 +25,7 @@ public class WeatherDataClient {
 
         
         WeatherService service = retrofit.create(WeatherService.class);
-        WeatherClient client =  service.getWeather(key, latitude, longitude).execute().body();
+        WeatherClient client =  service.getWeather(key, station).execute().body();
         
         
         return client.getCurrentObservation();

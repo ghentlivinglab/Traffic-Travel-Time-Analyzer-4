@@ -97,10 +97,10 @@ public class CurrentObservation {
     private String dewpointString;
     @SerializedName("dewpoint_f")
     @Expose
-    private Integer dewpointF;
+    private Double dewpointF;
     @SerializedName("dewpoint_c")
     @Expose
-    private Integer dewpointC;
+    private Double dewpointC;
     @SerializedName("heat_index_string")
     @Expose
     private String heatIndexString;
@@ -704,7 +704,7 @@ public class CurrentObservation {
      * @return
      *     The dewpointF
      */
-    public Integer getDewpointF() {
+    public Double getDewpointF() {
         return dewpointF;
     }
 
@@ -713,7 +713,7 @@ public class CurrentObservation {
      * @param dewpointF
      *     The dewpoint_f
      */
-    public void setDewpointF(Integer dewpointF) {
+    public void setDewpointF(Double dewpointF) {
         this.dewpointF = dewpointF;
     }
 
@@ -722,7 +722,7 @@ public class CurrentObservation {
      * @return
      *     The dewpointC
      */
-    public Integer getDewpointC() {
+    public Double getDewpointC() {
         return dewpointC;
     }
 
@@ -731,7 +731,7 @@ public class CurrentObservation {
      * @param dewpointC
      *     The dewpoint_c
      */
-    public void setDewpointC(Integer dewpointC) {
+    public void setDewpointC(Double dewpointC) {
         this.dewpointC = dewpointC;
     }
 

@@ -9,16 +9,20 @@ import be.ugent.verkeer4.verkeerdomain.ProviderService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
 import be.ugent.verkeer4.verkeerdomain.WeatherService;
 import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
 
     private static final int EVERY_MILLIS = 300000;
-
+    private static List<String> stations = new ArrayList<>();
+    
     public static void main(String[] args) throws ClassNotFoundException {
 
+        init();
         IRouteService routeService = new RouteService();
         IPOIService poiService = new POIService();
         IWeatherService weatherService = new WeatherService();
@@ -50,11 +54,8 @@ public class Main {
                 }
                 
                 try {
-                    Logger.getLogger(Main.class.getName()).log(Level.INFO, "Starting poll for weather..");
-                    providerService.pollWeather(51.009651,3.731060);    // 51.009651,3.731060 merelbeke
-                    providerService.pollWeather(51.060933,3.797765);    // 51.060933,3.797765 destelbergen
-                    providerService.pollWeather(51.050480,3.663300);    // 51.050480,3.663300 drongen
-                    providerService.pollWeather(51.195697,3.806934);    // 51.195697,3.806934 zelzate
+                    Logger.getLogger(Main.class.getName()).log(Level.INFO, "Starting poll for weather..");                    
+                    providerService.pollWeather(stations);
                     
                 } catch (Exception ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,5 +70,14 @@ public class Main {
             }
 
         }
+    }
+    
+    public static void init()
+    {
+        stations.add("IVLAAMSG97");
+        stations.add("IVLAAMSG88");
+        stations.add("IVLAANDE2");
+        stations.add("IVLAAMSG120");
+        stations.add("IFLANDER2");
     }
 }
