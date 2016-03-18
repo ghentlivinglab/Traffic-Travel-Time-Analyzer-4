@@ -11,7 +11,7 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
-<div class="container-fluid">
+<div class="container">
     <input type="hidden" id="routeId" value="${detail.id}"/>
     <div class="row">
         <div class="panel panel-primary">
@@ -97,9 +97,7 @@
                 <h3 class="panel-title">History</h3>
             </div>
             <div class="panel-body">
-                <div class="container">
-                    <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
-                </div>
+                <div id="container" style="height: 400px"></div>
                 <button id="toggle-btn" type="button" class="btn btn-primary" style="margin: 10px auto">Toggle</button>
             </div>
         </div>
