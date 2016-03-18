@@ -1,7 +1,7 @@
 use strict;
 
 if(scalar @ARGV < 4) {
-	print "Usage: tomtom fromlat fromlng tolat tolng\n";
+	print "Usage: tomtom fromlat fromlng tolat tolng avoidHighways\n";
 	exit(1);
 }
 
@@ -9,7 +9,10 @@ my $fromLat = @ARGV[0]; #"51.05633";
 my $fromLng = @ARGV[1]; #"3.69485";
 my $toLat = @ARGV[2]; #"51.038768";
 my $toLng = @ARGV[3]; #"3.736953";
-
+my $avoidHighways = 0;
+if(scalar @ARGV >= 5) {
+	$avoidHighways = @ARGV[4];
+}
 main();
 
 sub main {
@@ -105,7 +108,15 @@ sub getAPIKey {
 sub printRouteData {
 	(my $apiKey) = @_;
 	
-	my $url = 'http://api.internal.tomtom.com/lbs/services/route/3/' . $fromLat . ',' . $fromLng . ':' . $toLat . ',' . $toLng . '/Quickest/json?key=' . $apiKey . '&language=en&projection=EPSG4326&avoidTraffic=false&includeTraffic=true&day=today&time=now&iqRoutes=2&trafficModelId=1455899653197&map=basic';
+	my $routeType;
+	if($avoidHighways) {
+		$routeType = "Shortest";
+	}
+	else {
+		$routeType = "Quickest";
+	}
+	my $url = 'http://api.internal.tomtom.com/lbs/services/route/3/' . $fromLat . ',' . $fromLng . ':' . $toLat . ',' . $toLng . '/' . $routeType .'/json?key=' . $apiKey . '&language=en&projection=EPSG4326&avoidTraffic=false&includeTraffic=true&day=today&time=now&iqRoutes=2&trafficModelId=1455899653197&map=basic';
+	#my $url = 'https://api.tomtom.com/routing/1/calculateRoute/' .$fromLat . ',' . $fromLng . ':' . $toLat . ',' . $toLng . '/json?key=' . $apiKey . 
 	
 	
 	#print $url;

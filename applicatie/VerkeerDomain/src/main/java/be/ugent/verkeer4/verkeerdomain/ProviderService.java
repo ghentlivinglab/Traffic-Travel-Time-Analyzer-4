@@ -20,11 +20,9 @@ import be.ugent.verkeer4.verkeerdomain.provider.WazeProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WeatherProvider;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -41,14 +39,10 @@ public class ProviderService extends BaseService implements IProviderService {
     private final List<IPOIProvider> poiProviders;
     private final IPOIService poiService;
     
-    private final IWeatherService weatherService;
-    private final IWeatherProvider weatherProvider;
-
-    public ProviderService(IRouteService routeService, IPOIService poiService, IWeatherService weatherService) throws ClassNotFoundException {
+    public ProviderService(IRouteService routeService, IPOIService poiService) throws ClassNotFoundException {
         super();
         this.routeService = routeService;
         this.poiService = poiService;
-        this.weatherService = weatherService;
 
         TomTomProvider tomtomProvider = new TomTomProvider();
         BeMobileProvider beMobileProvider = new BeMobileProvider();
@@ -58,7 +52,7 @@ public class ProviderService extends BaseService implements IProviderService {
 
         this.perRouteProviders = new ArrayList<>();
         perRouteProviders.add(tomtomProvider);
-        perRouteProviders.add(beMobileProvider);;
+        perRouteProviders.add(beMobileProvider);
         perRouteProviders.add(hereMapsProvider);
         perRouteProviders.add(new GoogleProvider());
         perRouteProviders.add(wazeProvider);
@@ -75,7 +69,6 @@ public class ProviderService extends BaseService implements IProviderService {
         this.poiProviders.add(wazeProvider);
         this.poiProviders.add(coyoteProvider);
         
-        this.weatherProvider = new WeatherProvider();
     }
 
     private synchronized void saveRouteData(RouteData data) {
@@ -140,9 +133,10 @@ public class ProviderService extends BaseService implements IProviderService {
             futures.clear();
 
             long diff = new Date().getTime() - curTime;
-            if (diff > 0 && diff < 7000) { // sleep resterende van de 7 seconden
+            if (diff > 0 && diff < 5000) { // sleep resterende van de 5 seconden
                 try {
-                    Thread.sleep(diff);
+                    Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Waiting for " + (5000 - diff) + "ms before continuing");
+                    Thread.sleep(5000 - diff);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -172,7 +166,9 @@ public class ProviderService extends BaseService implements IProviderService {
                         if (existingPOIsByReferenceId.containsKey(poi.getReferenceId())) {
                             // poi bestaat al, update waarden?
                             POI oldPOI = existingPOIsByReferenceId.get(poi.getReferenceId());
+                            // id & matched overnemen
                             poi.setId(oldPOI.getId());
+                            poi.setMatchedWithRoutes(oldPOI.isMatchedWithRoutes());
                             poiService.update(poi);
 
                         } else {
@@ -203,20 +199,5 @@ public class ProviderService extends BaseService implements IProviderService {
             }
         }
         futures.clear();
-    }
-
-    @Override
-    public void pollWeather(List<String> stations) throws ClassNotFoundException {
-        
-        for(String station : stations)
-        {
-            WeatherData data = weatherProvider.poll(station);
-            if (data != null) {
-                repo.getWeatherSet().insert(data);
-            } 
-            else {
-                Logger.getLogger(WeatherService.class.getName()).log(Level.WARNING, "Could not fetch weather for station {0}", station);
-            } 
-        }      
     }
 }

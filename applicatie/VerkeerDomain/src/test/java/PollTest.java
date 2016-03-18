@@ -53,7 +53,7 @@ public class PollTest {
      @Test
     public void testPollPOI() throws ClassNotFoundException {
          IRouteService routeService = new RouteService();
-         IPOIService poiService = new POIService();
+         IPOIService poiService = new POIService(routeService);
          IProviderService providerService = new ProviderService(routeService, poiService);
          
          BoundingBox bbox = routeService.getBoundingBoxOfAllRoutes();

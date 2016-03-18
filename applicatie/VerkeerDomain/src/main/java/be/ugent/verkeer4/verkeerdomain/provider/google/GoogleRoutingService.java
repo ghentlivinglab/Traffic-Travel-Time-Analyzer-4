@@ -18,5 +18,5 @@ public interface GoogleRoutingService {
             
   @GET("json")
   Call<GoogleClient> calculateRoute(@Query("key") String key, @Query("destinations") String destionations, 
-                                               @Query("origins") String origins, @Query("departure_time") String departureTime);
+                                               @Query("origins") String origins, @Query("departure_time") String departureTime, @Query("avoid") String avoid);
 }

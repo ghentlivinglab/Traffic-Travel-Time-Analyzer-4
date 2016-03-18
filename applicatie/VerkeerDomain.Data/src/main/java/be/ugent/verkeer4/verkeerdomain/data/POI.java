@@ -18,6 +18,8 @@ public class POI {
     
     private String info;
     private int category;
+    
+    private int matchedWithRoutes;
 
     /**
      * @return the id
@@ -143,6 +145,20 @@ public class POI {
      */
     public void setProvider(ProviderEnum provider) {
         this.provider = provider.getValue();
+    }
+
+    /**
+     * @return the matchedWithRoutes
+     */
+    public boolean isMatchedWithRoutes() {
+        return matchedWithRoutes != 0;
+    }
+
+    /**
+     * @param matchedWithRoutes the matchedWithRoutes to set
+     */
+    public void setMatchedWithRoutes(boolean matchedWithRoutes) {
+        this.matchedWithRoutes = matchedWithRoutes ? 1 : 0;
     }
     
     

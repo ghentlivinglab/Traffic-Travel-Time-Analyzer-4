@@ -30,3 +30,40 @@
 @-moz-keyframes dash	{ to { stroke-dashoffset: -100; } }
 @-ms-keyframes dash		{ to { stroke-dashoffset: -100; } }
 @-o-keyframes dash		{ to { stroke-dashoffset: -100; } }
+
+
+.map-cluster {
+  
+  width:32px;
+  height:32px;
+  border-radius:20px;
+  text-align:center;
+  position:relative;
+  
+}
+
+.map-cluster > img {
+  width:32px;
+  height:32px;
+  position:absolute;
+  left:-1px;
+  top:-1px;
+}
+
+.map-cluster > b {
+  position:absolute;
+  background-color:rgb(50,50,50);
+  color:silver;
+  padding:1px;
+  min-width:17px;
+  font-size:10px;
+  font-weight:bold;
+  bottom:-2px;
+  right:-2px;
+  border-radius:5px;
+}
+
+.leaflet-div-icon {
+    border-style:none !important;
+    background-color:transparent !important;
+}

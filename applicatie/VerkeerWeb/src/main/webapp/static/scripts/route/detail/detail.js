@@ -1,15 +1,25 @@
-$(function () {
+(function (trajectDetail, $) {
     "use strict";
 
     var routeChart;
     var combinedTravelTimes = [];
     var combinedDelays = [];
     var showingDelayChart = false;
-    const travelTimeTitle = "Reistijden per provider";
-    const delayTitle = "Vertraging per provider";
+    const travelTimeTitle = "Travel time per provider";
+    const delayTitle = "Delay per provider";
+    const providerChartSettings = {
+        Coyote: {color: "#7cb5ec", symbol: "circle"},
+        BeMobile: {color: "#434348", symbol: "diamond"},
+        ViaMichelin: {color: "#90ed7d", symbol: "square"},
+        HereMaps: {color: "#f7a35c", symbol: "triangle"},
+        Bing: {color: "#8085e9", symbol: "triangle-down"},
+        Waze: {color: "#f15c80", symbol: "circle"},
+        TomTom: {color: "#e4d354", symbol: "diamond"},
+        GoogleMaps: {color: "#2b908f", symbol: "square"}
+    };
 
     $(document).ready(function () {
-        markExtremeProviders();
+        trajectDetail.markExtremeProviders();
         $("#datetimepicker-begin").datetimepicker({
             format: 'DD/MM/YYYY HH:mm',
             showTodayButton: true,
@@ -26,14 +36,14 @@ $(function () {
             }
         );
 
-        $("#update-btn").click(getRouteData);
-        $("#toggle-btn").click(toggleChart);
-        buildChart();
+        $("#update-btn").click(trajectDetail.getRouteData);
+        $("#toggle-btn").click(trajectDetail.toggleChart);
+        trajectDetail.buildChart();
         // Fill table with the default filters
-        getRouteData();
+        trajectDetail.getRouteData();
     });
 
-    var getRouteData = function getRouteData() {
+    trajectDetail.getRouteData = function () {
         $.ajax({
                 method: "GET",
                 url: "../routedata",
@@ -46,60 +56,47 @@ $(function () {
             .done(function (routeData) {
                 showingDelayChart = false;
                 routeChart.setTitle({text: travelTimeTitle});
-                setTableData("#data-table", "#data-table-body", routeData);
-                combineRouteData(routeData, "travelTime", combinedTravelTimes);
-                combineRouteData(routeData, "delay", combinedDelays);
-                setChartData(combinedTravelTimes);
+                trajectDetail.combineRouteData(routeData, "travelTime", combinedTravelTimes);
+                trajectDetail.combineRouteData(routeData, "delay", combinedDelays);
+                trajectDetail.setChartData(combinedTravelTimes);
             });
     };
 
-    var setTableData = function setTableData(tableId, tableBodyId, routeData) {
-        $(tableBodyId).empty();
-        routeData.forEach(function (ele) {
-            var date = new Date(ele.timestamp);
-            var delayLevel = getDelayLevel(ele.delay);
-            var label = getBootstrapLabelDelay(delayLevel);
-            var row = "<tr>"
-                + "<td>" + moment(date).format("D/MM/YYYY") + "</td>"
-                + "<td>" + moment(date).format("HH:mm:ss") + "</td>"
-                + "<td>" + ele.provider + "</td>"
-                + "<td>" + secondsToText(ele.travelTime) + "</td>"
-                + "<td><span class='" + label + "'>" + secondsToText(ele.delay) + "</span></td>"
-                + "</tr>";
-            $(tableBodyId).append(row);
-        });
-        // Make sure to refresh sort again
-        $(tableId).trigger("update");
-        // set sorting column and direction
-        var sorting = [[0, 0], [1, 0], [2, 0]];
-        $(tableId).trigger("sorton", [sorting]);
-    };
-
-    var buildChart = function buildChart() {
-        $('#container').highcharts({
+    trajectDetail.buildChart = function () {
+        routeChart = new Highcharts.Chart({
             chart: {
-                zoomType: 'x'
+                zoomType: 'x',
+                renderTo: 'container'
             },
             title: {
                 text: travelTimeTitle
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
-                    'Klik en sleep op de grafiek om te zoomen' : 'Pinch op de grafiek om te zoomen'
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
             },
             xAxis: {
                 title: {
-                    text: 'Tijdstip'
+                    text: 'Timestamp'
                 },
                 type: "datetime"
             },
             yAxis: {
                 title: {
-                    text: 'Duur (s)'
+                    text: 'Duration'
+                },
+                labels: {
+                    formatter: function () {
+                        return verkeer.secondsToText(this.value);
+                    }
                 }
             },
             tooltip: {
-                valueSuffix: 's'
+                formatter: function () {
+                    var date = moment(this.x).format("dddd, MMMM Do, HH:mm:ss");
+                    return date + "<br/>" + '<span style="color:' + this.point.series.color + '">' + trajectDetail.getPointSymbol(this.point)
+                        + '</span> ' + this.series.name + ': <b>' + verkeer.secondsToText(this.point.y) + "</b>";
+                }
             },
             legend: {
                 layout: 'vertical',
@@ -108,10 +105,36 @@ $(function () {
                 borderWidth: 0
             }
         });
-        routeChart = $('#container').highcharts();
     };
 
-    var clearAllChartData = function clearAllChartData() {
+    trajectDetail.getPointSymbol = function (point) {
+        var symbol = "";
+        if (point.series && point.series.symbol) {
+            switch (point.series.symbol) {
+                case 'circle':
+                    symbol = '●';
+                    break;
+                case 'diamond':
+                    symbol = '♦';
+                    break;
+                case 'square':
+                    symbol = '■';
+                    break;
+                case 'triangle':
+                    symbol = '▲';
+                    break;
+                case 'triangle-down':
+                    symbol = '▼';
+                    break;
+                default:
+                    symbol = "";
+                    break;
+            }
+        }
+        return symbol;
+    };
+
+    trajectDetail.clearAllChartData = function () {
         if (!routeChart || !routeChart.series) return;
 
         while (routeChart.series.length > 0) {
@@ -121,8 +144,8 @@ $(function () {
         routeChart.redraw();
     };
 
-    var setChartData = function setChartData(series) {
-        clearAllChartData();
+    trajectDetail.setChartData = function (series) {
+        trajectDetail.clearAllChartData();
 
         if (series && series.length > 0) {
             // Put new data on chart
@@ -133,15 +156,20 @@ $(function () {
         }
     };
 
-    var combineRouteData = function combineRouteData(routeData, xAxisProperty, container) {
+    trajectDetail.combineRouteData = function (routeData, xAxisProperty, container) {
         var dict = {}; // <provider name, provider object>
 
         // combine all data in one object per provider
         routeData.forEach(function (ele) {
             var provider = dict[ele.provider];
             if (!provider) {
+                var providerSetting = providerChartSettings[ele.provider];
                 provider = {
                     name: ele.provider,
+                    color: providerSetting ? providerSetting.color : null,
+                    marker: {
+                        symbol: providerSetting ? providerSetting.symbol : null
+                    },
                     data: []
                 };
                 dict[ele.provider] = provider;
@@ -155,44 +183,48 @@ $(function () {
         for (var providerKey in dict) {
             container.push(dict[providerKey]);
         }
+        // sort the providers by name
+        container.sort(function (a, b) {
+            return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+        });
     };
 
-    var toggleChart = function toggleChart() {
+    trajectDetail.toggleChart = function () {
         if (showingDelayChart) {
-            setChartData(combinedTravelTimes);
+            trajectDetail.setChartData(combinedTravelTimes);
             routeChart.setTitle({text: travelTimeTitle});
         } else {
-            setChartData(combinedDelays);
+            trajectDetail.setChartData(combinedDelays);
             routeChart.setTitle({text: delayTitle});
         }
         showingDelayChart = !showingDelayChart;
     };
 
-    var getSecondsFromSummaryRow = function getSecondsFromSummaryRow(row) {
+    trajectDetail.getSecondsFromSummaryRow = function (row) {
         var td = row.children[1]; // second td, the traveltime
         var span = td.children[0]; // the span
         return parseInt(span.getAttribute("data-time"));
     };
 
-    var markExtremeProviders = function markExtremeProviders() {
+    trajectDetail.markExtremeProviders = function () {
         var table = document.getElementById("summary-table-body");
 
         var travelTimes = [];
         var rowLength = table.rows.length;
         for (var i = 0; i < rowLength; i += 1) {
             var row = table.rows[i];
-            travelTimes.push(getSecondsFromSummaryRow(row));
+            travelTimes.push(trajectDetail.getSecondsFromSummaryRow(row));
         }
 
-        var m = mean(travelTimes);
-        var vrnc = variance(m, travelTimes);
-        var stdev = standardDeviation(vrnc);
+        var mean = verkeer.mean(travelTimes);
+        var variance = verkeer.variance(mean, travelTimes);
+        var stdev = verkeer.standardDeviation(variance);
 
         for (i = 0; i < rowLength; i += 1) {
             row = table.rows[i];
-            if (!withinStd(travelTimes[i], m, stdev, 1)) {
+            if (!verkeer.withinStd(travelTimes[i], mean, stdev, 1)) {
                 row.className += " danger";
             }
         }
     };
-});
+}(window.verkeer.trajectDetail = window.verkeer.trajectDetail || {}, jQuery));
