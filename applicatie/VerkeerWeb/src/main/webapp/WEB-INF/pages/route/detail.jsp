@@ -11,7 +11,7 @@
     </head>
     <body>
         <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
-        <div class="container-fluid">
+        <div class="container">
             <input type="hidden" id="routeId" value="${detail.id}"/>
             <div class="row">
                 <div class="panel panel-primary">
@@ -55,7 +55,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>      
             </div>
             <div class="row">
                 <div class="panel panel-default">
@@ -104,7 +104,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+
+           <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title ">Traffic jams</h3>
@@ -128,9 +129,12 @@
                 </div>
             </div>
         </div>
+
+
+
         <script src="<c:url value="/static/scripts/route/map.js" />"></script>
         <script>
-                                MapManagement.intializeRouteMap("map", "<c:url value="/route/mapdata?id=${detail.id}" />");
+        MapManagement.intializeRouteMap("map", "<c:url value="/route/mapdata?id=${detail.id}" />");
         </script>
         <script src="<c:url value="/static/scripts/libs/highcharts.js" />"></script>
         <script src="<c:url value="/static/scripts/libs/exporting.js" />"></script>

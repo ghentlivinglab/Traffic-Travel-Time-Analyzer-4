@@ -2,12 +2,13 @@ package be.ugent.verkeer4.verkeerweb.dataobjects;
 
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJam;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCause;
+import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
 import java.util.List;
 
 public class RouteDetailTrafficJam {
 
     private RouteTrafficJam trafficJam;
-    private List<RouteTrafficJamCause> causes;
+    private List<GroupedRouteTrafficJamCause> causes;
 
     public RouteDetailTrafficJam(RouteTrafficJam j) {
         this.trafficJam = j;
@@ -21,11 +22,11 @@ public class RouteDetailTrafficJam {
         this.trafficJam = trafficJam;
     }
 
-    public List<RouteTrafficJamCause>  getCauses() {
+    public List<GroupedRouteTrafficJamCause>  getCauses() {
         return this.causes;
     }
     
-    public void setCauses(List<RouteTrafficJamCause> causes) {
+    public void setCauses(List<GroupedRouteTrafficJamCause> causes) {
        this.causes = causes;
     }
 }

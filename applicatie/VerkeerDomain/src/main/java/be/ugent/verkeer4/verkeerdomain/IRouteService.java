@@ -6,6 +6,7 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJam;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
+import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
 import java.util.Date;
 import java.util.List;
 
@@ -33,5 +34,5 @@ public interface IRouteService {
 
     public void finalizeTrafficJams(Route route, Date today);
 
-    public List<RouteTrafficJamCause> getRouteTrafficJamCausesForRouteBetween(int id, Date startDate, Date endDate);
+    public List<GroupedRouteTrafficJamCause> getRouteTrafficJamCausesForRouteBetween(int id, Date startDate, Date endDate);
 }

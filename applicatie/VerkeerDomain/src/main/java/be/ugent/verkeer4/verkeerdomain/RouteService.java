@@ -10,12 +10,16 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCauseCategoryEnum;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
+import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.CalculateRouteResponse;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Leg;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Point;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.TomTomClient;
 import java.io.IOException;
+import static java.lang.System.in;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -124,13 +128,11 @@ public class RouteService extends BaseService implements IRouteService {
         }
         return jams;
     }
-    
-    
+
     @Override
-    public List<RouteTrafficJamCause> getRouteTrafficJamCausesForRouteBetween(int routeId, Date startDate, Date endDate) {
+    public List<GroupedRouteTrafficJamCause> getRouteTrafficJamCausesForRouteBetween(int routeId, Date startDate, Date endDate) {
         return repo.getRouteTrafficJamCauseSet().getRouteTrafficJamsCausesForRouteBetween(routeId, startDate, endDate);
     }
-    
 
     private List<RouteTrafficJam> getTrafficJamsForDay(int routeId, Date day) {
         // today    
@@ -151,8 +153,6 @@ public class RouteService extends BaseService implements IRouteService {
                 Settings.getInstance().getMinimumDelayFromTrafficJam(), Settings.getInstance().getTrafficJamMovingAverageOverXMin());
     }
 
-    
-    
     private final Date initialTrafficJamStartPoint = new GregorianCalendar(2016, 01, 01).getTime();
 
     @Override
@@ -179,9 +179,9 @@ public class RouteService extends BaseService implements IRouteService {
                     // voeg traffic jam toe
                     int jamId = repo.getRouteTrafficJamSet().insert(jam);
                     jam.setId(jamId);
-                    
+
                     AnalyzeNearByPOIsForJamCauses(poiService, jam, maxDistanceForPOIRouteMatching);
-                    
+
                     // TODO analyze weather etc...
                 }
 
@@ -211,42 +211,43 @@ public class RouteService extends BaseService implements IRouteService {
             double distanceFromRoute = poi.getDistance();
 
             // TODO score tweaken
-            
-            score += 1 - (distanceFromRoute / maxDistanceForPOIRouteMatching);
-
-            if (secondsFromStartOfJam < (0.25 * jamDurationSeconds)) { // binnen de 1e 25% van de traffic jam
-                score += 1 - (secondsFromStartOfJam / (0.25 * jamDurationSeconds));
-            }
-
+            //score += 1 - (distanceFromRoute / maxDistanceForPOIRouteMatching);
             switch (poi.getCategory()) {
                 case Accident:
-                    score += 1;
+                case Hazard:
+                case Incident:
+                case PoliceTrap:
+                    // als er een accident was dat binnen de 25% van de traffic jam valt
+                    if (secondsFromStartOfJam < (0.25 * jamDurationSeconds)) { // binnen de 1e 25% van de traffic jam
+
+                        if (poi.getCategory() == POICategoryEnum.Hazard) {
+                            score += 0.75;
+                        } else if (poi.getCategory() == POICategoryEnum.Accident) {
+                            score += 1;
+                        } else if (poi.getCategory() == POICategoryEnum.Incident) {
+                            score += 0.25;
+                        } else if (poi.getCategory() == POICategoryEnum.PoliceTrap) {
+                            score += 0.10;
+                        }
+                    }
                     break;
                 case Construction:
-                    score += 0.5;
-                    break;
-                case Hazard:
-                    score += 0.5;
-                    break;
                 case LaneClosed:
-                    score += 0.5;
-                    break;
                 case RoadClosed:
-                    score += 0.5;
-                    break;
-                case Incident:
-                    score += 0.25;
-                    break;
-                case PoliceTrap:
-                    score += 0.25;
+                    // poi moet bijna OP het traject liggen, anders is het een andere baan waarop gewerkt wordt
+                    if (distanceFromRoute < 0.1) { 
+                        
+                        if (LocalDateTime.ofInstant(poi.getSince().toInstant(), ZoneId.systemDefault()).toLocalDate().equals(LocalDateTime.ofInstant(jam.getFrom().toInstant(), ZoneId.systemDefault()).toLocalDate())) {
+                            // construction or something of closed on same day
+                            score += 0.75;
+                        } else {
+                            score += 0.5;
+                        }
+                    }
                     break;
             }
 
-            // tussen [0-1];
-            score /= 3;
-
-            // als kans > 70%
-            if (score > 0.70 && poi.getCategory() != POICategoryEnum.TrafficJam) {
+            if (score > 0) {
                 RouteTrafficJamCause cause = new RouteTrafficJamCause();
                 cause.setCategory(RouteTrafficJamCauseCategoryEnum.POI);
                 cause.setRouteTrafficJamId(jam.getId());
@@ -257,6 +258,5 @@ public class RouteService extends BaseService implements IRouteService {
             }
         }
     }
-
 
 }

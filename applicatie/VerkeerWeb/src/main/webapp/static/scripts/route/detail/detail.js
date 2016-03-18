@@ -241,24 +241,32 @@
 
             jamRow += "<td>" + moment(jam.trafficJam.from).format("DD/MM/YYYY HH:mm:ss") + "</td>";
             jamRow += "<td>" + moment(jam.trafficJam.to).format("DD/MM/YYYY HH:mm:ss") + "</td>";
-            
+
             var duration = moment.utc(moment(jam.trafficJam.to).diff(moment(jam.trafficJam.from))).format("HH:mm:ss");
             jamRow += "<td>" + duration + "</td>";
-            
+
             jamRow += "<td>" + verkeer.secondsToText(jam.trafficJam.avgDelay) + "</td>";
             jamRow += "<td>" + verkeer.secondsToText(jam.trafficJam.maxDelay) + "</td>";
 
             // TODO possible causes
             jamRow += "<td>";
-            
-            if(jam.causes !== null) {
-                for (var j = 0; j < jam.causes.length; j++) {                     
-                    jamRow += "Cause: C:" + jam.causes[j].category  + ", subcat: " + jam.causes[j].subCategory + ": " + (jam.causes[j].probability * 100).toFixed(2) + "%";
-                    if(j !== jam.causes.length - 1)
+
+            if (jam.causes !== null) {
+                var causes = jam.causes.sort(function (a, b) {
+                    return b.avgProbability - a.avgProbability;
+                });
+                for (var j = 0; j < causes.length; j++) {
+                    var icon = trajectDetail.getIconForJamCause(causes[j]);
+                    if (icon !== "") {
+                        jamRow += "<img src='" + icon + "'/>";
+                    }
+                    //(C:" + causes[j].category + ", subcat: " + causes[j].subCategory + "): "
+                    jamRow += jam.causes[j].description + " " + (causes[j].avgProbability * 100).toFixed(2) + "%";
+                    if (j !== jam.causes.length - 1)
                         jamRow += "<br/>"
                 }
             }
-                    
+
             jamRow += "</td>";
 
             jamRow += "</tr>";
@@ -268,6 +276,46 @@
         html += "";
 
         table.innerHTML = html;
+    };
+
+    trajectDetail.getIconForJamCause = function (cause) {
+        var iconUrl = verkeer.MAIN_ROOT + "/static/images/poi_";
+        if (cause.category === "POI") { // POI
+            switch (cause.subCategory) {
+                case 0: //Unknown(0),
+                    iconUrl += "unknown";
+                    break;
+                case 1: //Construction(1),
+                    iconUrl += "construction";
+                    break;
+                case 2: //Incident(2),
+                    iconUrl += "incident";
+                    break;
+                case 3: //TrafficJam(3),
+                    iconUrl += "jam";
+                    break;
+                case 4: //LaneClosed(4),
+                    iconUrl += "laneclosed";
+                    break;
+                case 5: //RoadClosed(5),
+                    iconUrl += "roadclosed";
+                    break;
+                case 6: //PoliceTrap(6),
+                    iconUrl += "police";
+                    break;
+                case 7: //Hazard(7),
+                    iconUrl += "hazard";
+                    break;
+                case 8: //Accident(8);
+                    iconUrl += "accident";
+                    break;
+            }
+
+            iconUrl += ".png";
+            return iconUrl;
+        } else {
+            return "";
+        }
     };
 
 }(window.verkeer.trajectDetail = window.verkeer.trajectDetail || {}, jQuery));
