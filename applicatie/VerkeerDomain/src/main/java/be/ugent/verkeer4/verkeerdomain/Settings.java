@@ -53,6 +53,11 @@ public class Settings {
        return conf.getString("PerlPath");
     }
     
+    double getMaxDistanceForPOIRouteMatching() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        // in kilometers
+        return Double.parseDouble(conf.getString("MaxDistanceForPOIRouteMatching"));
+    }
     
     public boolean inProduction() {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
@@ -83,5 +88,4 @@ public class Settings {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
         return conf.getString("APIKeys.Weather");
     }
-    
 }
