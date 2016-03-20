@@ -30,3 +30,8 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 13/03/16,16:00,18:00,Thuis,"Implementatie van API Client om weer op te vragen van undergroundWeather.",67,
 13/03/16,18:30,19:45,Thuis,"Debuggen en testen van API Client zodat deze data kan ophalen van API Server van undergroundWeather.",67,
 14/03/16,08:00,10:00,Thuis,"Tabel aanmaken in database en klassen schrijven om te verbinden met de database. + Debuggen en testen werkend systeem.",67,
+15/03/16,08:15,10:15,School,"Bespreken issues sprint 2",,
+15/03/16,10:15,12:15,School,"Problemen oplossen omdat er stations worden gebruikt in Antwerpen en Chievres i.p.v. in Gent",67,
+17/03/16,13:10,15:10,School,"Weather Client aangepast zodat deze op stations werkt en niet op locatie. (Bekeken welke stations gebruikt moeten worden en code aangepast)",67,
+18/03/16,19:00,19:40,Thuis,"Merge problemen met branche WeatherApi",,
+20/03/16,18:30,18:50,Thuis,"Merge problemen oplossen en eindelijk gemerged met develop. Weather API is officieel in gebruik!",,
