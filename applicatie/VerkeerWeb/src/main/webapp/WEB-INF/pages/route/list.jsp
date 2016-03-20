@@ -24,6 +24,9 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#provider" role="tab">For each provider</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#route" role="tab">By route</a>
+                </li>
             </ul>
 
             <!-- Tab panes -->
@@ -82,7 +85,7 @@
                         <thead>
                             <tr>
                                 <th>
-                                      <div class="dropdown">
+                                    <div class="dropdown">
                                         <div class="button-group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                                 <span class="glyphicon glyphicon-cog"></span>
@@ -299,6 +302,42 @@
                             </c:forEach>
                         </tbody>
                     </table>
+                </div>
+                <div class="tab-pane" id="route" role="tabpanel">
+                    <div class="row">
+                        <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
+                            <div class="col-sm-3">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">${routeSummaryEntry.route.name}</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li>Distance: ${routeSummaryEntry.route.distance} m </li>
+                                            <li>Standard Travel Time: ${routeSummaryEntry.route.defaultTravelTime}</li>
+                                            <li>Average Delay: ${routeSummaryEntry.averageCurrentTravelTime} </li>
+                                            <li>TomTom CTT: ${routeSummaryEntry.getTravelTimeForProvider(0)}</li>
+                                            <li>TomTom Delay: ${routeSummaryEntry.getDelayForProvider(0)}</li>
+                                            <li>Waze CTT: ${routeSummaryEntry.getTravelTimeForProvider(5)}</li>
+                                            <li>Waze Delay: ${routeSummaryEntry.getDelayForProvider(5)}</li>
+                                            <li>GoogleMaps CTT: ${routeSummaryEntry.getTravelTimeForProvider(2)}</li>
+                                            <li>GoogleMaps Delay: ${routeSummaryEntry.getDelayForProvider(2)}</li>
+                                            <li>HereMaps CTT: ${routeSummaryEntry.getTravelTimeForProvider(1)}</li>
+                                            <li>HereMaps Delay: ${routeSummaryEntry.getDelayForProvider(1)}</li>
+                                            <li>Coyote CTT: ${routeSummaryEntry.getTravelTimeForProvider(3)}</li>
+                                            <li>Coyote Delay: ${routeSummaryEntry.getDelayForProvider(3)}</li>
+                                            <li>BeMobile CTT: ${routeSummaryEntry.getTravelTimeForProvider(4)}</li>
+                                            <li>BeMobile Delay: ${routeSummaryEntry.getDelayForProvider(4)}</li>
+                                            <li>BingMaps CTT: ${routeSummaryEntry.getTravelTimeForProvider(6)}</li>
+                                            <li>BingMaps Delay: ${routeSummaryEntry.getDelayForProvider(6)}</li>
+                                            <li>ViaMichelin CTT: ${routeSummaryEntry.getTravelTimeForProvider(7)}</li>
+                                            <li>ViaMichelin Delay: ${routeSummaryEntry.getDelayForProvider(7)}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </div>
             </div>
         </div>
