@@ -29,3 +29,8 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 06/03/16,18:00,20:00,Thuis,"Projectdossier documentatie bundelen en toevoegen",,
 06/03/16,20:15,23:30,Thuis,"Dossier sprint 1 + wiki updates",,
 07/03/16,20:00,21:00,Thuis,"Presentatie Sprint 1 voorbereidingen",,
+08/03/16,08:15,12:30,School,"Laatste voorbereidingen presentatie + presentatie's en meetings + start sprint 2",,
+13/03/16,20:00,21:30,Thuis,"Onderzoek en POC van dashboard + vertaling naar engels",#68,
+14/03/16,20:00,22:30,Thuis,"Dashboard voorbereiding voor standup + verwerken feedback sprint 1 analyse + onderzoek selenium tests",,
+15/03/16,08:15,12:30,School,"Bespreken issues sprint 2 + start dashboard en documentatie opmerkingen sprint 1 afwerken",,
+18/03/16,16:00,17:00,Thuis,"Dashboard frontend + nieuwe overview per route prototype",#47,
