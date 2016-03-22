@@ -8,6 +8,7 @@
             <jsp:param name="title" value="Traject ${detail.name}"/>
         </jsp:include>
         <jsp:include page="/WEB-INF/shared/maprequirements.jsp"/>
+        <link href="<c:url value="/static/styles/route/detail.css" />" rel="stylesheet">
     </head>
     <body>
         <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
@@ -85,9 +86,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel-footer">
-                        <button id="update-btn" type="button" class="btn btn-primary">Update</button>
+                        <button id="update-btn" type="button" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-refresh spinning"></span> Update
+                        </button>
                     </div>
                 </div>
             </div>
