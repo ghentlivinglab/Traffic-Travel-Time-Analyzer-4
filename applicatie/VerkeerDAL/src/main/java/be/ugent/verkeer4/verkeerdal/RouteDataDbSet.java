@@ -1,6 +1,8 @@
 package be.ugent.verkeer4.verkeerdal;
 
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
+import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJam;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +28,8 @@ public class RouteDataDbSet extends DbSet<RouteData> {
     public List<RouteData> getRouteDataAlignedTo5min(String condition, Map<String, Object> parameters) {
         // Opgelet: door de functie is dit stukken trager!
         try (org.sql2o.Connection con = sql2o.open()) {
-            Query q = con.createQuery("select rd.id as id, rd.routeId as routeId, rd.provider as provider, " +
-                    "FloorToNearest5min(rd.Timestamp) as timestamp, rd.traveltime as traveltime, rd.delay as delay "
+            Query q = con.createQuery("select rd.id as id, rd.routeId as routeId, rd.provider as provider, "
+                    + "FloorToNearest5min(rd.Timestamp) as timestamp, rd.traveltime as traveltime, rd.delay as delay "
                     + "from " + getTableName() + " rd "
                     + "where " + condition);
 
@@ -51,7 +53,7 @@ public class RouteDataDbSet extends DbSet<RouteData> {
                 where += "WHERE " + condition + " ";
             }
             String query = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd " + where + " group by routeId, provider) ";
-            
+
             Query q = con.createQuery(query);
 
             if (parameters != null) {
@@ -69,5 +71,131 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         Map<String, Object> params = new HashMap<>();
         params.put("RouteId", id);
         return getMostRecentSummaries("RouteId = :RouteId", params);
+    }
+
+    private class RouteDataTrafficJamEntry {
+
+        private Date timestamp;
+        private double avgDelay;
+        private double movingAverage;
+        private boolean trafficjam;
+
+        public Date getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(Date timestamp) {
+            this.timestamp = timestamp;
+        }
+
+        public double getAvgDelay() {
+            return avgDelay;
+        }
+
+        public void setAvgDelay(double avgDelay) {
+            this.avgDelay = avgDelay;
+        }
+
+        public double getMovingAverage() {
+            return movingAverage;
+        }
+
+        public void setMovingAverage(double movingAverage) {
+            this.movingAverage = movingAverage;
+        }
+
+        public boolean isTrafficjam() {
+            return trafficjam;
+        }
+
+        public void setTrafficjam(boolean trafficjam) {
+            this.trafficjam = trafficjam;
+        }
+
+    }
+
+    public List<RouteTrafficJam> calculateTrafficJams(int routeId, Date from, Date until, double minDelayForTrafficJam, double movingAverageOverXMin) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            String query = "SELECT x.Timestamp as Timestamp, x.avgDelay as avgDelay, avg(y.avgDelay) as movingAverage, CASE WHEN avg(y.avgDelay) > :MinDelayForTrafficJam THEN 1 ELSE 0 END AS trafficjam "
+                    + " FROM (SELECT TIMESTAMP, avg(delay) AS avgDelay FROM routedata "
+                    + "       WHERE routeid = :RouteId AND Timestamp BETWEEN :From AND :Until "
+                    + "       GROUP BY FloorToNearest5Min(TIMESTAMP)) AS x "
+                    + " JOIN"
+                    + "       (SELECT TIMESTAMP, avg(delay) AS avgDelay FROM routedata "
+                    + "        WHERE routeid = :RouteId AND TIMESTAMP BETWEEN :From AND :Until "
+                    + "        GROUP BY floorTonearest5min(TIMESTAMP)) AS y "
+                    + " ON y.Timestamp BETWEEN x.Timestamp - INTERVAL :WindowSizeMin MINUTE AND x.Timestamp + INTERVAL :WindowSizeMin MINUTE "
+                    + " GROUP BY x.Timestamp, x.avgDelay "
+                    + " ORDER BY x.Timestamp";
+
+            Query q = con.createQuery(query);
+
+            q.addParameter("From", from);
+            q.addParameter("Until", until);
+            q.addParameter("RouteId", routeId);
+            q.addParameter("MinDelayForTrafficJam", minDelayForTrafficJam);
+            q.addParameter("WindowSizeMin", movingAverageOverXMin / 2);
+
+            List<RouteDataTrafficJamEntry> lst = q.executeAndFetch(RouteDataTrafficJamEntry.class);
+
+            List<RouteTrafficJam> jams = new ArrayList<>();
+
+            if (lst.size() <= 0) {
+                return jams;
+            }
+
+            boolean curTrafficJam = lst.get(0).trafficjam;
+            Date trafficJamStart = (Date) from.clone();
+            double totalTrafficDelay = curTrafficJam ? lst.get(0).avgDelay : 0;
+            int nrOfItems = curTrafficJam ? 1 : 0;
+            double maxTrafficDelay = 0;
+
+            for (int i = 1; i < lst.size(); i++) {
+                RouteDataTrafficJamEntry entry = lst.get(i);
+                if (curTrafficJam) {
+                    if (entry.isTrafficjam()) {
+                        totalTrafficDelay += entry.getAvgDelay();
+                        if (maxTrafficDelay < entry.getAvgDelay()) {
+                            maxTrafficDelay = entry.getAvgDelay();
+                        }
+                        nrOfItems++;
+                    } else {
+                        // end of traffic jam
+
+                        RouteTrafficJam jam = new RouteTrafficJam();
+                        jam.setRouteId(routeId);
+                        jam.setFrom(trafficJamStart);
+                        jam.setTo(entry.getTimestamp());
+                        jam.setAvgDelay(totalTrafficDelay / nrOfItems);
+                        jam.setMaxDelay(maxTrafficDelay);
+                        jams.add(jam);
+                        curTrafficJam = entry.isTrafficjam();
+                    }
+                } else if (entry.isTrafficjam()) {
+                    // start of traffic jam, reset current traffic variables
+                    totalTrafficDelay = entry.getAvgDelay();
+                    nrOfItems = 1;
+                    maxTrafficDelay = entry.getAvgDelay();
+                    trafficJamStart = entry.getTimestamp();
+                    curTrafficJam = entry.isTrafficjam();
+                } else {
+                    // geen traffic jam, was ook geen traffic jam
+                }
+
+            }
+
+            if (curTrafficJam) {
+                // finalize pending traffic jam
+                RouteTrafficJam jam = new RouteTrafficJam();
+                jam.setRouteId(routeId);
+                jam.setFrom(trafficJamStart);
+                jam.setTo(lst.get(lst.size() - 1).getTimestamp());
+                jam.setAvgDelay(totalTrafficDelay / nrOfItems);
+                jam.setMaxDelay(maxTrafficDelay);
+                jams.add(jam);
+            }
+
+            return jams;
+        }
     }
 }

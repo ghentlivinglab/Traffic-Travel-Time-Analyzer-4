@@ -5,6 +5,10 @@ import be.ugent.verkeer4.verkeerdal.UnitOfWork;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
+import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
+import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
+import be.ugent.verkeer4.verkeerdomain.data.WeatherDirectionEnum;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import junit.framework.TestCase;
@@ -50,6 +54,7 @@ public class DbAccessTest extends TestCase {
         rd.setDistance(5678);
         rd.setTimestamp(new Date());
         int newId = repo.getRouteDataSet().insert(rd);
+      
         rd.setId(newId);
         
         rd.setDelay(987);
@@ -73,6 +78,29 @@ public class DbAccessTest extends TestCase {
             Route firstRoute = repo.getRouteSet().getItems().get(0);
             Route traject = repo.getRouteSet().getItem(firstRoute.getId());
             assertNotNull("Traject niet gevonden", traject);
+        } catch (Exception e) {
+            fail("Error: " + e.getMessage());
+        }
+    }
+    
+    public void testInsertWeather()
+    {
+        WeatherData data = new WeatherData();
+        data.setTimestamp(new Date());
+        data.setLatitude(51);
+        data.setLongitude(51);
+        data.setTemperature(10.5);
+        data.setWindSpeed(3.1);
+        data.setWindDirection(WeatherDirectionEnum.North.getValue());
+        data.setCondition(WeatherConditionEnum.Clear.getValue());
+       
+        int newId = repo.getWeatherSet().insert(data);
+    }
+    
+    public void testGetWeather() {
+        try {
+            List<WeatherData> weather = repo.getWeatherSet().getItems();
+            assertNotNull("Weer Items niet gevonden", weather);
         } catch (Exception e) {
             fail("Error: " + e.getMessage());
         }

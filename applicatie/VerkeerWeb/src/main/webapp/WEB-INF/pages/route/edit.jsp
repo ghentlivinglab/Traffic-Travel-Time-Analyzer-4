@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Traject wijzigen</h3>
+                    <h3 class="panel-title">Edit Route</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -26,7 +26,7 @@
                                     <div class="form-group">
                                         <label for="name">Naam</label>
                                         <form:input class="form-control" path="name"/>
-                                        <span>Opgelet: De naam moet overeenstemmen met het traject in Coyote om correct de gegevens te kunnen uitlezen</span>
+                                        <span>Attention: The name has to correspond with the route in coyote in order to read the data correctly.</span>
                                         <form:errors path="name" cssClass="error"/>
                                     </div>
                                     <div class="form-group">
@@ -40,7 +40,7 @@
                                                 <form:errors path="fromLatLng" cssClass="error"/>
                                             </div>
                                             <div class="col-md-8">
-                                                <span>Klik rechts op de map om de positie te verplaatsen</span>
+                                                <span>Right click on the map to change the position.</span>
                                                 <div id="fromMap" style="height:300px"></div>
                                             </div>
                                         </div>
@@ -57,7 +57,7 @@
                                                 <form:errors path="toLatLng" cssClass="error"/>
                                             </div>
                                             <div class="col-md-8">
-                                                <span>Klik rechts op de map om de positie te verplaatsen</span>
+                                                <span>Right click on the map to change the position.</span>
                                                 <div id="toMap" style="height:300px"></div>
                                             </div>
                                         </div>
@@ -65,16 +65,16 @@
                                     <div class="checkbox">
                                         <label for="avoidHighways">
                                             <form:checkbox path="avoidHighwaysOrUseShortest"/>
-                                            Neem kortste weg
+                                            Take shortest road.
                                         </label>
                                     </div>
-                                    <span>Niet alle providers ondersteunen een onderscheid tussen snelste en kortste weg</span>
+                                    <span>Not all providers make a distinction between the fastest and the shortest road.</span>
                                     <form:errors path="avoidHighwaysOrUseShortest" cssClass="error"/>
                                 </div>
 
                                 <div class="panel-footer">
                                     <button type="submit" class="btn btn-primary">Opslaan</button>
-                                    <a href="${pageContext.servletContext.contextPath}/route/detail/${routeEdit.id}">Traject details</a>
+                                    <a href="${pageContext.servletContext.contextPath}/route/detail/${routeEdit.id}">Route details</a>
                                 </div>
                             </form:form>
                         </div>

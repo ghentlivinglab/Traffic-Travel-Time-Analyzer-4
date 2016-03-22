@@ -33,7 +33,7 @@ public class Settings {
         String configName = inProduction() ? DB_PROD_CONFIG : DB_DEV_CONFIG;
         Config conf = ConfigFactory.load(configName);
         return conf.getString("database.user");
-
+        
     }
 
     public String getDatabasePassword() {
@@ -45,18 +45,30 @@ public class Settings {
 
     public String getScrapePath() {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
-        return conf.getString("ScrapePath");
-    }
-
-    public String getPerlPath() {
-        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
-        return conf.getString("PerlPath");
+       return conf.getString("ScrapePath");
     }
     
-    double getMaxDistanceForPOIRouteMatching() {
+    public String getPerlPath() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+       return conf.getString("PerlPath");
+    }
+
+    public double getMaxDistanceForPOIRouteMatching() {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
         // in kilometers
         return Double.parseDouble(conf.getString("MaxDistanceForPOIRouteMatching"));
+    }
+
+    public double getMinimumDelayFromTrafficJam() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        // in sec
+        return Double.parseDouble(conf.getString("MinimumDelayFromTrafficJam"));
+    }
+
+    public double getTrafficJamMovingAverageOverXMin() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        // in min
+        return Double.parseDouble(conf.getString("TrafficJamMovingAverageOverXMin"));
     }
 
     public boolean inProduction() {
@@ -83,5 +95,9 @@ public class Settings {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
         return conf.getString("APIKeys.BingMaps");
     }
-
+    
+    public String getWeatherAPIKey() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        return conf.getString("APIKeys.Weather");
+    }
 }

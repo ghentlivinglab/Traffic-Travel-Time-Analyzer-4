@@ -1,19 +1,23 @@
-package be.ugent.verkeer4.verkeerpollservice;
+package be.ugent.verkeer4.service;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
 
-    private static final int EVERY_MILLIS = 300000;
-
     public static void main(String[] args) throws ClassNotFoundException {
 
+        TrafficJamAnalysisService trafficJamAnalysisService  = new TrafficJamAnalysisService();
+        trafficJamAnalysisService.start();
+        
+        
         BackgroundPOIRouteMatcherService poiMatchingService = new BackgroundPOIRouteMatcherService();
-        poiMatchingService.start();
-
         DataScrapingService dataScrapingService = new DataScrapingService();
+        WeatherPollService weatherPollService = new WeatherPollService();
+        
+        poiMatchingService.start();
         dataScrapingService.start();
+        weatherPollService.start();
 
         // run in infinite loop, de services runnen in background threads
         while (true) {

@@ -1,9 +1,10 @@
 package be.ugent.verkeer4.verkeerdomain;
 
-import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
+import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.provider.BeMobileProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.BingMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.CoyoteProvider;
@@ -12,9 +13,11 @@ import be.ugent.verkeer4.verkeerdomain.provider.HereMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.IPOIProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.IProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.ISummaryProvider;
+import be.ugent.verkeer4.verkeerdomain.provider.IWeatherProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.TomTomProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.ViaMichelinProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WazeProvider;
+import be.ugent.verkeer4.verkeerdomain.provider.WeatherProvider;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +38,7 @@ public class ProviderService extends BaseService implements IProviderService {
     private final IRouteService routeService;
     private final List<IPOIProvider> poiProviders;
     private final IPOIService poiService;
-
+    
     public ProviderService(IRouteService routeService, IPOIService poiService) throws ClassNotFoundException {
         super();
         this.routeService = routeService;
@@ -65,6 +68,7 @@ public class ProviderService extends BaseService implements IProviderService {
         this.poiProviders.add(beMobileProvider);
         this.poiProviders.add(wazeProvider);
         this.poiProviders.add(coyoteProvider);
+        
     }
 
     private synchronized void saveRouteData(RouteData data) {

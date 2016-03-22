@@ -17,24 +17,24 @@
             <div class="row">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Kaartweergave</h3>
+                        <h3 class="panel-title">Map View</h3>
                     </div>
                     <div class="panel-body">
 
 
-                        <div class="col-md-7">
+                        <div class="col-md-6">
                             <div class="map" id="map" style="height:800px">
 
                             </div>        
                         </div>   
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <table class="table sortable">
                                 <thead>
                                     <tr>
-                                        <th><input name="routecheckAll" type="checkbox" class="routecheckAll" checked="checked"></input>Naam</th>
-                                        <th>Afstand</th>
-                                        <th>Huidige reistijd</th>
-                                        <th>Vertraging</th>
+                                        <th><input name="routecheckAll" type="checkbox" class="routecheckAll" checked="checked"></input>Name</th>
+                                        <th>Distance</th>
+                                        <th>Current Travel Time</th>
+                                        <th>Delay</th>
                                     </tr>
                                 </thead>
                                 <tbody>

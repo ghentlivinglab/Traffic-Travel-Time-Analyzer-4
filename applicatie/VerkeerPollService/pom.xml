@@ -17,7 +17,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>be.ugent.verkeer4.verkeerpollservice.Main</mainClass>
+                            <mainClass>be.ugent.verkeer4.service.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

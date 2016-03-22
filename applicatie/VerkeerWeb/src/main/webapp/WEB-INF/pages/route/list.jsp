@@ -14,15 +14,18 @@
     <body>
         <jsp:include page="/WEB-INF/shared/navigation.jsp" />
         <div class="container-fluid">
-            <h1>Traject Overzicht</h1>
+            <h1>Route Overview</h1>
 
-            <span>Laatste gegevens van ${overview.recentRouteDateFrom}</span>
+            <span>Most recent data from ${overview.recentRouteDateFrom}</span>
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item active">
-                    <a class="nav-link active" data-toggle="tab" href="#summary" role="tab">Samenvatting</a>
+                    <a class="nav-link active" data-toggle="tab" href="#summary" role="tab">Summary</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#provider" role="tab">Per provider</a>
+                    <a class="nav-link" data-toggle="tab" href="#provider" role="tab">For each provider</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#route" role="tab">By route</a>
                 </li>
             </ul>
 
@@ -32,11 +35,11 @@
                     <table class="table sortable">
                         <thead>
                             <tr>
-                                <th>Naam</th>
-                                <th>Afstand</th>
-                                <th>Normale Reisduur</th>
-                                <th>Huidige Reisduur</th>
-                                <th>Vertraging</th>
+                                <th>Name</th>
+                                <th>Distance</th>
+                                <th>Standard Travel Time</th>
+                                <th>Current Travel Time</th>
+                                <th>Delay</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,7 +71,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="<c:url value="/route/edit/${routeSummaryEntry.route.id}"/>"><span class="btn icon-pencil">Wijzig</span></a>
+                                        <a href="<c:url value="/route/edit/${routeSummaryEntry.route.id}"/>"><span class="btn icon-pencil">Edit</span></a>
                                     </td>                                    
                                 </tr>
                             </c:forEach>
@@ -82,99 +85,99 @@
                         <thead>
                             <tr>
                                 <th>
-                                      <div class="dropdown">
+                                    <div class="dropdown">
                                         <div class="button-group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                                 <span class="glyphicon glyphicon-cog"></span>
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu filterlist">
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><label><input class="chkProviderFilter" checked="checked" data-provider="0" type="checkbox"/>&nbsp;TomTom</label></a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="5" type="checkbox"/>&nbsp;Waze</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="2" type="checkbox"/>&nbsp;Google</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="1" type="checkbox"/>&nbsp;Here</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="3" type="checkbox"/>&nbsp;Coyote</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="4" type="checkbox"/>&nbsp;Be-mobile</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="6" type="checkbox"/>&nbsp;Bing</a></li>
-                                                <li><a class="small" class="nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="7" type="checkbox"/>&nbsp;Via Michelin</a></li>                                                
+                                                <li><a class="small nodefault" tabIndex="-1"><label><input class="chkProviderFilter" checked="checked" data-provider="0" type="checkbox"/>&nbsp;TomTom</label></a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="5" type="checkbox"/>&nbsp;Waze</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="2" type="checkbox"/>&nbsp;Google</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="1" type="checkbox"/>&nbsp;Here</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="3" type="checkbox"/>&nbsp;Coyote</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="4" type="checkbox"/>&nbsp;Be-mobile</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="6" type="checkbox"/>&nbsp;Bing</a></li>
+                                                <li><a class="small nodefault" tabIndex="-1"><input class="chkProviderFilter" checked="checked" data-provider="7" type="checkbox"/>&nbsp;Via Michelin</a></li>
                                             </ul>
                                         </div>                      
                                     </div>
-                                    Naam</th>
-                                <th>Afstand</th>
-                                <th>Huidige Reistijd</th>
-                                <th>Gem. Vertraging</th>
+                                    Name</th>
+                                <th>Distance</th>
+                                <th>Current Travel Time</th>
+                                <th>Avg. Delay</th>
                                 <th class="provider-header provider-hr" data-provider="0">
                                     <img class="header" src="<c:url value="/static/images/tomtom.png" />"/>
                                     <br/>
-                                    HR
+                                    CTT
                                 </th>
                                 <th class="provider-header provider-v delay-column" data-provider="0">
                                     <br/>
-                                    V
+                                    D
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="5">
                                     <img class="header" src="<c:url value="/static/images/waze.png" />"/>
                                     <br/>
-                                    HR
+                                    CTT
                                 </th>
                                 <th class="provider-header provider-v delay-column" data-provider="5">
                                     <br/>
-                                    V
+                                    D
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="2">
                                     <img class="header" src="<c:url value="/static/images/gmaps.png" />"/>
-                                    </br>
-                                    HR
+                                    <br>
+                                    CTT
                                 </th>
                                 <th class="provider-header provider-v delay-column" data-provider="2">
                                     <br/>
-                                    V
+                                    D
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="1">
                                     <img class="header" src="<c:url value="/static/images/here.png" />"/>
                                     <br/>
-                                    HR
+                                    CTT
                                 </th> 
                                 <th class="provider-header provider-v delay-column" data-provider="1">
                                     <br/>
-                                    V
+                                    D
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="3">
                                     <img class="header" src="<c:url value="/static/images/coyote.jpg" />"/>
                                     <br/>
-                                    HR
+                                    CTT
                                 </th>
                                 <th class="provider-header provider-v delay-column" data-provider="3">
                                     <br/>
-                                    V
+                                    D
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="4">
                                     <img class="header" src="<c:url value="/static/images/bemobile.png" />"/>
                                     <br/>
-                                    HR
+                                    CTT
                                 </th>
                                 <th class="provider-header provider-v delay-column" data-provider="4">
                                     <br/>
-                                    V
+                                    D
                                 </th>
                                 <th class="provider-header provider-hr" data-provider="6">
                                     <img class="header" src="<c:url value="/static/images/bing.png" />"/>
                                     <br/>
-                                    HR
+                                    CTT
                                 </th>
                                 <th class="provider-header provider-v delay-column" data-provider="6">
                                     <br/>
-                                    V
+                                    D
                                 </th>                                
                                 <th class="provider-header provider-hr" data-provider="7">
                                     <img class="header" src="<c:url value="/static/images/viamichelin.png" />"/>
                                     <br/>
-                                    HR
+                                    CTT
                                 </th>
                                 <th class="provider-header provider-v delay-column" data-provider="7">
                                     <br/>
-                                    V
+                                    D
                                 </th>
                             </tr>
                         </thead>
@@ -299,6 +302,42 @@
                             </c:forEach>
                         </tbody>
                     </table>
+                </div>
+                <div class="tab-pane" id="route" role="tabpanel">
+                    <div class="row">
+                        <c:forEach var="routeSummaryEntry" items="${overview.summaries}">
+                            <div class="col-sm-3">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">${routeSummaryEntry.route.name}</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li>Distance: ${routeSummaryEntry.route.distance} m </li>
+                                            <li>Standard Travel Time: ${routeSummaryEntry.route.defaultTravelTime}</li>
+                                            <li>Average Delay: ${routeSummaryEntry.averageCurrentTravelTime} </li>
+                                            <li>TomTom CTT: ${routeSummaryEntry.getTravelTimeForProvider(0)}</li>
+                                            <li>TomTom Delay: ${routeSummaryEntry.getDelayForProvider(0)}</li>
+                                            <li>Waze CTT: ${routeSummaryEntry.getTravelTimeForProvider(5)}</li>
+                                            <li>Waze Delay: ${routeSummaryEntry.getDelayForProvider(5)}</li>
+                                            <li>GoogleMaps CTT: ${routeSummaryEntry.getTravelTimeForProvider(2)}</li>
+                                            <li>GoogleMaps Delay: ${routeSummaryEntry.getDelayForProvider(2)}</li>
+                                            <li>HereMaps CTT: ${routeSummaryEntry.getTravelTimeForProvider(1)}</li>
+                                            <li>HereMaps Delay: ${routeSummaryEntry.getDelayForProvider(1)}</li>
+                                            <li>Coyote CTT: ${routeSummaryEntry.getTravelTimeForProvider(3)}</li>
+                                            <li>Coyote Delay: ${routeSummaryEntry.getDelayForProvider(3)}</li>
+                                            <li>BeMobile CTT: ${routeSummaryEntry.getTravelTimeForProvider(4)}</li>
+                                            <li>BeMobile Delay: ${routeSummaryEntry.getDelayForProvider(4)}</li>
+                                            <li>BingMaps CTT: ${routeSummaryEntry.getTravelTimeForProvider(6)}</li>
+                                            <li>BingMaps Delay: ${routeSummaryEntry.getDelayForProvider(6)}</li>
+                                            <li>ViaMichelin CTT: ${routeSummaryEntry.getTravelTimeForProvider(7)}</li>
+                                            <li>ViaMichelin Delay: ${routeSummaryEntry.getDelayForProvider(7)}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </div>
             </div>
         </div>
