@@ -119,11 +119,11 @@ public class RouteDataDbSet extends DbSet<RouteData> {
             String query = "SELECT x.Timestamp as Timestamp, x.avgDelay as avgDelay, avg(y.avgDelay) as movingAverage, CASE WHEN avg(y.avgDelay) > :MinDelayForTrafficJam THEN 1 ELSE 0 END AS trafficjam "
                     + " FROM (SELECT TIMESTAMP, avg(delay) AS avgDelay FROM routedata "
                     + "       WHERE routeid = :RouteId AND Timestamp BETWEEN :From AND :Until "
-                    + "       GROUP BY FloorToNearest5Min(TIMESTAMP)) AS x "
+                    + "       GROUP BY FloorToNearest5min(TIMESTAMP)) AS x "
                     + " JOIN"
                     + "       (SELECT TIMESTAMP, avg(delay) AS avgDelay FROM routedata "
                     + "        WHERE routeid = :RouteId AND TIMESTAMP BETWEEN :From AND :Until "
-                    + "        GROUP BY floorTonearest5min(TIMESTAMP)) AS y "
+                    + "        GROUP BY FloorToNearest5min(TIMESTAMP)) AS y "
                     + " ON y.Timestamp BETWEEN x.Timestamp - INTERVAL :WindowSizeMin MINUTE AND x.Timestamp + INTERVAL :WindowSizeMin MINUTE "
                     + " GROUP BY x.Timestamp, x.avgDelay "
                     + " ORDER BY x.Timestamp";
