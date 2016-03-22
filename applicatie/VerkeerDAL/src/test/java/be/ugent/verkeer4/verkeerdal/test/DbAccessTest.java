@@ -2,6 +2,8 @@ package be.ugent.verkeer4.verkeerdal.test;
 
 import be.ugent.verkeer4.verkeerdal.IUnitOfWork;
 import be.ugent.verkeer4.verkeerdal.UnitOfWork;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
+import be.ugent.verkeer4.verkeerdomain.data.Logging;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
@@ -155,5 +157,40 @@ public class DbAccessTest extends TestCase {
 
         Route storedTraject = repo.getRouteSet().getItem(lastTraject.getId());
         assertNull("Traject is niet verwijderd", storedTraject);
+    }
+    
+    /**
+     * Deze methode haalt alle logs uit de logEntry tabel
+     */
+    public void testGetLogs(){
+        try {
+            List<Logging> logs = repo.getLogEntrySet().getItems();
+            assertFalse("Geen logs gevonden", logs.isEmpty());
+        } catch (Exception e) {
+            fail("Error: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Deze methode plaatst een nieuw logbericht in de logEntry tabel
+     */
+    public void testInsertLog() {
+        Date now = new Date();
+        
+        Logging log = new Logging();
+        log.setType(LogTypeEnum.Info);
+        log.setDate(now);
+        log.setCategory("Test");
+        log.setMessage("Dit is een test");
+
+        int id = repo.getLogEntrySet().insert(log);
+        assertNotSame("Id is 0", 0, id);
+
+        Logging storedLog = repo.getLogEntrySet().getItem(id);
+
+        assertEquals("Type is niet hetzelfde", log.getType(), storedLog.getType());
+        assertEquals("Category is niet hetzelfde", log.getCategory(), storedLog.getCategory());
+        
+        repo.getLogEntrySet().delete(id);
     }
 }

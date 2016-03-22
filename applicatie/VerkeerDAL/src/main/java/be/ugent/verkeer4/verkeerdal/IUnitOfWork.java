@@ -10,6 +10,7 @@ public interface IUnitOfWork {
 
     public POIDbSet getPOISet();
     
+    public LogEntryDbSet getLogEntrySet();
 
     public WeatherDbSet getWeatherSet();
     
