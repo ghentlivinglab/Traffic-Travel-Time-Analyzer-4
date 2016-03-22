@@ -35,7 +35,7 @@
         var min = Math.floor(seconds / 60) + "";
         if (min.length == 1)
             min = "0" + min;
-        var sec = (seconds % 60) + "";
+        var sec = Math.floor(seconds % 60) + "";
         if (sec.length == 1)
             sec = "0" + sec;
         return min + "' " + sec + "''";

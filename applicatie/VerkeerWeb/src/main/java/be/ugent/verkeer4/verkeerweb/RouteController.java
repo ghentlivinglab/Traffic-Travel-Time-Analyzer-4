@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import be.ugent.verkeer4.verkeerdomain.*;
 import be.ugent.verkeer4.verkeerdomain.data.*;
+import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
+import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerweb.dataobjects.*;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetailsVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEditVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverviewVM;
-import java.time.Instant;
 import java.time.ZoneOffset;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
@@ -91,22 +93,45 @@ public class RouteController {
 
     @ResponseBody
     @RequestMapping(value = "route/routedata", method = RequestMethod.GET)
-    public List<RouteData> ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
+    public RouteDetailData ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
             throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         IPOIService poiService = new POIService(routeService);
         IProviderService providerService = new ProviderService(routeService, poiService);
-        List<RouteData> data = providerService.getRouteDataForRoute(id, startDate, endDate);
+        
+        RouteDetailData data = new RouteDetailData();
+        
+        List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate);
+        data.setValues(routeData);
+        
+        List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);
+        List<GroupedRouteTrafficJamCause> causes = routeService.getRouteTrafficJamCausesForRouteBetween(id, startDate, endDate);
+        Map<Integer, List<GroupedRouteTrafficJamCause>> causesByTrafficJamId = causes.stream().collect(Collectors.groupingBy(c -> c.getRouteTrafficJamId()));
+        
+        
+        List<RouteDetailTrafficJam> detailJams = new ArrayList<>();
+        for (RouteTrafficJam j : jams) {
+            RouteDetailTrafficJam detailJam = new RouteDetailTrafficJam(j);
+            
+            List<GroupedRouteTrafficJamCause> lst = causesByTrafficJamId.get(j.getId());
+            if(lst != null)
+                detailJam.setCauses(lst);
+            
+                        
+            detailJams.add(detailJam);
+        }
+        data.setJams(detailJams);
+        
         return data;
     }
 
     @RequestMapping(value = "route/detail/{id}", method = RequestMethod.GET)
     public ModelAndView getDetail(@PathVariable("id") int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService(routeService);
         Route route = routeService.getRoute(id);
 
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
+       
         RouteDetailsVM detail = new RouteDetailsVM(route, summaries);
         ModelAndView model = new ModelAndView("route/detail");
         model.addObject("detail", detail);
@@ -216,6 +241,8 @@ public class RouteController {
         }
     }
 
+    
+    
     private MapData getRouteMapData(int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         Route r = routeService.getRoute(id);
@@ -229,7 +256,7 @@ public class RouteController {
 
         Date from = Date.from(java.time.LocalDateTime.now().minusMinutes(5).toInstant(ZoneOffset.UTC));
         Date to = Date.from(java.time.LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.UTC));
-        List<POI> pois = poiService.getPOIsNearRoute(r.getId(), from, to);
+        List<POIWithDistanceToRoute> pois = poiService.getPOIsNearRoute(r.getId(), from, to);
         for (POI poi : pois) {
             MapPOI mp = getMapPOIFromPOI(poi);
             data.getPois().add(mp);

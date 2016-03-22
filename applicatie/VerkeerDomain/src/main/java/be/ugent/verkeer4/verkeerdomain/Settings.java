@@ -52,13 +52,25 @@ public class Settings {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
        return conf.getString("PerlPath");
     }
-    
-    double getMaxDistanceForPOIRouteMatching() {
+
+    public double getMaxDistanceForPOIRouteMatching() {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
         // in kilometers
         return Double.parseDouble(conf.getString("MaxDistanceForPOIRouteMatching"));
     }
-    
+
+    public double getMinimumDelayFromTrafficJam() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        // in sec
+        return Double.parseDouble(conf.getString("MinimumDelayFromTrafficJam"));
+    }
+
+    public double getTrafficJamMovingAverageOverXMin() {
+        Config conf = ConfigFactory.load(SETTINGS_CONFIG);
+        // in min
+        return Double.parseDouble(conf.getString("TrafficJamMovingAverageOverXMin"));
+    }
+
     public boolean inProduction() {
         Config conf = ConfigFactory.load(SETTINGS_CONFIG);
         return conf.getBoolean("general.inProduction");

@@ -2,7 +2,7 @@ package be.ugent.verkeer4.verkeerdomain.provider;
 
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
 import be.ugent.verkeer4.verkeerdomain.Settings;
-import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;

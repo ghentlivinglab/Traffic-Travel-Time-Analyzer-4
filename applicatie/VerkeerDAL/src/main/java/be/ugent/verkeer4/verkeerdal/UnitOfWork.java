@@ -8,6 +8,9 @@ public class UnitOfWork extends BaseRepository implements IUnitOfWork {
     private POIDbSet pois;
     private WeatherDbSet weather;
 
+    private RouteTrafficJamDbSet routeTrafficJams;
+    private RouteTrafficJamCauseDbSet routeTrafficJamCauses;
+    
     public UnitOfWork(String connectionString, String user, String password) throws ClassNotFoundException {
         super(connectionString, user, password);
     }
@@ -19,7 +22,8 @@ public class UnitOfWork extends BaseRepository implements IUnitOfWork {
         this.routeWaypoints = new RouteWaypointDbSet(sql2o);
         this.pois = new POIDbSet(sql2o);
         this.weather = new WeatherDbSet(sql2o);
-        
+        this.routeTrafficJams = new RouteTrafficJamDbSet(sql2o);
+        this.routeTrafficJamCauses = new RouteTrafficJamCauseDbSet(sql2o);
     }
 
     @Override
@@ -41,10 +45,20 @@ public class UnitOfWork extends BaseRepository implements IUnitOfWork {
     public POIDbSet getPOISet() {
         return this.pois;
     }
-
+    
     @Override
     public WeatherDbSet getWeatherSet() {
         return this.weather;
+    }
+    
+    @Override
+    public RouteTrafficJamDbSet getRouteTrafficJamSet() {
+        return this.routeTrafficJams;
+    }
+    
+    @Override
+    public RouteTrafficJamCauseDbSet getRouteTrafficJamCauseSet() {
+        return this.routeTrafficJamCauses;
     }
 
 }

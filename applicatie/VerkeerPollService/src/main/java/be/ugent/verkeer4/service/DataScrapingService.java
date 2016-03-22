@@ -1,4 +1,4 @@
-package be.ugent.verkeer4.verkeerpollservice;
+package be.ugent.verkeer4.service;
 
 import be.ugent.verkeer4.verkeerdomain.IPOIService;
 import be.ugent.verkeer4.verkeerdomain.IProviderService;
@@ -6,7 +6,7 @@ import be.ugent.verkeer4.verkeerdomain.IRouteService;
 import be.ugent.verkeer4.verkeerdomain.POIService;
 import be.ugent.verkeer4.verkeerdomain.ProviderService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
-import be.ugent.verkeer4.verkeerdomain.data.BoundingBox;
+import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
