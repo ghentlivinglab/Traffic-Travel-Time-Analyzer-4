@@ -55,7 +55,7 @@
                             </div>
                         </div>
                     </div>
-                </div>      
+                </div>
             </div>
             <div class="row">
                 <div class="panel panel-default">
@@ -97,9 +97,7 @@
                         <h3 class="panel-title">History</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="container">
-                            <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
-                        </div>
+                            <div id="container" style="height: 400px"></div>
                         <button id="toggle-btn" type="button" class="btn btn-primary" style="margin: 10px auto">Toggle</button>
                     </div>
                 </div>
@@ -129,8 +127,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <script src="<c:url value="/static/scripts/route/map.js" />"></script>
         <script>
