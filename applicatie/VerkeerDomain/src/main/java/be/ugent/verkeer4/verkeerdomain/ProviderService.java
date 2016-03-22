@@ -1,5 +1,6 @@
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
@@ -84,9 +85,9 @@ public class ProviderService extends BaseService implements IProviderService {
         List<Future> futures = new ArrayList<>();
         futures.add(pool.submit(() -> {
             for (ISummaryProvider provider : summaryProviders) {
-                Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Polling for summary on provider " + provider.getClass().getName());
+                LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Polling for summary on provider " + provider.getClass().getName());
                 List<RouteData> lst = provider.poll();
-                Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Polling for summary on provider " + provider.getClass().getName() + " COMPLETE");
+                LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Polling for summary on provider " + provider.getClass().getName() + " COMPLETE");
                 if (lst != null) {
                     for (RouteData rd : lst) {
                         if (rd != null) {
@@ -94,7 +95,7 @@ public class ProviderService extends BaseService implements IProviderService {
                         }
                     }
                 } else {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.WARNING, "Could not fetch summary for provider " + provider.getClass().getName());
+                    LogService.getInstance().insert(LogTypeEnum.Error, "Provider Service Error", "Could not fetch summary for provider " + provider.getClass().getName()); 
                 }
             }
         }));
@@ -106,14 +107,13 @@ public class ProviderService extends BaseService implements IProviderService {
             for (IProvider prov : perRouteProviders) {
                 IProvider provider = prov; // CLOSURE
                 futures.add(pool.submit(() -> {
-
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Polling for route " + r.getId() + " on provider " + provider.getClass().getName());
+                    LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Polling for route " + r.getId() + " on provider " + provider.getClass().getName());
                     RouteData data = provider.poll(r);
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Polling for route " + r.getId() + " on provider " + provider.getClass().getName() + " COMPLETE");
+                    LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Polling for route " + r.getId() + " on provider " + provider.getClass().getName() + " COMPLETE");
                     if (data != null) {
                         saveRouteData(data);
                     } else {
-                        Logger.getLogger(ProviderService.class.getName()).log(Level.WARNING, "Could not fetch route for provider " + provider.getClass().getName() + " for route " + route.getId() + " - " + r.getName());
+                        LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", "Could not fetch route for provider " + provider.getClass().getName() + " for route " + route.getId() + " - " + r.getName());
                     }
                 }));
             }

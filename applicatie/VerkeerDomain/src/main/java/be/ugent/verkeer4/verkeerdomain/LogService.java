@@ -20,7 +20,8 @@ public class LogService extends BaseService {
             try {
                 instance = new LogService();
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(LogService.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(LogService.class.getName()).log(Level.SEVERE, null, ex);
+                LogService.getInstance().insert(LogTypeEnum.Error, "Logging Error", LogService.class.getName() + ex.getMessage()); 
             }
         }
 
@@ -51,8 +52,8 @@ public class LogService extends BaseService {
         try {
             //id is de Id die aan de logentry gegeven is.
             int id = repo.getLogEntrySet().insert(log);
-        } catch(Exception e){
-            
+        } catch(Exception ex){
+            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -67,8 +68,8 @@ public class LogService extends BaseService {
         
         try {
             logs = repo.getLogEntrySet().getItems();
-        } catch (Exception e) {
-            //error
+        } catch (Exception ex) {
+            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex); 
         }
         
         return logs;
