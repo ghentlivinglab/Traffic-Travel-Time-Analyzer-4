@@ -11,13 +11,13 @@ public class Main {
         trafficJamAnalysisService.start();
         
         
-        BackgroundPOIRouteMatcherService poiMatchingService = new BackgroundPOIRouteMatcherService();
-        DataScrapingService dataScrapingService = new DataScrapingService();
-        WeatherPollService weatherPollService = new WeatherPollService();
+    //    BackgroundPOIRouteMatcherService poiMatchingService = new BackgroundPOIRouteMatcherService();
+    //    DataScrapingService dataScrapingService = new DataScrapingService();
+    //    WeatherPollService weatherPollService = new WeatherPollService();
         
-        poiMatchingService.start();
-        dataScrapingService.start();
-        weatherPollService.start();
+    //    poiMatchingService.start();
+    //    dataScrapingService.start();
+    //    weatherPollService.start();
 
         // run in infinite loop, de services runnen in background threads
         while (true) {

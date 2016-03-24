@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class TrafficJamAnalysisService extends BaseService {
 
     public TrafficJamAnalysisService() {
-        super(60 * 60 * 24, "Traffic Jam Analysis");
+        super(300000, "Traffic Jam Analysis");
     }
 
     

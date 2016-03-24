@@ -9,7 +9,9 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJam;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCauseCategoryEnum;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
+import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
+import be.ugent.verkeer4.verkeerdomain.data.composite.WeatherWithDistanceToRoute;
 import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.CalculateRouteResponse;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Leg;
@@ -153,7 +155,7 @@ public class RouteService extends BaseService implements IRouteService {
                 Settings.getInstance().getMinimumDelayFromTrafficJam(), Settings.getInstance().getTrafficJamMovingAverageOverXMin());
     }
 
-    private final Date initialTrafficJamStartPoint = new GregorianCalendar(2016, 01, 01).getTime();
+    private final Date initialTrafficJamStartPoint = new GregorianCalendar(2016, 03, 23).getTime();
 
     @Override
     public void finalizeTrafficJams(Route route, Date today) {
@@ -167,12 +169,12 @@ public class RouteService extends BaseService implements IRouteService {
             IPOIService poiService = new POIService(this);
 
             double maxDistanceForPOIRouteMatching = Settings.getInstance().getMaxDistanceForPOIRouteMatching();
+            
 
-            while (lastTrafficJamCheck.getTime() < today.getTime()) {
+            while (lastTrafficJamCheck.getTime() <= today.getTime()) {
 
                 Date from = lastTrafficJamCheck;
                 Date until = new Date(from.getTime() + 24 * 60 * 60 * 1000);
-
                 List<RouteTrafficJam> jams = repo.getRouteDataSet().calculateTrafficJams(route.getId(), from, until, Settings.getInstance().getMinimumDelayFromTrafficJam(), Settings.getInstance().getTrafficJamMovingAverageOverXMin());
                 for (RouteTrafficJam jam : jams) {
 
@@ -180,9 +182,8 @@ public class RouteService extends BaseService implements IRouteService {
                     int jamId = repo.getRouteTrafficJamSet().insert(jam);
                     jam.setId(jamId);
 
-                    AnalyzeNearByPOIsForJamCauses(poiService, jam, maxDistanceForPOIRouteMatching);
-
-                    // TODO analyze weather etc...
+                    //AnalyzeNearByPOIsForJamCauses(poiService, jam, maxDistanceForPOIRouteMatching);
+                    AnalyzeNearByWeatherForJamCauses(jam);
                 }
 
                 // next day
@@ -197,6 +198,52 @@ public class RouteService extends BaseService implements IRouteService {
         }
     }
 
+    private void AnalyzeNearByWeatherForJamCauses(RouteTrafficJam jam) {
+        
+        Map<String, Object> map = new HashMap<>();
+        List<WeatherWithDistanceToRoute> lst;
+        double score = 0;
+        map.put("Id", jam.getRouteId());
+            
+        try{
+            Route route = repo.getRouteSet().getItem("Id = :Id", map);
+            System.out.print(jam.getRouteId());
+            if(route != null)
+            {
+                lst = repo.getWeatherSet().getWeatherForRoute(route,jam.getFrom()); 
+                if(lst != null)
+                {
+                    WeatherWithDistanceToRoute weather = lst.get(0);
+                    switch(WeatherConditionEnum.fromInt(weather.getCondition()))
+                    {
+                        case HeavyRain:
+                            score += 0.25;
+                            break;
+                        case LightSnow:
+                            score += 0.25;
+                            break;
+                        case HeavySnow:
+                            score += 0.75;
+                            break;
+                    }
+                        
+                    if (score > 0) {
+                        RouteTrafficJamCause cause = new RouteTrafficJamCause();
+                        cause.setCategory(RouteTrafficJamCauseCategoryEnum.Weather);
+                        cause.setRouteTrafficJamId(jam.getId());
+                        cause.setSubCategory(weather.getCondition());
+                        cause.setProbability(score);
+                        cause.setReferenceId(weather.getId());
+                        repo.getRouteTrafficJamCauseSet().insert(cause);
+                    }
+                }
+            }       
+        } catch(Exception ex) {
+            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     private void AnalyzeNearByPOIsForJamCauses(IPOIService poiService, RouteTrafficJam jam, double maxDistanceForPOIRouteMatching) {
         // TODO determine causes
         double jamDurationSeconds = (jam.getTo().getTime() - jam.getFrom().getTime()) / 1000;

@@ -8,9 +8,12 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherDirectionEnum;
+import be.ugent.verkeer4.verkeerdomain.data.composite.WeatherWithDistanceToRoute;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -83,6 +86,30 @@ public class DbAccessTest extends TestCase {
         }
     }
     
+    public void testGetRoute21()
+    {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            List<WeatherWithDistanceToRoute> lst;
+            map.put("Id", 11);
+            
+            Route route = repo.getRouteSet().getItem("Id = :Id", map);
+            if(route != null)
+            {
+                lst = repo.getWeatherSet().getWeatherForRoute(route, new Date());
+                
+                for(WeatherWithDistanceToRoute w : lst)
+                {
+                    System.out.print(w.getDistance());
+                }
+            }
+            
+        } catch(Exception e) {
+            fail("Error: " + e.getMessage());
+        }
+        
+    }
+    
     public void testInsertWeather()
     {
         WeatherData data = new WeatherData();
@@ -134,7 +161,7 @@ public class DbAccessTest extends TestCase {
     public void testUpdateRoute() {
 
         Route t = repo.getRouteSet().getItems().get(0);
-        t.setId(0);
+        t.setId(0);        
         int id = repo.getRouteSet().insert(t); // copy
         t.setId(id);
         t.setName("Updated naam" + t.getName());
