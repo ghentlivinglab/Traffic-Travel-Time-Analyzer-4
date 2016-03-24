@@ -1,7 +1,9 @@
 package be.ugent.verkeer4.verkeerdomain.provider;
 
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
+import be.ugent.verkeer4.verkeerdomain.LogService;
 import be.ugent.verkeer4.verkeerdomain.Settings;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
@@ -71,7 +73,7 @@ public class CoyoteProvider implements ISummaryProvider, IPOIProvider {
                     rd.setRouteId(r.getId());
                     lst.add(rd);
                 } else {
-                    Logger.getLogger(CoyoteProvider.class.getName()).log(Level.WARNING, "''{0}'' IS NOT FOUND IN THE ROUTE LIST", nameParts[0]);
+                    LogService.getInstance().insert(LogTypeEnum.Warning, "CoyoteProvider Error", "''{0}'' IS NOT FOUND IN THE ROUTE LIST" + nameParts[0]);
                 }
             }
 
@@ -86,10 +88,10 @@ public class CoyoteProvider implements ISummaryProvider, IPOIProvider {
         try {
             return scrape();
         } catch (IOException ex) {
-            Logger.getLogger(CoyoteProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, "CoyoteProvider Error", ex.getMessage());
             return null;
         } catch (Exception ex) {
-            Logger.getLogger(CoyoteProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, "CoyoteProvider Error", ex.getMessage());
             return null;
         }
     }
@@ -99,10 +101,10 @@ public class CoyoteProvider implements ISummaryProvider, IPOIProvider {
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.Coyote, "coyotepoi.pl");
         } catch (IOException ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, "CoyoteProvider Error", ex.getMessage());
             return null;
         } catch (Exception ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, "CoyoteProvider Error", ex.getMessage());
             return null;
         }
     }

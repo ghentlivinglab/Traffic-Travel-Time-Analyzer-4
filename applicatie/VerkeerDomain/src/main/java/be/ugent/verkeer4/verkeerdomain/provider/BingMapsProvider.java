@@ -51,8 +51,7 @@ public class BingMapsProvider extends BaseProvider implements IProvider {
             return null;
         } catch (Exception ex) {
             //Error logging
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId(), ex);
-             
+            LogService.getInstance().insert(LogTypeEnum.Warning, "BingMapsProvider Error", "Scraping failed for route " + route.getId() + ex.getMessage());
             return null;
         }
     }    
