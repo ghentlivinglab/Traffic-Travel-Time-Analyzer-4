@@ -81,7 +81,7 @@ public class RouteService extends BaseService implements IRouteService {
                 this.updateWayPoints(r);
             }
         } catch (Exception ex) {
-            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, "Route Service Error", ex.getMessage());
         }
     }
 
@@ -280,7 +280,7 @@ public class RouteService extends BaseService implements IRouteService {
 
             repo.getRouteSet().update(route);
         } catch (Exception ex) {
-            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, "Route Service Error", ex.getMessage());
         }
     }
 

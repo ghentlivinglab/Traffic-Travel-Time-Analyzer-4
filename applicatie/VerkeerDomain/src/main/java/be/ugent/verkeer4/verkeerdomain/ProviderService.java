@@ -81,7 +81,7 @@ public class ProviderService extends BaseService implements IProviderService {
      * @param data 
      */
     private synchronized void saveRouteData(RouteData data) {
-        Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Saving new route data for route " + data.getRouteId() + " and provider " + data.getProvider());
+        LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Saving new route data for route " + data.getRouteId() + " and provider " + data.getProvider()); 
         repo.getRouteDataSet().insert(data);
     }
 
