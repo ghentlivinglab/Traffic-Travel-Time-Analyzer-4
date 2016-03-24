@@ -87,7 +87,8 @@
                             </div>
                         </div>
                         <button id="update-btn" type="button" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-refresh spinning"></span> Update
+                            <span id="refresh-icon" class="glyphicon glyphicon-refresh"></span>
+                            <span id="update-btn-txt">Update</span>
                         </button>
                     </div>
                 </div>

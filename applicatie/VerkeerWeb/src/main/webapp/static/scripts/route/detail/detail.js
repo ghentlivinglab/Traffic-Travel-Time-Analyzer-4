@@ -1,4 +1,6 @@
 (function (trajectDetail, verkeer, $, moment, Highcharts) {
+
+    // chart and data variabels
     var routeChart;
     var combinedTravelTimes = [];
     var combinedDelays = [];
@@ -16,16 +18,28 @@
         GoogleMaps: {color: "#2b908f", symbol: "square"}
     };
 
+    // view only variables
+    var refreshIcon;
+    var updateBtn;
+    var toggleBtn;
+    var datePickerBegin;
+    var datePickerEnd;
+
     $(document).ready(function () {
+        refreshIcon = document.getElementById("refresh-icon");
+        updateBtn = document.getElementById("update-btn");
+        toggleBtn = document.getElementById("toggle-btn");
+        datePickerBegin = $("#datetimepicker-begin");
+        datePickerEnd = $("#datetimepicker-end");
         trajectDetail.markExtremeProviders();
-        $("#datetimepicker-begin").datetimepicker({
+        datePickerBegin.datetimepicker({
             format: "DD/MM/YYYY HH:mm",
             showTodayButton: true,
             showClear: true,
             defaultDate: moment().startOf("day")
         });
 
-        $("#datetimepicker-end").datetimepicker(
+        datePickerEnd.datetimepicker(
             {
                 format: "DD/MM/YYYY HH:mm",
                 showTodayButton: true,
@@ -33,30 +47,35 @@
                 defaultDate: moment().endOf("day")
             }
         );
-
-        $("#update-btn").click(trajectDetail.getRouteData);
-        $("#toggle-btn").click(trajectDetail.toggleChart);
+        updateBtn.addEventListener("click", trajectDetail.getRouteData);
+        toggleBtn.addEventListener("click", trajectDetail.toggleChart);
         trajectDetail.buildChart();
-        // Fill table with the default filters
         trajectDetail.getRouteData();
     });
 
     trajectDetail.getRouteData = function () {
+        // spin the update button
+        refreshIcon.classList.add("spinning");
         $.ajax({
             method: "GET",
             url: "../routedata",
             data: {
                 id: $("#routeId").val(),
-                startDate: $("#datetimepicker-begin").data("DateTimePicker").date().toDate(),
-                endDate: $("#datetimepicker-end").data("DateTimePicker").date().toDate()
+                startDate: datePickerBegin.data("DateTimePicker").date().toDate(),
+                endDate: datePickerEnd.data("DateTimePicker").date().toDate()
+            },
+            success: function (data) {
+                showingDelayChart = false;
+                routeChart.setTitle({text: travelTimeTitle});
+                trajectDetail.combineRouteData(data.values, "travelTime", combinedTravelTimes);
+                trajectDetail.combineRouteData(data.values, "delay", combinedDelays);
+                trajectDetail.setChartData(combinedTravelTimes);
+                trajectDetail.buildTrafficJamTable(data.jams);
+            },
+            complete: function(){
+                // spin the update button
+                refreshIcon.classList.remove("spinning");
             }
-        }).done(function (data) {
-            showingDelayChart = false;
-            routeChart.setTitle({text: travelTimeTitle});
-            trajectDetail.combineRouteData(data.values, "travelTime", combinedTravelTimes);
-            trajectDetail.combineRouteData(data.values, "delay", combinedDelays);
-            trajectDetail.setChartData(combinedTravelTimes);
-            trajectDetail.buildTrafficJamTable(data.jams);
         });
     };
 
