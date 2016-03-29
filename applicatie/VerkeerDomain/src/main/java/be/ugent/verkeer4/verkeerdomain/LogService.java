@@ -20,8 +20,8 @@ public class LogService extends BaseService {
             try {
                 instance = new LogService();
             } catch (ClassNotFoundException ex) {
-                //Logger.getLogger(LogService.class.getName()).log(Level.SEVERE, null, ex);
-                LogService.getInstance().insert(LogTypeEnum.Error, "Logging Error", LogService.class.getName() + ex.getMessage()); 
+                //Bij problemen met de logservice schrijven we logs niet weg in de DB
+                Logger.getLogger(LogService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

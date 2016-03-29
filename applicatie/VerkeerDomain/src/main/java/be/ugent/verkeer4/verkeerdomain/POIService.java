@@ -44,7 +44,6 @@ public class POIService extends BaseService implements IPOIService {
             repo.getPOISet().update(poi);
         } catch (Exception ex) {
             LogService.getInstance().insert(LogTypeEnum.Error, "POI Service Error", LogService.class.getName() + ex.getMessage()); 
-            //Logger.getLogger(POIService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -180,7 +179,6 @@ public class POIService extends BaseService implements IPOIService {
                         }
                         catch(Exception ex) {
                             LogService.getInstance().insert(LogTypeEnum.Error, "POI Service Error", LogService.class.getName() + ex.getMessage()); 
-                            //Logger.getLogger(POIService.class.getName()).log(Level.WARNING, null, ex);
                         }
                         notMatchedForRoute = false;
                     }

@@ -120,6 +120,7 @@ public class DbSet<T> {
             Object key = q.executeUpdate().getKey();
             return (int) (long) key;
         } catch (Exception ex) {
+            //Bij problemen met insert statement schrijven we logs niet weg in DB
             Logger.getLogger(DbSet.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
         }

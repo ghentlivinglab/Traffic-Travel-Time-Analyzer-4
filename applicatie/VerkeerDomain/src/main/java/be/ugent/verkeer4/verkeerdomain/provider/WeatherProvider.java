@@ -5,6 +5,8 @@
  */
 package be.ugent.verkeer4.verkeerdomain.provider;
 
+import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherDirectionEnum;
@@ -56,7 +58,7 @@ public class WeatherProvider implements IWeatherProvider {
             return data;
                   
         } catch (IOException ex) {
-            Logger.getLogger(WeatherProvider.class.getName()).log(Level.SEVERE, null, ex);          
+            LogService.getInstance().insert(LogTypeEnum.Error, "WeatherProvider Error", ex.getMessage());      
             return null;
         }
         

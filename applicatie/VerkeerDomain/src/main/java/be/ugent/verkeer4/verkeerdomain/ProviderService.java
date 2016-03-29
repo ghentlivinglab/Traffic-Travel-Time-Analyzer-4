@@ -142,13 +142,10 @@ public class ProviderService extends BaseService implements IProviderService {
                     future.get(60, TimeUnit.SECONDS);
                 } catch (InterruptedException ex) {
                     LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
-                    //Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {
                     LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
-                    //Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (TimeoutException ex) {
                     LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
-                    //Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             futures.clear();
@@ -158,11 +155,9 @@ public class ProviderService extends BaseService implements IProviderService {
             if (diff > 0 && diff < 5000) { // sleep resterende van de 5 seconden
                 try {
                     LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Waiting for " + (5000 - diff) + "ms before continuing");
-                    //Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Waiting for " + (5000 - diff) + "ms before continuing");
                     Thread.sleep(5000 - diff);
                 } catch (InterruptedException ex) {
                     LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
-                    //Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -230,13 +225,10 @@ public class ProviderService extends BaseService implements IProviderService {
                 future.get(60, TimeUnit.SECONDS);
             } catch (InterruptedException ex) {
                 LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
-                //Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ExecutionException ex) {
                 LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
-                //Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
             } catch (TimeoutException ex) {
                 LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
-                //Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         futures.clear();
