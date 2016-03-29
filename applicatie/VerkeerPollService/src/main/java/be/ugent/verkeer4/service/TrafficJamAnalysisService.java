@@ -1,7 +1,9 @@
 package be.ugent.verkeer4.service;
 
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
+import be.ugent.verkeer4.verkeerdomain.LogService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +42,7 @@ public class TrafficJamAnalysisService extends BaseService {
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(TrafficJamAnalysisService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, "TrafficJamAnalysisService", ex.getMessage());
         }
     }
 
