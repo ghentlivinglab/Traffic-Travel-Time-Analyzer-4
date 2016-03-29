@@ -32,3 +32,5 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 15/03/16,22:00,23:40,School,"Problemen met database opgelost, naamgeving klasses en velden van de logentries aangepast zodat deze overeenkomen met de tabel en tests aangepast",39,
 22/03/16,08:15,12:25,School,"Standup meeting, verdelen van de komende issues, merge conflicten oplossen, zoeken in project waar logging nodig zijn en op die plaatsen logging voorzien",,
 24/03/16,14:15,15:40,School,"Logging overal voorzien (met try-catch structuur) in project waar nodig.",39,
+29/03/16,21:30,23:59,Thuis,"Loggers toegevoegd, alle klasses zijn nu voorzien van correcte logging",39,
+30/03/16,00:00,00:15,Thuis,"Code om logs toe te voegen op front-end toegevoegd, maar nog geen dataobjects gemaakt",39,
