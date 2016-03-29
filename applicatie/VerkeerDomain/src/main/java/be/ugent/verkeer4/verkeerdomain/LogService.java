@@ -45,14 +45,15 @@ public class LogService extends BaseService {
         Logging log = new Logging();
         log.setType(type);
         log.setDate(now);
-        log.setCategory("Test");
-        log.setMessage("Dit is een test");
+        log.setCategory(category);
+        log.setMessage(message);
         
-        //vermijden dat de volledige website crashed als er een fout is bij het wegschrijven van logberichten.
         try {
             //id is de Id die aan de logentry gegeven is.
             int id = repo.getLogEntrySet().insert(log);
         } catch(Exception ex){
+            //vermijden dat de volledige website crashed als er een fout is bij het wegschrijven van logberichten
+            //daarom hier niet proberen om errors in DB op te slaan
             Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
