@@ -36,6 +36,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <c:forEach var="loggingEntry" items="${overview.loggingEntries}">
+                                        <tr class="info">
+                                                <td>${loggingEntry.date}</td>
+                                                <td>${loggingEntry.category}</td>
+                                                <td>${loggingEntry.message}</td>
+                                        </tr>
+                                    </c:forEach>
                                     <tr class="info">
                                         <td>2014-05-22T16:14:39-06:00</td>
                                         <td>Warning</td>
