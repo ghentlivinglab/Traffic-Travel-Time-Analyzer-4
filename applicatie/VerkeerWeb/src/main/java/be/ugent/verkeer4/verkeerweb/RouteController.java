@@ -370,4 +370,9 @@ public class RouteController {
         return mr;
     }
 
+    @RequestMapping(value = "/route/compare", method = RequestMethod.GET)
+    public ModelAndView greeting() throws Exception {
+        ModelAndView model = new ModelAndView("route/compare");
+        return model;
+    }
 }
