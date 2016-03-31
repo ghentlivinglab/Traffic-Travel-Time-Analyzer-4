@@ -40,6 +40,7 @@ public class HomeController {
         LogOverviewVM logOverview = new LogOverviewVM();
         
         //overlopen van de logEntries in de database
+        //enkel de laatste 100 entries weergeven
         for(int i = lst.size()-1; i >= (lst.size() - 100); i--){
             Logging l = lst.get(i);
             LogEntryVM entry = new LogEntryVM();
