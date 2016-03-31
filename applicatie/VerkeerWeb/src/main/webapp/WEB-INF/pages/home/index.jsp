@@ -43,36 +43,6 @@
                                                 <td>${loggingEntry.message}</td>
                                         </tr>
                                     </c:forEach>
-                                    <tr class="info">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Warning</td>
-                                        <td>TomTom scraper failed, used API as fallback</td>
-                                    </tr>
-                                    <tr class="danger">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Error</td>
-                                        <td>Failed to connect to the database</td>
-                                    </tr>
-                                    <tr class="warning">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Error</td>
-                                        <td>Failed to connect to HereMaps API</td>
-                                    </tr>
-                                    <tr class="info">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Warning</td>
-                                        <td>TomTom scraper failed, used API as fallback</td>
-                                    </tr>
-                                    <tr class="danger">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Error</td>
-                                        <td>Failed to connect to the database</td>
-                                    </tr>
-                                    <tr class="warning">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Error</td>
-                                        <td>Failed to connect to HereMaps API</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
