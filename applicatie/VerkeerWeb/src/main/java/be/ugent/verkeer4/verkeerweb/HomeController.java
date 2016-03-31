@@ -2,7 +2,9 @@ package be.ugent.verkeer4.verkeerweb;
 
 import be.ugent.verkeer4.verkeerdomain.ILogService;
 import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Logging;
+import be.ugent.verkeer4.verkeerweb.viewmodels.LogEntryVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.LogOverviewVM;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -37,12 +39,26 @@ public class HomeController {
         //maak het viewmodel object aan
         LogOverviewVM logOverview = new LogOverviewVM();
         
+        //overlopen van de logEntries in de database
         for(Logging l : lst) {
             LogEntryVM entry = new LogEntryVM();
-            entry.setLog(l);
+            entry.setId(l.getId());
+            entry.setDate(l.getDate());
+            entry.setCategory(l.getCategory());
+            entry.setMessage(l.getMessage());
+            
+            //aanpassen naar het gewenste type voor de ViewModel
+            if(l.getType() == LogTypeEnum.Info){
+                entry.setType("info");
+            } 
+            else if (l.getType() == LogTypeEnum.Warning){
+                entry.setType("warning");
+            }
+            else{
+                entry.setType("danger");
+            }
             
             logOverview.getLogEntries().add(entry);
-            
         }
         
         return logOverview;
