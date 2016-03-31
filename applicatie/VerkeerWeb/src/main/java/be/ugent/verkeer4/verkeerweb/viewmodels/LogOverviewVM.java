@@ -14,7 +14,7 @@ import java.util.List;
  * @author Tomas Bolckmans
  */
 public class LogOverviewVM {
-    private List<> logEntries;
+    private List<LogEntryVM> logEntries;
     
     public LogOverviewVM(){
         logEntries = new ArrayList<>();
@@ -23,14 +23,14 @@ public class LogOverviewVM {
     /**
      * @return the logEntries
      */
-    public List<> getLogEntries() {
+    public List<LogEntryVM> getLogEntries() {
         return logEntries;
     }
 
     /**
      * @param logEntries the logEntries to set
      */
-    public void setLogEntries(List<> logEntries) {
+    public void setLogEntries(List<LogEntryVM> logEntries) {
         this.logEntries = logEntries;
     }
     
