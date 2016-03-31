@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  *
  * @author Tomas Bolckmans
  */
-public class LogService extends BaseService {
+public class LogService extends BaseService implements ILogService {
 
     private static LogService instance;
 

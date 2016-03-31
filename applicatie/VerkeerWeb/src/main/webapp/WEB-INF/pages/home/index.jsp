@@ -36,7 +36,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="loggingEntry" items="${overview.loggingEntries}">
+                                    <c:forEach var="loggingEntry" items="${logOverview.logEntries}">
                                         <tr class="info">
                                                 <td>${loggingEntry.date}</td>
                                                 <td>${loggingEntry.category}</td>
