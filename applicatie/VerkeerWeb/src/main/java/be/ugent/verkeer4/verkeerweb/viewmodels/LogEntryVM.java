@@ -88,7 +88,7 @@ public class LogEntryVM {
      * @param category the category to set
      */
     public void setCategory(String category) {
-        this.category = category;
+        this.category = category.replaceFirst("be.ugent.verkeer4.", "");
     }
 
     /**
