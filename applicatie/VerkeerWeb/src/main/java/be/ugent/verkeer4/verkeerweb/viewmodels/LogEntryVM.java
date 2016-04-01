@@ -6,6 +6,7 @@
 package be.ugent.verkeer4.verkeerweb.viewmodels;
 
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -16,9 +17,9 @@ public class LogEntryVM {
     private int id;
     private String type;
     private Date date;
+    private String time;
     private String category;
     private String message;
-    //=> zie RouteData voor voorbeeld
 
     /**
      * @return the id
@@ -60,6 +61,12 @@ public class LogEntryVM {
      */
     public void setDate(Date date) {
         this.date = date;
+    }
+    
+    public String getTime(){
+        //Datum converteren naar tijd.
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm:ss");
+        return localDateFormat.format(date);
     }
 
     /**
