@@ -6,6 +6,7 @@ import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Logging;
 import be.ugent.verkeer4.verkeerweb.viewmodels.LogEntryVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.LogOverviewVM;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,15 +40,27 @@ public class HomeController {
         //maak het viewmodel object aan
         LogOverviewVM logOverview = new LogOverviewVM();
         
+        //Datum converteren naar enkel datum (zonder tijd)
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        
+        //Datum converteren naar tijd.
+        SimpleDateFormat localTimeFormat = new SimpleDateFormat("HH:mm:ss");
+        
+        
         //overlopen van de logEntries in de database
         //enkel de laatste 100 entries weergeven
         for(int i = lst.size()-1; i >= (lst.size() - 100); i--){
             Logging l = lst.get(i);
             LogEntryVM entry = new LogEntryVM();
             entry.setId(l.getId());
-            entry.setDate(l.getDate());
+            entry.setDate(localDateFormat.format(l.getDate()));
+            entry.setTime(localTimeFormat.format(l.getDate()));
             entry.setCategory(l.getCategory());
             entry.setMessage(l.getMessage());
+            
+
+        
+            
             
             //aanpassen naar het gewenste type voor de ViewModel
             if(l.getType() == LogTypeEnum.Info){

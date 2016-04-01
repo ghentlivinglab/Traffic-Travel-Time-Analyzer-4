@@ -16,7 +16,7 @@ import java.util.Date;
 public class LogEntryVM {
     private int id;
     private String type;
-    private Date date;
+    private String date;
     private String time;
     private String category;
     private String message;
@@ -50,23 +50,31 @@ public class LogEntryVM {
     }
 
     /**
-     * @return the timestamp
+     * @return the string
      */
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
     /**
      * @param date the timestamp to set
      */
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
     
+     /**
+     * @param time the string to set
+     */
+    public void setTime(String time){
+        this.time = time;
+    }
+    
+    /**
+     * @return the string time
+     */
     public String getTime(){
-        //Datum converteren naar tijd.
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm:ss");
-        return localDateFormat.format(date);
+        return time;
     }
 
     /**

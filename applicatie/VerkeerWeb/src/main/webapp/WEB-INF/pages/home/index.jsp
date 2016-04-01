@@ -30,7 +30,8 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Timestamp</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
                                         <th>Type</th>
                                         <th>Message</th>
                                     </tr>
@@ -39,6 +40,7 @@
                                     <c:forEach var="loggingEntry" items="${logOverview.logEntries}">
                                         <tr class="${loggingEntry.type}">
                                                 <td>${loggingEntry.date}</td>
+                                                <td>${loggingEntry.time}</td>
                                                 <td>${loggingEntry.category}</td>
                                                 <td>${loggingEntry.message}</td>
                                         </tr>
