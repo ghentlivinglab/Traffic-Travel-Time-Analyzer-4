@@ -31,21 +31,21 @@ public class DataScrapingService  extends BaseService {
     @Override
     protected void action() {
           try {
-            LogService.getInstance().insert(LogTypeEnum.Info, "DataScrapingService Error", "Start poll for POI...");
+            LogService.getInstance().insert(LogTypeEnum.Info, DataScrapingService.class.getName(), "Start poll for POI...");
             BoundingBox bbox = routeService.getBoundingBoxOfAllRoutes();
             bbox.inflate(0.002); // increase lat,lng with 0.002 padding on each side
             providerService.pollPOI(bbox);
             
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "DataScrapingService Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, DataScrapingService.class.getName(), ex.getMessage());
         }
         
         try {
-            LogService.getInstance().insert(LogTypeEnum.Info, "DataScrapingService Error", "Start poll...");
+            LogService.getInstance().insert(LogTypeEnum.Info, DataScrapingService.class.getName(), "Start poll...");
             providerService.poll();
             
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "DataScrapingService Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, DataScrapingService.class.getName(), ex.getMessage());
         }
     }
 }

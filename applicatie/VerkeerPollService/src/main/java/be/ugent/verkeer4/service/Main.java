@@ -26,7 +26,7 @@ public class Main {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                LogService.getInstance().insert(LogTypeEnum.Error, "Main Pollservice Error", ex.getMessage());
+                LogService.getInstance().insert(LogTypeEnum.Error, Main.class.getName() + ": PollService", ex.getMessage());
             }
         }
     }

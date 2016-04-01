@@ -33,7 +33,7 @@ public abstract class BaseService {
             try {
                 run();
             } catch (ClassNotFoundException ex) {
-                LogService.getInstance().insert(LogTypeEnum.Error, "BasePollingService Error", ex.getMessage());
+                LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName()+ " Poll", ex.getMessage());
             }
         });
         t.setName(this.name);
@@ -59,7 +59,7 @@ public abstract class BaseService {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    LogService.getInstance().insert(LogTypeEnum.Error, "BasePollingService Error", ex.getMessage());
+                    LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName()+ " Poll", ex.getMessage());
                 }
             }
 

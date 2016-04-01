@@ -25,12 +25,12 @@ public class BackgroundPOIRouteMatcherService extends BaseService {
     @Override
     protected void action() {
         try {
-            LogService.getInstance().insert(LogTypeEnum.Info, "BackgroundPoiRouterMachter Service Error", "Starting POI matching");
+            LogService.getInstance().insert(LogTypeEnum.Info, BackgroundPOIRouteMatcherService.class.getName(), "Starting POI matching");
             poiService.matchPOIsWithRoute();
-            LogService.getInstance().insert(LogTypeEnum.Info, "BackgroundPoiRouterMachter Service Error", "Finished POI matching");
+            LogService.getInstance().insert(LogTypeEnum.Info, BackgroundPOIRouteMatcherService.class.getName(), "Finished POI matching");
 
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "BackgroundPoiRouterMachter Service Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, BackgroundPOIRouteMatcherService.class.getName(), ex.getMessage());
         }
     }
 }
