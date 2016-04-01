@@ -32,7 +32,7 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
                 return result;
             }
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Warning, "TomTomProvider Error", "Scraping failed for route " + route.getId() + ", falling back to API" + ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Warning, TomTomProvider.class.getName(), "Scraping failed for route " + route.getId() + ", falling back to API" + ex.getMessage());
 
             return useAPI(route);
         }
@@ -56,7 +56,7 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
 
             return null;
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "TomTomProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, TomTomProvider.class.getName(), ex.getMessage());
             return null;
         }
     }
@@ -66,10 +66,10 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.TomTom, "tomtompoi.pl");
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "TomTomProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, TomTomProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "TomTomProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, TomTomProvider.class.getName(), ex.getMessage());
             return null;
         }
     }

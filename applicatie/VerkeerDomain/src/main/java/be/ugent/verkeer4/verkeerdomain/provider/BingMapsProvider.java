@@ -51,7 +51,7 @@ public class BingMapsProvider extends BaseProvider implements IProvider {
             return null;
         } catch (Exception ex) {
             //Error logging
-            LogService.getInstance().insert(LogTypeEnum.Warning, "BingMapsProvider Error", "Scraping failed for route " + route.getId() + ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Warning, BingMapsProvider.class.getName(), "Scraping failed for route " + route.getId() + ex.getMessage());
             return null;
         }
     }    

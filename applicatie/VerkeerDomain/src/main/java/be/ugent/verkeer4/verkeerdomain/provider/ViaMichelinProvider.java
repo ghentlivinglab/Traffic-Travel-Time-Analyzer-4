@@ -19,7 +19,7 @@ public class ViaMichelinProvider extends BaseProvider implements IProvider {
         try {
             return scrape(route, "viamichelin.pl");
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Warning, "ViaMichelinProvider Error", "Scraping failed for route " + route.getId() + ": " + ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Warning, ViaMichelinProvider.class.getName(), "Scraping failed for route " + route.getId() + ": " + ex.getMessage());
             
             return null;
         }

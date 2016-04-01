@@ -23,7 +23,7 @@ public class WazeProvider extends BaseProvider implements IProvider, IPOIProvide
         try {
             return scrape(route, "waze.pl");
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Warning, "WazeProvider Error", "Scraping failed for route " + route.getId() + ": " + ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Warning, WazeProvider.class.getName(), "Scraping failed for route " + route.getId() + ": " + ex.getMessage());
 
             return null;
         }
@@ -34,10 +34,10 @@ public class WazeProvider extends BaseProvider implements IProvider, IPOIProvide
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.Waze, "wazepoi.pl");
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "ViaMichelinProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, WazeProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "ViaMichelinProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, WazeProvider.class.getName(), ex.getMessage());
             return null;
         }
     }

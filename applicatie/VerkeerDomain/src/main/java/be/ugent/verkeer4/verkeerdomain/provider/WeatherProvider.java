@@ -58,7 +58,7 @@ public class WeatherProvider implements IWeatherProvider {
             return data;
                   
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "WeatherProvider Error", ex.getMessage());      
+            LogService.getInstance().insert(LogTypeEnum.Error, WeatherProvider.class.getName(), ex.getMessage());      
             return null;
         }
         

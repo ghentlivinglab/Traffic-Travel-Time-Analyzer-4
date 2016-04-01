@@ -23,7 +23,7 @@ public class BeMobileProvider extends BaseProvider implements IProvider, IPOIPro
         try {
             return scrape(route, "bemobile.pl");
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Warning, "BeMobileProvider Error", "Scraping failed for route " + route.getId() + ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Warning, BeMobileProvider.class.getName(), "Scraping failed for route " + route.getId() + ex.getMessage());
             return null;
         }
     }
@@ -33,10 +33,10 @@ public class BeMobileProvider extends BaseProvider implements IProvider, IPOIPro
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.BeMobile,"bemobilepoi.pl");
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "BeMobileProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, BeMobileProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "BeMobileProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, BeMobileProvider.class.getName(), ex.getMessage());
             return null;
         }
     }

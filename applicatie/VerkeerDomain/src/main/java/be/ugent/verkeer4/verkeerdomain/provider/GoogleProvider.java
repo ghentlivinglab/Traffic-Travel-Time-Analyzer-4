@@ -48,7 +48,7 @@ public class GoogleProvider extends BaseProvider implements IProvider {
 
             return null;
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Warning, "GoogleProvider Error", "Scraping failed for route " + route.getId() + ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Warning, GoogleProvider.class.getName(), "Scraping failed for route " + route.getId() + ex.getMessage());
             return null;
         }     
     }   

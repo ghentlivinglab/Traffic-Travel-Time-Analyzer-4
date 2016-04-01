@@ -73,7 +73,7 @@ public class CoyoteProvider implements ISummaryProvider, IPOIProvider {
                     rd.setRouteId(r.getId());
                     lst.add(rd);
                 } else {
-                    LogService.getInstance().insert(LogTypeEnum.Warning, "CoyoteProvider Error", "''{0}'' IS NOT FOUND IN THE ROUTE LIST" + nameParts[0]);
+                    LogService.getInstance().insert(LogTypeEnum.Warning, CoyoteProvider.class.getName(), "''{0}'' IS NOT FOUND IN THE ROUTE LIST" + nameParts[0]);
                 }
             }
 
@@ -88,10 +88,10 @@ public class CoyoteProvider implements ISummaryProvider, IPOIProvider {
         try {
             return scrape();
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "CoyoteProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, CoyoteProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "CoyoteProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, CoyoteProvider.class.getName(), ex.getMessage());
             return null;
         }
     }
@@ -101,10 +101,10 @@ public class CoyoteProvider implements ISummaryProvider, IPOIProvider {
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.Coyote, "coyotepoi.pl");
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "CoyoteProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, CoyoteProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "CoyoteProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, CoyoteProvider.class.getName(), ex.getMessage());
             return null;
         }
     }

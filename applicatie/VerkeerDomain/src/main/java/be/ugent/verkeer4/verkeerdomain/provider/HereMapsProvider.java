@@ -31,7 +31,7 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
                 return result;
             }
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Warning, "HereMapsProvider Error", "Scraping failed for route " + route.getId() + ", falling back to API" + ex);
+            LogService.getInstance().insert(LogTypeEnum.Warning, HereMapsProvider.class.getName(), "Scraping failed for route " + route.getId() + ", falling back to API" + ex);
             return useAPI(route);
         }
     }
@@ -56,7 +56,7 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
 
             return null;
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "HereMapsProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, HereMapsProvider.class.getName(), ex.getMessage());
             return null;
         }
     }
@@ -66,10 +66,10 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.HereMaps, "herepoi.pl");
         } catch (IOException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "HereMapsProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, HereMapsProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "HereMapsProvider Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, HereMapsProvider.class.getName(), ex.getMessage());
             return null;
         }
     }
