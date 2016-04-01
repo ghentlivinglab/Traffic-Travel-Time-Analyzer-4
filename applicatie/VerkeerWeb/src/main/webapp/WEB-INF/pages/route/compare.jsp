@@ -10,30 +10,43 @@
 <body>
 <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
 <div class="container">
-    <div class="row">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Compare routes</h3>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Compare routes</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="route1">Select first route</label>
+                    <select id="route1" class="form-control">
+                        <c:forEach var="route" items="${routes}">
+                            <option value="${route.id}">${route.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <label for="route2">Select second route</label>
+                    <select id="route2" class="form-control">
+                        <c:forEach var="route" items="${routes}">
+                            <option value="${route.id}">${route.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <label for="providers">Select providers</label>
+                    <select multiple id="providers" class="form-control">
+                        <c:forEach var="provider" items="${providers}">
+                            <option value="${provider}">${provider}</option>
+                        </c:forEach>
+                    </select>
+                </div>
             </div>
-            <div class="panel-body">
-                <div>
-                    <label for="provider1">First provider</label>
-                    <select id="provider1" class="form-control">
-                        <c:forEach var="provider" items="${providers}">
-                            <option value="${provider}">${provider}</option>
-                        </c:forEach>
-                    </select>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="container" style="height: 400px"></div>
+                    <button id="toggle-btn" type="button" class="btn btn-primary" style="margin: 10px auto">Toggle
+                    </button>
                 </div>
-                <div style="margin: 10px auto">
-                    <label for="provider2">Second provider</label>
-                    <select id="provider2" class="form-control">
-                        <c:forEach var="provider" items="${providers}">
-                            <option value="${provider}">${provider}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div id="container" style="height: 400px"></div>
-                <button id="toggle-btn" type="button" class="btn btn-primary" style="margin: 10px auto">Toggle</button>
             </div>
         </div>
     </div>

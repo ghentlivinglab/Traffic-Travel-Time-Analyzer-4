@@ -371,7 +371,7 @@ public class RouteController {
     }
 
     @RequestMapping(value = "/route/compare", method = RequestMethod.GET)
-    public ModelAndView greeting() {
+    public ModelAndView compare() throws ClassNotFoundException {
         // get provider names sorted
         ProviderEnum[] providersEnum = ProviderEnum.values();
         String[] providers = new String[providersEnum.length];
@@ -380,9 +380,14 @@ public class RouteController {
         }
         Arrays.sort(providers);
 
+        // get the route names and id
+        RouteService routeService = new RouteService();
+        List<Route> routes = routeService.getRoutesInfo();
+
         // send view
         ModelAndView model = new ModelAndView("route/compare");
         model.addObject("providers", providers);
+        model.addObject("routes", routes);
         return model;
     }
 }
