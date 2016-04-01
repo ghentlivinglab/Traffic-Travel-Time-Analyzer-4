@@ -41,11 +41,10 @@ public class HomeController {
         LogOverviewVM logOverview = new LogOverviewVM();
         
         //Datum converteren naar enkel datum (zonder tijd)
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         
         //Datum converteren naar tijd.
         SimpleDateFormat localTimeFormat = new SimpleDateFormat("HH:mm:ss");
-        
         
         //overlopen van de logEntries in de database
         //enkel de laatste 100 entries weergeven
@@ -57,10 +56,6 @@ public class HomeController {
             entry.setTime(localTimeFormat.format(l.getDate()));
             entry.setCategory(l.getCategory());
             entry.setMessage(l.getMessage());
-            
-
-        
-            
             
             //aanpassen naar het gewenste type voor de ViewModel
             if(l.getType() == LogTypeEnum.Info){

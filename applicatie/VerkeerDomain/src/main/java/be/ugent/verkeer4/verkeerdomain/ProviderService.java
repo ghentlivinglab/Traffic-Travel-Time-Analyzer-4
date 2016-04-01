@@ -81,7 +81,7 @@ public class ProviderService extends BaseService implements IProviderService {
      * @param data 
      */
     private synchronized void saveRouteData(RouteData data) {
-        LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Saving new route data for route " + data.getRouteId() + " and provider " + data.getProvider()); 
+        LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Saving new route data for route " + data.getRouteId() + " and provider " + data.getProvider()); 
         repo.getRouteDataSet().insert(data);
     }
 
@@ -99,9 +99,9 @@ public class ProviderService extends BaseService implements IProviderService {
         // schedule een fetch van alle summary gegevens
         futures.add(pool.submit(() -> {
             for (ISummaryProvider provider : summaryProviders) {
-                LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Polling for summary on provider " + provider.getClass().getName());
+                LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Polling for summary on provider " + provider.getClass().getName());
                 List<RouteData> lst = provider.poll();
-                LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Polling for summary on provider " + provider.getClass().getName() + " COMPLETE");
+                LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Polling for summary on provider " + provider.getClass().getName() + " COMPLETE");
                 if (lst != null) {
                     for (RouteData rd : lst) {
                         if (rd != null) {
@@ -109,7 +109,7 @@ public class ProviderService extends BaseService implements IProviderService {
                         }
                     }
                 } else {
-                    LogService.getInstance().insert(LogTypeEnum.Error, "Provider Service Error", "Could not fetch summary for provider " + provider.getClass().getName()); 
+                    LogService.getInstance().insert(LogTypeEnum.Error, ProviderService.class.getName(), "Could not fetch summary for provider " + provider.getClass().getName()); 
                 }
             }
         }));
@@ -124,13 +124,13 @@ public class ProviderService extends BaseService implements IProviderService {
             for (IProvider prov : perRouteProviders) {
                 IProvider provider = prov; // CLOSURE
                 futures.add(pool.submit(() -> {
-                    LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Polling for route " + r.getId() + " on provider " + provider.getClass().getName());
+                    LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Polling for route " + r.getId() + " on provider " + provider.getClass().getName());
                     RouteData data = provider.poll(r);
-                    LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Polling for route " + r.getId() + " on provider " + provider.getClass().getName() + " COMPLETE");
+                    LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Polling for route " + r.getId() + " on provider " + provider.getClass().getName() + " COMPLETE");
                     if (data != null) {
                         saveRouteData(data);
                     } else {
-                        LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", "Could not fetch route for provider " + provider.getClass().getName() + " for route " + route.getId() + " - " + r.getName());
+                        LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), "Could not fetch route for provider " + provider.getClass().getName() + " for route " + route.getId() + " - " + r.getName());
                     }
                 }));
             }
@@ -141,11 +141,11 @@ public class ProviderService extends BaseService implements IProviderService {
                 try {
                     future.get(60, TimeUnit.SECONDS);
                 } catch (InterruptedException ex) {
-                    LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
+                    LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
                 } catch (ExecutionException ex) {
-                    LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
+                    LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
                 } catch (TimeoutException ex) {
-                    LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
+                    LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
                 }
             }
             futures.clear();
@@ -154,10 +154,10 @@ public class ProviderService extends BaseService implements IProviderService {
             long diff = new Date().getTime() - curTime;
             if (diff > 0 && diff < 5000) { // sleep resterende van de 5 seconden
                 try {
-                    LogService.getInstance().insert(LogTypeEnum.Info, "Provider Service Error", "Waiting for " + (5000 - diff) + "ms before continuing");
+                    LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Waiting for " + (5000 - diff) + "ms before continuing");
                     Thread.sleep(5000 - diff);
                 } catch (InterruptedException ex) {
-                    LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
+                    LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
                 }
             }
         }
@@ -224,11 +224,11 @@ public class ProviderService extends BaseService implements IProviderService {
             try {
                 future.get(60, TimeUnit.SECONDS);
             } catch (InterruptedException ex) {
-                LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
+                LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
             } catch (ExecutionException ex) {
-                LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
+                LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
             } catch (TimeoutException ex) {
-                LogService.getInstance().insert(LogTypeEnum.Warning, "Provider Service Error", ex.getMessage());
+                LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
             }
         }
         futures.clear();

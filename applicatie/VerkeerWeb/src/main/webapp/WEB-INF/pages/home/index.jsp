@@ -32,7 +32,7 @@
                                     <tr>
                                         <th>Date</th>
                                         <th>Time</th>
-                                        <th>Type</th>
+                                        <th>Class</th>
                                         <th>Message</th>
                                     </tr>
                                 </thead>

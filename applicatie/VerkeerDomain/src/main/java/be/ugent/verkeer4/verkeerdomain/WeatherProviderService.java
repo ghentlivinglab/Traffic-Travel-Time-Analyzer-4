@@ -36,7 +36,7 @@ public class WeatherProviderService extends BaseService{
                 repo.getWeatherSet().insert(data);
             } 
             else {
-                LogService.getInstance().insert(LogTypeEnum.Warning, "WeaherProvider Service Error", "Could not fetch weather for station: " + station);
+                LogService.getInstance().insert(LogTypeEnum.Warning, WeatherProviderService.class.getName(), "Could not fetch weather for station: " + station);
             } 
         }      
     }

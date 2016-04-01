@@ -26,7 +26,7 @@ public class WeatherService extends BaseService implements IWeatherService {
         try {
             repo.getWeatherSet().update(data);
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, "WeaherProvider Service Error", ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Error, WeatherService.class.getName(), ex.getMessage());
         }
     }
 
