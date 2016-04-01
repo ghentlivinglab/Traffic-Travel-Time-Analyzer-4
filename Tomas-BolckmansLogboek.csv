@@ -35,3 +35,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 29/03/16,21:30,23:59,Thuis,"Loggers toegevoegd, alle klasses zijn nu voorzien van correcte logging",39,
 30/03/16,00:00,00:15,Thuis,"Code om logs toe te voegen op front-end toegevoegd, maar nog geen dataobjects gemaakt",39,
 31/03/16,22:00,23:59,Thuis,"Viewmodels aangemaakt, interface voor logservice aangemaakt, logs toegevoegd op homepagina",39,
+01/04/16,11:30,12:30,Thuis,"Stijl logtabel aangepast: naamgeving category ingekort, kleuren verbeterd, tijd en datum afzonderlijk gezet",39,
