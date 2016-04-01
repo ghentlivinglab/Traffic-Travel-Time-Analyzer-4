@@ -101,7 +101,7 @@ public class RouteController {
         
         RouteDetailData data = new RouteDetailData();
         
-        List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate);
+        List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate, "Timestamp");
         data.setValues(routeData);
         
         List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);

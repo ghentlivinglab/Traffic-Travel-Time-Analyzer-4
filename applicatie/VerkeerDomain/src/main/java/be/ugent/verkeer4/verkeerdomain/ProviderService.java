@@ -4,7 +4,6 @@ import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
-import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.provider.BeMobileProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.BingMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.CoyoteProvider;
@@ -13,11 +12,10 @@ import be.ugent.verkeer4.verkeerdomain.provider.HereMapsProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.IPOIProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.IProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.ISummaryProvider;
-import be.ugent.verkeer4.verkeerdomain.provider.IWeatherProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.TomTomProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.ViaMichelinProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WazeProvider;
-import be.ugent.verkeer4.verkeerdomain.provider.WeatherProvider;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -140,11 +138,7 @@ public class ProviderService extends BaseService implements IProviderService {
             for (Future future : futures) {
                 try {
                     future.get(60, TimeUnit.SECONDS);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (TimeoutException ex) {
+                } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                     Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -171,8 +165,8 @@ public class ProviderService extends BaseService implements IProviderService {
      * @return 
      */
     @Override
-    public List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to) {
-        return repo.getRouteDataSet().getItemsForRoute(routeId, from, to);
+    public List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to, String order) {
+        return repo.getRouteDataSet().getItemsForRoute(routeId, from, to, order);
     }
 
     /**
@@ -223,11 +217,7 @@ public class ProviderService extends BaseService implements IProviderService {
         for (Future future : futures) {
             try {
                 future.get(60, TimeUnit.SECONDS);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ExecutionException ex) {
-                Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (TimeoutException ex) {
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
