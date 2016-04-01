@@ -16,18 +16,22 @@
                 <h3 class="panel-title">Compare routes</h3>
             </div>
             <div class="panel-body">
-                <label for="provider1">First provider</label>
-                <form id="provider1">
-                    <select name="todo">
-                        <option value="todo">todo</option>
+                <div>
+                    <label for="provider1">First provider</label>
+                    <select id="provider1" class="form-control">
+                        <c:forEach var="provider" items="${providers}">
+                            <option value="${provider}">${provider}</option>
+                        </c:forEach>
                     </select>
-                </form>
-                <label for="provider2">Second provider</label>
-                <form id="provider2">
-                    <select name="todo">
-                        <option value="todo">todo</option>
+                </div>
+                <div style="margin: 10px auto">
+                    <label for="provider2">Second provider</label>
+                    <select id="provider2" class="form-control">
+                        <c:forEach var="provider" items="${providers}">
+                            <option value="${provider}">${provider}</option>
+                        </c:forEach>
                     </select>
-                </form>
+                </div>
                 <div id="container" style="height: 400px"></div>
                 <button id="toggle-btn" type="button" class="btn btn-primary" style="margin: 10px auto">Toggle</button>
             </div>

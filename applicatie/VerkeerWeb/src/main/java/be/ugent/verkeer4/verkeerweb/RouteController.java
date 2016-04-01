@@ -371,8 +371,18 @@ public class RouteController {
     }
 
     @RequestMapping(value = "/route/compare", method = RequestMethod.GET)
-    public ModelAndView greeting() throws Exception {
+    public ModelAndView greeting() {
+        // get provider names sorted
+        ProviderEnum[] providersEnum = ProviderEnum.values();
+        String[] providers = new String[providersEnum.length];
+        for (int i = 0; i < providers.length; i++) {
+            providers[i] = providersEnum[i].name();
+        }
+        Arrays.sort(providers);
+
+        // send view
         ModelAndView model = new ModelAndView("route/compare");
+        model.addObject("providers", providers);
         return model;
     }
 }
