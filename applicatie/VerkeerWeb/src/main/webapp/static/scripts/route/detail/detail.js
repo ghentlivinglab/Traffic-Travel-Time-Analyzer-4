@@ -33,7 +33,7 @@
             }
         );
         updateBtn.addEventListener("click", trajectDetail.getRouteData);
-        toggleBtn.addEventListener("click", trajectDetail.toggleChart);
+        toggleBtn.addEventListener("click", routeChart.toggleChart);
         trajectDetail.markExtremeProviders();
         routeChart.buildChart(chartId);
         trajectDetail.getRouteData();
