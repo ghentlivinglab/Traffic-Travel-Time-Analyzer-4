@@ -34,3 +34,5 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 14/03/16,20:00,22:30,Thuis,"Dashboard voorbereiding voor standup + verwerken feedback sprint 1 analyse + onderzoek selenium tests",,
 15/03/16,08:15,12:30,School,"Bespreken issues sprint 2 + start dashboard en documentatie opmerkingen sprint 1 afwerken",,
 18/03/16,16:00,17:00,Thuis,"Dashboard frontend + nieuwe overview per route prototype",#47,
+25/03/16,17:00,17:30,Thuis,"Onderzoek Selenium Testing en POC",,
+04/04/16,20:45,21:45,Thuis,"Autostrade route's toegevoegd",#69,
