@@ -21,7 +21,7 @@ if(scalar @ARGV >= 5) {
 	$avoidHighways = @ARGV[4];
 }
 
-my $cachename = "tomtom.cache";
+my $cacheName = "tomtom.cache";
 
 # voer de main functie uit de de gegevens zal opvragen en printen
 main();
@@ -39,7 +39,9 @@ sub main {
 	}
 	else {
 		# vraag eerst de website op waar in de javascript file  gereferenced wordt
-		my $bootstrapUrl = getBootstrapScriptUrl();
+		#my $bootstrapUrl = getBootstrapScriptUrl();
+		# // EDIT: de website is aangepast, de api key staat nu ergens anders
+		my $bootstrapUrl = 'https://mydrive.tomtom.com/onp-conf.js?v=1.04';
 		# haal nu de api key uit de javascript file
 		$apiKey = getAPIKey($bootstrapUrl);
 		$cache->{"apikey"} = $apiKey;
@@ -56,11 +58,11 @@ sub main {
 ##################
 sub readCache {
 	my @args = @ARGV;
-	@ARGV = ( $cachename );
+	@ARGV = ( $cacheName );
 	
 	# check de last modified time van de  cache file
 	(my $dev,my $ino,my $mode,my $nlink,my $uid,my $gid,my $rdev,my $size,
-   my $atime,my $mtime,my $ctime,my $blksize,my $blocks) =  stat("here.cache");
+   my $atime,my $mtime,my $ctime,my $blksize,my $blocks) =  stat($cacheName);
    
    # als cache ouder is dan een uur gebruik cache niet meer
    my $age = time - $mtime;
@@ -116,11 +118,11 @@ sub getAPIKey {
 	my $response = `curl --insecure -s -o - "$bootstrapUrl"`;
 	
 	# eerst substringen naar de apikey: is STUKKEN sneller
-	my $idx = index($response, "apikey:");
+	my $idx = index($response, "NKW_ROUTING_API_KEY:");
 	my $part = substr($response,$idx, 200);
 	
 	# parse de apikey uit de javascript file met regex
-	if($part =~ /.*apikey\:\s*'(.*?)'.*/gc) {
+	if($part =~ /.*NKW_ROUTING_API_KEY\:\s*"(.*?)".*/gc) {
 		return $1;
 	}
 	
@@ -137,20 +139,20 @@ sub printRouteData {
 	# als we highways moeten avoiden is dit de parameter die moet meegegeven worden
 	my $routeType;
 	if($avoidHighways) {
-		$routeType = "Shortest";
+		$routeType = "shortest";
 	}
 	else {
-		$routeType = "Quickest";
+		$routeType = "fastest";
 	}
 	
 	# bouw url op
-	my $url = 'http://api.internal.tomtom.com/lbs/services/route/3/' . $fromLat . ',' . $fromLng . ':' . $toLat . ',' . $toLng . '/' . $routeType .'/json?key=' . $apiKey . '&language=en&projection=EPSG4326&avoidTraffic=false&includeTraffic=true&day=today&time=now&iqRoutes=2&trafficModelId=1455899653197&map=basic';
+	my $url = 'https://api.tomtom.com/routing/1/calculateRoute/' . $fromLat . ',' . $fromLng . ':' . $toLat . ',' . $toLng . '/json?key=' . $apiKey . '&language=en&traffic=true&report=effectiveSettings&travelMode=car&routeType=' . $routeType;
 	
 	# vraag gegevens op
 	my $response = `curl --insecure -s -o - "$url"`;
 	
 	# haal de volledige inhoud van de instructions json property uit de response met regex
-	if($response =~ /.*?"summary"\s*\:\s*\{(.*?)"instructions"/gc) {
+	if($response =~ /"routes":\[{"summary":{(.*?)}/gc) {
 		my $summary = $1;
 		
 		# split de instructions in stukken
@@ -167,7 +169,7 @@ sub printRouteData {
 		
 		#print de header en de route data
 		print "totalDistanceMeters;totalTimeSeconds;totalDelaySeconds\n";
-		print $obj{'"totalDistanceMeters"'} . ";" . $obj{'"totalTimeSeconds"'} . ";" . $obj{'"totalDelaySeconds"'} . "\n";
+		print $obj{'"lengthInMeters"'} . ";" . $obj{'"travelTimeInSeconds"'} . ";" . $obj{'"trafficDelayInSeconds"'} . "\n";
 		
 	}
 }

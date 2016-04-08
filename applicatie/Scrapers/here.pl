@@ -64,7 +64,7 @@ sub readCache {
 	
 	# check de last modified time van de  cache file
 	(my $dev,my $ino,my $mode,my $nlink,my $uid,my $gid,my $rdev,my $size,
-   my $atime,my $mtime,my $ctime,my $blksize,my $blocks) =  stat("here.cache");
+   my $atime,my $mtime,my $ctime,my $blksize,my $blocks) =  stat($cacheName);
    
    # als cache ouder is dan een uur gebruik cache niet meer
    my $age = time - $mtime;
