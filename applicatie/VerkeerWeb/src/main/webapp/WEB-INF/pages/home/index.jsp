@@ -77,7 +77,7 @@
                                         <td>5' 12"</td>
                                         <td>Accident</td>
                                     </tr>
-                                    <tr>
+                                    <tr class="info">
                                         <td><a href="#">Detail</a></td>
                                         <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
                                         <td>15 km</td>
@@ -105,14 +105,14 @@
                                         <td>5' 12"</td>
                                         <td>Wegenwerken</td>
                                     </tr>
-                                    <tr class="success">
+                                    <tr class="warning">
                                         <td><a href="#">Detail</a></td>
                                         <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
                                         <td>15 km</td>
                                         <td>5' 12"</td>
                                         <td>Autovrij weekend</td>
                                     </tr>
-                                    <tr class="success">
+                                    <tr class="info">
                                         <td><a href="#">Detail</a></td>
                                         <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
                                         <td>15 km</td>

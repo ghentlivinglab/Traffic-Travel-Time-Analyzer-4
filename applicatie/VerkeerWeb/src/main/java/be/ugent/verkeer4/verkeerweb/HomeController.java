@@ -48,7 +48,7 @@ public class HomeController {
         
         //overlopen van de logEntries in de database
         //enkel de laatste 100 entries weergeven
-        for(int i = lst.size()-1; i >= (lst.size() - 100); i--){
+        for(int i = lst.size()-1; i >= (lst.size() - 50); i--){
             Logging l = lst.get(i);
             LogEntryVM entry = new LogEntryVM();
             entry.setId(l.getId());

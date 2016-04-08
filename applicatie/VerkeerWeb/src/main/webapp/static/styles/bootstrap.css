@@ -2392,6 +2392,16 @@ table th[class*="col-"] {
   background-color: #008000;
   color: #ffffff;
 }
+
+.table > thead > tr.info > td > a,
+.table > tbody > tr.info > td > a,
+.table > tfoot > tr.info > td > a,
+.table > thead > tr.info > th > a,
+.table > tbody > tr.info > th > a,
+.table > tfoot > tr.info > th > a {
+  color: #ffffff;
+}
+
 .table-hover > tbody > tr > td.info:hover,
 .table-hover > tbody > tr > th.info:hover,
 .table-hover > tbody > tr.info:hover > td,
@@ -2423,6 +2433,15 @@ table th[class*="col-"] {
   background-color: #ffa500;
   color: #ffffff;
 }
+
+.table > thead > tr.warning > td > a,
+.table > tbody > tr.warning > td > a,
+.table > tfoot > tr.warning > td > a,
+.table > thead > tr.warning > th > a,
+.table > tbody > tr.warning > th > a,
+.table > tfoot > tr.warning > th > a {
+  color: #ffffff;
+}
 .table > thead > tr > td.danger,
 .table > tbody > tr > td.danger,
 .table > tfoot > tr > td.danger,
@@ -2446,6 +2465,16 @@ table th[class*="col-"] {
   background-color: #ff0000;
   color: #ffffff;
 }
+
+.table > thead > tr.danger > td > a,
+.table > tbody > tr.danger > td > a,
+.table > tfoot > tr.danger > td > a,
+.table > thead > tr.danger > th > a,
+.table > tbody > tr.danger > th > a,
+.table > tfoot > tr.danger > th > a {
+  color: #ffffff;
+}
+
 .table-responsive {
   min-height: .01%;
   overflow-x: auto;
