@@ -12,8 +12,6 @@ import be.ugent.verkeer4.verkeerdomain.POIService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public abstract class BaseService {

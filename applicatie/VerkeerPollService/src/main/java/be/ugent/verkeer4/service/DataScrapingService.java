@@ -9,8 +9,6 @@ import be.ugent.verkeer4.verkeerdomain.ProviderService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DataScrapingService  extends BaseService {
     
