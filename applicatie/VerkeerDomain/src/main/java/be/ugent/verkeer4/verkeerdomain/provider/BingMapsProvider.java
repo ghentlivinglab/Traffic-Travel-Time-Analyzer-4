@@ -8,9 +8,6 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.provider.bing.BingMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.bing.ResourceSet;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Tomas Bolckmans

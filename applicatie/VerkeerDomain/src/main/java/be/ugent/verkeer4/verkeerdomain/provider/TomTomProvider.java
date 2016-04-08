@@ -12,8 +12,6 @@ import be.ugent.verkeer4.verkeerdomain.provider.tomtom.TomTomClient;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvider {
 

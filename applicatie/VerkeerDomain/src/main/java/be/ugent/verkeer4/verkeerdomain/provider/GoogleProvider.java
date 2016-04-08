@@ -14,8 +14,6 @@ import be.ugent.verkeer4.verkeerdomain.provider.google.Element;
 import be.ugent.verkeer4.verkeerdomain.provider.google.GoogleMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.google.Row;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**

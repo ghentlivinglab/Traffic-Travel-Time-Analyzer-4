@@ -9,8 +9,6 @@ import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class WazeProvider extends BaseProvider implements IProvider, IPOIProvider {
 

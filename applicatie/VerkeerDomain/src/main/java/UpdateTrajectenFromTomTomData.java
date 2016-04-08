@@ -10,8 +10,6 @@ import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Leg;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Point;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.TomTomClient;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class UpdateTrajectenFromTomTomData {
 

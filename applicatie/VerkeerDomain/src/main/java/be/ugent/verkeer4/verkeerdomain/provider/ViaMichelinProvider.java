@@ -5,8 +5,6 @@ import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ViaMichelinProvider extends BaseProvider implements IProvider {
 
