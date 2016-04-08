@@ -11,8 +11,6 @@ import be.ugent.verkeer4.verkeerdomain.provider.here.HereMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.here.Response;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class HereMapsProvider extends BaseProvider implements IProvider, IPOIProvider {
 

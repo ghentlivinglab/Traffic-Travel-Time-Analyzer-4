@@ -10,8 +10,6 @@ import be.ugent.verkeer4.verkeerdomain.WeatherProviderService;
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
