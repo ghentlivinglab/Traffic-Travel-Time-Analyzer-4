@@ -1,5 +1,7 @@
 package be.ugent.verkeer4.verkeerdomain.provider;
 
+import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
@@ -21,8 +23,7 @@ public class BeMobileProvider extends BaseProvider implements IProvider, IPOIPro
         try {
             return scrape(route, "bemobile.pl");
         } catch (Exception ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId(), ex);
-
+            LogService.getInstance().insert(LogTypeEnum.Warning, BeMobileProvider.class.getName(), "Scraping failed for route " + route.getId() + ex.getMessage());
             return null;
         }
     }
@@ -32,10 +33,10 @@ public class BeMobileProvider extends BaseProvider implements IProvider, IPOIPro
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.BeMobile,"bemobilepoi.pl");
         } catch (IOException ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, BeMobileProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, BeMobileProvider.class.getName(), ex.getMessage());
             return null;
         }
     }

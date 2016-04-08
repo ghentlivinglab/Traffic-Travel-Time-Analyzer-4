@@ -5,6 +5,7 @@
  */
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,7 +26,7 @@ public class WeatherService extends BaseService implements IWeatherService {
         try {
             repo.getWeatherSet().update(data);
         } catch (Exception ex) {
-            Logger.getLogger(WeatherService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, WeatherService.class.getName(), ex.getMessage());
         }
     }
 

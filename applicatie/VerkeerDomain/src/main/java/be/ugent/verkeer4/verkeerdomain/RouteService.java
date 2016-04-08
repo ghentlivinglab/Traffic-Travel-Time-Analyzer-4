@@ -1,5 +1,6 @@
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POICategoryEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
@@ -80,7 +81,7 @@ public class RouteService extends BaseService implements IRouteService {
                 this.updateWayPoints(r);
             }
         } catch (Exception ex) {
-            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, RouteService.class.getName(), ex.getMessage());
         }
     }
 
@@ -279,7 +280,7 @@ public class RouteService extends BaseService implements IRouteService {
 
             repo.getRouteSet().update(route);
         } catch (Exception ex) {
-            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, RouteService.class.getName(), ex.getMessage());
         }
     }
 

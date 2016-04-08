@@ -1,5 +1,7 @@
 package be.ugent.verkeer4.verkeerdomain.provider;
 
+import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
@@ -29,8 +31,7 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
                 return result;
             }
         } catch (Exception ex) {
-            Logger.getLogger(HereMapsProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId() + ", falling back to API", ex);
-
+            LogService.getInstance().insert(LogTypeEnum.Warning, HereMapsProvider.class.getName(), "Scraping failed for route " + route.getId() + ", falling back to API" + ex);
             return useAPI(route);
         }
     }
@@ -55,7 +56,7 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
 
             return null;
         } catch (IOException ex) {
-            Logger.getLogger(HereMapsProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, HereMapsProvider.class.getName(), ex.getMessage());
             return null;
         }
     }
@@ -65,10 +66,10 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.HereMaps, "herepoi.pl");
         } catch (IOException ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, HereMapsProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, HereMapsProvider.class.getName(), ex.getMessage());
             return null;
         }
     }

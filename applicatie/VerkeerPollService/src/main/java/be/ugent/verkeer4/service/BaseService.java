@@ -7,8 +7,10 @@ package be.ugent.verkeer4.service;
 
 import be.ugent.verkeer4.verkeerdomain.IPOIService;
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
+import be.ugent.verkeer4.verkeerdomain.LogService;
 import be.ugent.verkeer4.verkeerdomain.POIService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +33,7 @@ public abstract class BaseService {
             try {
                 run();
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BackgroundPOIRouteMatcherService.class.getName()).log(Level.SEVERE, null, ex);
+                LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName()+ " Poll", ex.getMessage());
             }
         });
         t.setName(this.name);
@@ -57,7 +59,7 @@ public abstract class BaseService {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName()+ " Poll", ex.getMessage());
                 }
             }
 

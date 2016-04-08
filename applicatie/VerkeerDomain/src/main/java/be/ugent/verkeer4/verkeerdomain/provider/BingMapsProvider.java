@@ -1,5 +1,7 @@
 package be.ugent.verkeer4.verkeerdomain.provider;
 
+import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
@@ -49,7 +51,7 @@ public class BingMapsProvider extends BaseProvider implements IProvider {
             return null;
         } catch (Exception ex) {
             //Error logging
-             Logger.getLogger(TomTomProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId(), ex);
+            LogService.getInstance().insert(LogTypeEnum.Warning, BingMapsProvider.class.getName(), "Scraping failed for route " + route.getId() + ex.getMessage());
             return null;
         }
     }    
