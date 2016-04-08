@@ -266,7 +266,7 @@ public class RouteService extends BaseService implements IRouteService {
                     int jamId = repo.getRouteTrafficJamSet().insert(jam);
                     jam.setId(jamId);
 
-                    AnalyzeNearByPOIsForJamCauses(poiService, jam, maxDistanceForPOIRouteMatching);
+                    analyzeNearByPOIsForJamCauses(poiService, jam, maxDistanceForPOIRouteMatching);
 
                     // TODO analyze weather etc...
                 }
@@ -290,7 +290,7 @@ public class RouteService extends BaseService implements IRouteService {
      * @param jam
      * @param maxDistanceForPOIRouteMatching 
      */
-    private void AnalyzeNearByPOIsForJamCauses(IPOIService poiService, RouteTrafficJam jam, double maxDistanceForPOIRouteMatching) {
+    private void analyzeNearByPOIsForJamCauses(IPOIService poiService, RouteTrafficJam jam, double maxDistanceForPOIRouteMatching) {
         // TODO determine causes
         double jamDurationSeconds = (jam.getTo().getTime() - jam.getFrom().getTime()) / 1000;
 

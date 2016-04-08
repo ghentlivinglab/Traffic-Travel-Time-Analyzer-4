@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="RouteController">
+  <ClassDiagramComponents>
+    <Class name="RouteController" package="be.ugent.verkeer4.verkeerweb" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="getList" returnType="ModelAndView" visibility="public"/>
+        <Method name="getRouteOverviewModel" returnType="RouteOverviewVM" visibility="private">
+          <Argument type="IRouteService" name="routeService"/>
+        </Method>
+        <Method name="ajaxGetRouteData" returnType="RouteDetailData" visibility="public">
+          <Argument type="int" name="id"/>
+          <Argument type="Date" name="startDate"/>
+          <Argument type="Date" name="endDate"/>
+        </Method>
+        <Method name="getDetail" returnType="ModelAndView" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="getMap" returnType="ModelAndView" visibility="public"/>
+        <Method name="ajaxGetMapRoutes" returnType="MapData" visibility="public">
+          <Argument type="HttpServletRequest" name="req"/>
+        </Method>
+        <Method name="edit" returnType="ModelAndView" visibility="public">
+          <Argument type="Integer" name="id"/>
+        </Method>
+        <Method name="edit" returnType="ModelAndView" visibility="public">
+          <Argument type="RouteEditVM" name="route"/>
+          <Argument type="BindingResult" name="result"/>
+        </Method>
+        <Method name="getRouteMapData" returnType="MapData" visibility="private">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="getTrafficDelayPercentage" returnType="double" visibility="private">
+          <Argument type="Route" name="r"/>
+          <Argument type="RouteData[]" name="summaries"/>
+        </Method>
+        <Method name="getAllRouteMapData" returnType="MapData" visibility="private"/>
+        <Method name="getMapPOIFromPOI" returnType="MapPOI" visibility="private">
+          <Argument type="POI" name="poi"/>
+        </Method>
+        <Method name="getMapRoute" returnType="MapRoute" visibility="private">
+          <Argument type="Route" name="r"/>
+          <Argument type="List&lt;RouteData&gt;" name="routeSummaries"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>

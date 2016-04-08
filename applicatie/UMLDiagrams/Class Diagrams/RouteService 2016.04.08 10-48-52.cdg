@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="RouteService">
+  <ClassDiagramComponents>
+    <Class name="RouteService" package="be.ugent.verkeer4.verkeerdomain" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="initialTrafficJamStartPoint" type="Date" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getRoutes" returnType="List&lt;Route&gt;" visibility="public"/>
+        <Method name="getRoute" returnType="Route" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="insertRouteWaypoint" returnType="void" visibility="public">
+          <Argument type="RouteWaypoint" name="wp"/>
+        </Method>
+        <Method name="updateRoute" returnType="void" visibility="public">
+          <Argument type="Route" name="r"/>
+          <Argument type="boolean" name="updateWaypoints"/>
+        </Method>
+        <Method name="updateWayPoints" returnType="void" visibility="private">
+          <Argument type="Route" name="r"/>
+        </Method>
+        <Method name="getRouteWaypoints" returnType="List&lt;RouteWaypoint&gt;" visibility="public"/>
+        <Method name="getRouteWaypointsForRoute" returnType="List&lt;RouteWaypoint&gt;" visibility="public">
+          <Argument type="int" name="routeId"/>
+        </Method>
+        <Method name="getMostRecentRouteSummaries" returnType="List&lt;RouteData&gt;" visibility="public"/>
+        <Method name="getMostRecentRouteSummariesForRoute" returnType="List&lt;RouteData&gt;" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="getBoundingBoxOfAllRoutes" returnType="BoundingBox" visibility="public"/>
+        <Method name="getRouteTrafficJamsForRouteBetween" returnType="List&lt;RouteTrafficJam&gt;" visibility="public">
+          <Argument type="int" name="routeId"/>
+          <Argument type="Date" name="from"/>
+          <Argument type="Date" name="until"/>
+        </Method>
+        <Method name="getRouteTrafficJamCausesForRouteBetween" returnType="List&lt;GroupedRouteTrafficJamCause&gt;" visibility="public">
+          <Argument type="int" name="routeId"/>
+          <Argument type="Date" name="startDate"/>
+          <Argument type="Date" name="endDate"/>
+        </Method>
+        <Method name="getTrafficJamsForDay" returnType="List&lt;RouteTrafficJam&gt;" visibility="private">
+          <Argument type="int" name="routeId"/>
+          <Argument type="Date" name="day"/>
+        </Method>
+        <Method name="finalizeTrafficJams" returnType="void" visibility="public">
+          <Argument type="Route" name="route"/>
+          <Argument type="Date" name="today"/>
+        </Method>
+        <Method name="AnalyzeNearByPOIsForJamCauses" returnType="void" visibility="private">
+          <Argument type="IPOIService" name="poiService"/>
+          <Argument type="RouteTrafficJam" name="jam"/>
+          <Argument type="double" name="maxDistanceForPOIRouteMatching"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>

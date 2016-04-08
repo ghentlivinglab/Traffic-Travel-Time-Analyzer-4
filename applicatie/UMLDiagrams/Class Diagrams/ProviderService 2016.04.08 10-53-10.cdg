@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="ProviderService">
+  <ClassDiagramComponents>
+    <Class name="ProviderService" package="be.ugent.verkeer4.verkeerdomain" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="perRouteProviders" type="List&lt;IProvider&gt;" visibility="private" isFinal="true"/>
+        <Field name="summaryProviders" type="List&lt;ISummaryProvider&gt;" visibility="private" isFinal="true"/>
+        <Field name="poiProviders" type="List&lt;IPOIProvider&gt;" visibility="private" isFinal="true"/>
+        <Field name="routeService" type="IRouteService" visibility="private" isFinal="true"/>
+        <Field name="poiService" type="IPOIService" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="IRouteService" name="routeService"/>
+          <Argument type="IPOIService" name="poiService"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="saveRouteData" returnType="void" visibility="private" isSynchronized="true">
+          <Argument type="RouteData" name="data"/>
+        </Method>
+        <Method name="poll" returnType="void" visibility="public"/>
+        <Method name="getRouteDataForRoute" returnType="List&lt;RouteData&gt;" visibility="public">
+          <Argument type="int" name="routeId"/>
+          <Argument type="Date" name="from"/>
+          <Argument type="Date" name="to"/>
+        </Method>
+        <Method name="pollPOI" returnType="void" visibility="public">
+          <Argument type="BoundingBox" name="bbox"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>
