@@ -3,9 +3,7 @@
 <ClassDiagram name="RouteService">
   <ClassDiagramComponents>
     <Class name="RouteService" package="be.ugent.verkeer4.verkeerdomain" visibility="public" xPosition="20.0" yPosition="20.0">
-      <Fields>
-        <Field name="initialTrafficJamStartPoint" type="Date" visibility="private" isFinal="true"/>
-      </Fields>
+      <Fields/>
       <Constructors>
         <Constructor visibility="public"/>
       </Constructors>
@@ -51,7 +49,7 @@
           <Argument type="Route" name="route"/>
           <Argument type="Date" name="today"/>
         </Method>
-        <Method name="AnalyzeNearByPOIsForJamCauses" returnType="void" visibility="private">
+        <Method name="analyzeNearByPOIsForJamCauses" returnType="void" visibility="private">
           <Argument type="IPOIService" name="poiService"/>
           <Argument type="RouteTrafficJam" name="jam"/>
           <Argument type="double" name="maxDistanceForPOIRouteMatching"/>
