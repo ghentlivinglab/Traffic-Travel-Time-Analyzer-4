@@ -27,3 +27,6 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 14/03/16,23:00,23:15,Thuis,Mijn deel issue afgwerkt,68,
 17/03/16,14:00,15:00,School,Verschillende layout verbeteringen en bugfixes op de trajectdetail pagina + met Thomas even kijken naar een beter design voor de overzichtspagina,,
 22/03/16,08:15,12:15,School,VOP meeting,,
+31/03/16,22:00,23:59,Thuis,Chart gesplitst van detail en skelet compare pagina opgezet,74,
+01/04/16,01:00,02:00,Thuis,View design verandert en dynamisch gemaakt,74,
+11/03/16,22:00,23:59,Thuis,Verder gewerkt aan algo voor gemiddelde te berekenen en view aangevuld met basic datum sorteer optie,74,
