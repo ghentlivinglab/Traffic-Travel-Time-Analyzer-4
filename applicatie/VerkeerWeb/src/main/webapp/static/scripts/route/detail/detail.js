@@ -1,6 +1,6 @@
-(function (trajectDetail, $) {
-    "use strict";
+(function (trajectDetail, verkeer, $, moment, Highcharts) {
 
+    // chart and data variabels
     var routeChart;
     var combinedTravelTimes = [];
     var combinedDelays = [];
@@ -113,73 +113,89 @@
         93: {discription: "Unknown"}
     };
 
+    // view only variables
+    var refreshIcon;
+    var updateBtn;
+    var toggleBtn;
+    var datePickerBegin;
+    var datePickerEnd;
+
     $(document).ready(function () {
+        refreshIcon = document.getElementById("refresh-icon");
+        updateBtn = document.getElementById("update-btn");
+        toggleBtn = document.getElementById("toggle-btn");
+        datePickerBegin = $("#datetimepicker-begin");
+        datePickerEnd = $("#datetimepicker-end");
         trajectDetail.markExtremeProviders();
-        $("#datetimepicker-begin").datetimepicker({
-            format: 'DD/MM/YYYY HH:mm',
+        datePickerBegin.datetimepicker({
+            format: "DD/MM/YYYY HH:mm",
             showTodayButton: true,
             showClear: true,
-            defaultDate: moment().startOf('day')
+            defaultDate: moment().startOf("day")
         });
 
-        $("#datetimepicker-end").datetimepicker(
-                {
-                    format: 'DD/MM/YYYY HH:mm',
-                    showTodayButton: true,
-                    showClear: true,
-                    defaultDate: moment().endOf('day')
-                }
+        datePickerEnd.datetimepicker(
+            {
+                format: "DD/MM/YYYY HH:mm",
+                showTodayButton: true,
+                showClear: true,
+                defaultDate: moment().endOf("day")
+            }
         );
-
-        $("#update-btn").click(trajectDetail.getRouteData);
-        $("#toggle-btn").click(trajectDetail.toggleChart);
+        updateBtn.addEventListener("click", trajectDetail.getRouteData);
+        toggleBtn.addEventListener("click", trajectDetail.toggleChart);
         trajectDetail.buildChart();
-        // Fill table with the default filters
         trajectDetail.getRouteData();
     });
 
     trajectDetail.getRouteData = function () {
+        // spin the update button
+        refreshIcon.classList.add("spinning");
         $.ajax({
             method: "GET",
             url: "../routedata",
             data: {
                 id: $("#routeId").val(),
-                startDate: $("#datetimepicker-begin").data("DateTimePicker").date().toDate(),
-                endDate: $("#datetimepicker-end").data("DateTimePicker").date().toDate()
+                startDate: datePickerBegin.data("DateTimePicker").date().toDate(),
+                endDate: datePickerEnd.data("DateTimePicker").date().toDate()
+            },
+            success: function (data) {
+                showingDelayChart = false;
+                routeChart.setTitle({text: travelTimeTitle});
+                trajectDetail.combineRouteData(data.values, "travelTime", combinedTravelTimes);
+                trajectDetail.combineRouteData(data.values, "delay", combinedDelays);
+                trajectDetail.setChartData(combinedTravelTimes);
+                trajectDetail.buildTrafficJamTable(data.jams);
+            },
+            complete: function(){
+                // spin the update button
+                refreshIcon.classList.remove("spinning");
             }
-        })
-                .done(function (data) {
-                    showingDelayChart = false;
-                    routeChart.setTitle({text: travelTimeTitle});
-                    trajectDetail.combineRouteData(data.values, "travelTime", combinedTravelTimes);
-                    trajectDetail.combineRouteData(data.values, "delay", combinedDelays);
-                    trajectDetail.setChartData(combinedTravelTimes);
-                    trajectDetail.buildTrafficJamTable(data.jams);
-                });
+        });
     };
 
     trajectDetail.buildChart = function () {
         routeChart = new Highcharts.Chart({
             chart: {
-                zoomType: 'x',
-                renderTo: 'container'
+                zoomType: "x",
+                renderTo: "container"
             },
             title: {
                 text: travelTimeTitle
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
-                        'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+                    "Click and drag in the plot area to zoom in" : "Pinch the chart to zoom in"
             },
             xAxis: {
                 title: {
-                    text: 'Timestamp'
+                    text: "Timestamp"
                 },
                 type: "datetime"
             },
             yAxis: {
                 title: {
-                    text: 'Duration'
+                    text: "Duration"
                 },
                 labels: {
                     formatter: function () {
@@ -190,14 +206,14 @@
             tooltip: {
                 formatter: function () {
                     var date = moment(this.x).format("dddd, MMMM Do, HH:mm:ss");
-                    return date + "<br/>" + '<span style="color:' + this.point.series.color + '">' + trajectDetail.getPointSymbol(this.point)
-                            + '</span> ' + this.series.name + ': <b>' + verkeer.secondsToText(this.point.y) + "</b>";
+                    return date + "<br/>" + "<span style='color:" + this.point.series.color + "'>" + trajectDetail.getPointSymbol(this.point)
+                        + "</span> " + this.series.name + ": <b>" + verkeer.secondsToText(this.point.y) + "</b>";
                 }
             },
             legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle',
+                layout: "vertical",
+                align: "right",
+                verticalAlign: "middle",
                 borderWidth: 0
             }
         });
@@ -207,20 +223,20 @@
         var symbol = "";
         if (point.series && point.series.symbol) {
             switch (point.series.symbol) {
-                case 'circle':
-                    symbol = '●';
+                case "circle":
+                    symbol = "●";
                     break;
-                case 'diamond':
-                    symbol = '♦';
+                case "diamond":
+                    symbol = "♦";
                     break;
-                case 'square':
-                    symbol = '■';
+                case "square":
+                    symbol = "■";
                     break;
-                case 'triangle':
-                    symbol = '▲';
+                case "triangle":
+                    symbol = "▲";
                     break;
-                case 'triangle-down':
-                    symbol = '▼';
+                case "triangle-down":
+                    symbol = "▼";
                     break;
                 default:
                     symbol = "";
@@ -325,7 +341,6 @@
         }
     };
 
-
     trajectDetail.buildTrafficJamTable = function (jams) {
         var table = document.getElementById("tblJamsBody");
 
@@ -355,7 +370,6 @@
                     if (icon !== "") {
                         jamRow += "<img src='" + icon + "'/>";
                     }
-                    //(C:" + causes[j].category + ", subcat: " + causes[j].subCategory + "): "
                     
                     if(jam.causes[j].description === null && jam.causes[j].category === "Weather") {
                         jamRow += weatherConditions[jam.causes[j].subCategory].discription;
@@ -366,7 +380,7 @@
                     
                     jamRow += " " + (causes[j].avgProbability * 100).toFixed(2) + "%";
                     if (j !== jam.causes.length - 1)
-                        jamRow += "<br/>"
+                        jamRow += "<br/>";
                 }
             }
 
@@ -434,5 +448,4 @@
         
         return iconUrl += ".png";
     };
-
-}(window.verkeer.trajectDetail = window.verkeer.trajectDetail || {}, jQuery));
+}(window.verkeer.trajectDetail = window.verkeer.trajectDetail || {}, verkeer, jQuery, moment, Highcharts));

@@ -1,3 +1,6 @@
+############################
+# Tomtompoi.pl scraped  alle poi gegevens binnen de opgegeven bounding box
+############################
 use strict;
 use JSON;
 use utf8; 
@@ -8,30 +11,41 @@ if(scalar @ARGV < 4) {
 	exit(1);
 }
 
+# Argumenten
+# geo coordinaten voor bounding box
 my $fromLat = @ARGV[0]; #"51.05633";
 my $fromLng = @ARGV[1]; #"3.69485";
 my $toLat = @ARGV[2]; #"51.038768";
 my $toLng = @ARGV[3]; #"3.736953";
 
+# cache file voor api key tijdelijk in te bewaren
+my $cacheName = "tomtompoi.cache";
 
+# mapping van de types naar een duidelijkere omschrijving
 my %iconMeaning = ( 	0 => "unknown", 1 => "accident", 2 => "fog", 3 => "dangerous_conditions", 
 						4 => "rain", 5 => "ice", 6 => "jam", 7 => "lane_closed", 8 => "road_closed", 9 => "road_works",
 						10 => "wind", 11 => "flooding", 12 => "detour", 13 => "cluster");
-				
+		
+# mapping van het type		
 my %tyMeaning = ( 0 => "unknown", 1 => "minor", 2 => "moderate", 3 => "major", 4 => "undefined" );
 
+# voer de main functie uit de de gegevens zal opvragen en printen
 main();
 
 sub main {
 
+	# we moeten eerst op zoek gaan naar een geldige API Key die we kunnen gebruiken
+	# de API Key cachen we in een file zodat dit niet steeds opnieuw moet opgevraagd worden
 	my $apiKey;
 	
+	# check of de api gecached is
 	my $cache = readCache();
 	if(exists $cache->{"apikey"} && $cache->{"apikey"} ne "") {
 		$apiKey = $cache->{"apikey"};
 	}
 	else {
-		my $bootstrapUrl = getBootstrapScriptUrl();
+		# // EDIT: de website is aangepast, de api key staat nu ergens anders
+		my $bootstrapUrl = "https://mydrive.tomtom.com/onp-conf.js?v=1.04"; #getBootstrapScriptUrl();
 		$apiKey = getAPIKey($bootstrapUrl);
 		$cache->{"apikey"} = $apiKey;
 		saveAPIKey($apiKey);
@@ -43,12 +57,16 @@ sub main {
 
 }
 
+##################
+# Leest de gecachede properties van de cache file
+##################
 sub readCache {
 	my @args = @ARGV;
-	@ARGV = ( "tomtom.cache" );
+	@ARGV = ( $cacheName );
 	
+	# check de last modified time van de  cache file
 	(my $dev,my $ino,my $mode,my $nlink,my $uid,my $gid,my $rdev,my $size,
-   my $atime,my $mtime,my $ctime,my $blksize,my $blocks) =  stat("tomtom.cache");
+   my $atime,my $mtime,my $ctime,my $blksize,my $blocks) =  stat($cacheName);
    
    # als cache ouder is dan een uur gebruik cache niet meer
    my $age = time - $mtime;
@@ -57,28 +75,35 @@ sub readCache {
 		return {};
    }		
 	
+	# lees alle lijnen van de vorm key=value en steek ze in een hash
 	my $obj = {};
-	
 	while(<>) {
 		chomp;
 		my @parts = split("=", $_);
 		$obj->{$parts[0]} = $parts[1];
 	}
 	
+	# restore de oorpsronkelijke args en return de hash
 	@ARGV = @args;
 	return $obj;
 }
 
+#################
+# Saved de API key gegevens in de cache
+#################
 sub saveAPIKey {
 	(my $apikey) = @_;
 	
-	open my $fh, ">tomtom.cache";
+	open my $fh, ">$cacheName";
 	print $fh "apikey=$apikey";
 	close $fh;
 }
 
 
-
+#################
+#  Geeft de bootstrap js url terug waaruit de API key gehaald kan worden
+# EDIT: niet meer van toepassing sinds wijziging website op 8/4/2016
+##################
 sub getBootstrapScriptUrl {
 	my $url ='http://routes.tomtom.com/#/route/' . $fromLat . '°N, ' . $fromLng . '°E@' . $fromLat . ',' . $fromLng . '@-1/' . $toLat . '°N, ' . $toLng . '°E@' . $toLat . ',' . $toLng . '@-1/?leave=now&traffic=false&zoom=12';
 	my $response = `curl --insecure -s -o - "$url"`;
@@ -90,20 +115,21 @@ sub getBootstrapScriptUrl {
 	return "";
 }
 
+
+########################
+# Haalt de API Key gegevens op uit de javascript file
+########################
 sub getAPIKey {
 	(my $bootstrapUrl) = @_;
+	# vraag js inhoud op
 	my $response = `curl --insecure -s -o - "$bootstrapUrl"`;
 	
-	#print "parsing api key\n";
-	# apikey:'dvbfcb88hkrje9ur2fs84uxn'
-	
 	# eerst substringen naar de apikey: is STUKKEN sneller
-	#print $response;
-	my $idx = index($response, "apikey:");
+	my $idx = index($response, "LBS_TRAFFIC_INCIDENTS_API_KEY:");
 	my $part = substr($response,$idx, 200);
 	
-	#print $part;
-	if($part =~ /.*apikey\:\s*'(.*?)'.*/gc) {
+	# parse de apikey uit de javascript file met regex
+	if($part =~ /.*LBS_TRAFFIC_INCIDENTS_API_KEY\:\s*"(.*?)".*/gc) {
 		return $1;
 	}
 	
@@ -111,43 +137,37 @@ sub getAPIKey {
 	exit(1);
 }
 
-
 sub printPOI {
 	(my $apiKey) = @_;
 	
-	# TODO bounding box lat lng -> x,y
-	my $viewportUrl = 'http://api.internal.tomtom.com/lbs/services/viewportDesc/3/6624851.19157%2C410625.297053%2C6640081.269456%2C423657.810376/13/6618707.565422%2C389624.223532%2C6646224.895605%2C444658.883897/9/false/json?key=8r734zursdrdrvcejfhedk8q';
-	
-	my $viewportJson = `curl --insecure -s -o - "$viewportUrl"`;
-	my $viewportResponse = from_json($viewportJson);
-	
-	#print $viewportJson;
-	my $trafficModelId =  $viewportResponse->{"viewpResp"}->{"trafficState"}->{'@trafficModelId'};
-	
-	#print "Traffic model id: " . $trafficModelId;
 	#http://api.internal.tomtom.com/lbs/services/trafficIcons/3/s3/50.98022,3.62719,51.19782,3.83324/13/1456502762951/json?jsonp=jsonp1456502809288&key=dvbfcb88hkrje9ur2fs84uxn&projection=EPSG4326&language=en&style=s3&expandCluster=true
-	my $url = 'http://api.internal.tomtom.com/lbs/services/trafficIcons/3/s3/' . $fromLat . ',' . $fromLng . ',' . $toLat . ',' . $toLng . '/13/' . $trafficModelId . '/json?&key=' . $apiKey . '&projection=EPSG4326&language=nl&style=s3&expandCluster=true&originalPosition=true';
+	my $url = 'http://api-internal.tomtom.com/lbs/services/trafficIcons/3/s3/' . $fromLat . ',' . $fromLng . ',' . $toLat . ',' . $toLng . '/13/-1/json?key=' . $apiKey . '&projection=EPSG4326&language=nl&style=s3&expandCluster=true&originalPosition=true';
 	
-	#print $url;
-	
+	# haal json op
 	my $json = `curl --insecure -s -o - "$url"`;
 	
+	# gebruik xs:json om de json naar een object model om te zetten
 	my $response = from_json($json);
-#	print $json;
 
 	my @pois = @{ $response->{"tm"}->{"poi"} };
 	
+	# print de header
 	print "id;lat;lng;type;traffictype;comments";
 	print "\n";
 	
 	for my $p (@pois) {
 	
+		# print de id van de poi
 		print $p->{"id"};
 		print ";";
+		
+		# print de lat en lng
 		print $p->{"p"}->{"y"};
 		print ";";
 		print $p->{"p"}->{"x"};
 		print ";";
+		
+		# print de overeenkomstige enum waarde voor het type van de poi
 		if($iconMeaning{$p->{"ic"}} eq "jam") {
 			print "3"; # traffic jam
 		}
@@ -167,8 +187,12 @@ sub printPOI {
 			print "0"; # unknown
 		}		
 		print ";";
+		
+		# print het type (major/minor, ...)
 		print $tyMeaning{$p->{"ty"}};
 		print ";";
+		
+		# print de comments als er zijn, anders gebruik de omschrijving van het type als comments
 		if(!$p->{"d"} || $p->{"d"} eq "") {
 			print $iconMeaning{$p->{"ic"}};
 		}

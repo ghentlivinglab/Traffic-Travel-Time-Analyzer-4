@@ -8,6 +8,7 @@
             <jsp:param name="title" value="Traject ${detail.name}"/>
         </jsp:include>
         <jsp:include page="/WEB-INF/shared/maprequirements.jsp"/>
+        <link href="<c:url value="/static/styles/route/detail.css" />" rel="stylesheet">
     </head>
     <body>
         <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
@@ -55,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                </div>      
+                </div>
             </div>
             <div class="row">
                 <div class="panel panel-default">
@@ -85,9 +86,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel-footer">
-                        <button id="update-btn" type="button" class="btn btn-primary">Update</button>
+                        <button id="update-btn" type="button" class="btn btn-primary">
+                            <span id="refresh-icon" class="glyphicon glyphicon-refresh"></span>
+                            <span id="update-btn-txt">Update</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -97,9 +99,7 @@
                         <h3 class="panel-title">History</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="container">
-                            <div id="container" style="min-width: 100px; height: 400px; margin: 0 auto"></div>
-                        </div>
+                            <div id="container" style="height: 400px"></div>
                         <button id="toggle-btn" type="button" class="btn btn-primary" style="margin: 10px auto">Toggle</button>
                     </div>
                 </div>
@@ -129,8 +129,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <script src="<c:url value="/static/scripts/route/map.js" />"></script>
         <script>

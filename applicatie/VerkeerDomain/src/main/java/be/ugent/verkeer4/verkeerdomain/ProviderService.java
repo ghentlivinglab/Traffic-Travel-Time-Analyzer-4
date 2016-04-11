@@ -1,5 +1,6 @@
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
@@ -28,15 +29,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ProviderService extends BaseService implements IProviderService {
 
+    // alle providers waarvoor de verkeergegevens route per route opgevraagd moeten worden
     private final List<IProvider> perRouteProviders;
+    // alle providers waarvoor de verkeergegevens van alle routes in 1x opgevraagd kunnen worden
     private final List<ISummaryProvider> summaryProviders;
-    private final IRouteService routeService;
+    // alle providers waar POI gegevens kunnen bij opgevraagd worden
     private final List<IPOIProvider> poiProviders;
+    
+    private final IRouteService routeService;
     private final IPOIService poiService;
     
     public ProviderService(IRouteService routeService, IPOIService poiService) throws ClassNotFoundException {
@@ -71,22 +74,32 @@ public class ProviderService extends BaseService implements IProviderService {
         
     }
 
+    /**
+     * Slaat de gegeven route data op, in een thread safe manier
+     * @param data 
+     */
     private synchronized void saveRouteData(RouteData data) {
-        Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Saving new route data for route " + data.getRouteId() + " and provider " + data.getProvider());
+        LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Saving new route data for route " + data.getRouteId() + " and provider " + data.getProvider()); 
         repo.getRouteDataSet().insert(data);
     }
 
+    /**
+     * Polled voor nieuwe vertraging gegevens voor alle routes
+     * Elke route wordt in parallel gepolled
+     * @throws ClassNotFoundException 
+     */
     @Override
     public void poll() throws ClassNotFoundException {
 
         ExecutorService pool = Executors.newFixedThreadPool(10);
 
         List<Future> futures = new ArrayList<>();
+        // schedule een fetch van alle summary gegevens
         futures.add(pool.submit(() -> {
             for (ISummaryProvider provider : summaryProviders) {
-                Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Polling for summary on provider " + provider.getClass().getName());
+                LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Polling for summary on provider " + provider.getClass().getName());
                 List<RouteData> lst = provider.poll();
-                Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Polling for summary on provider " + provider.getClass().getName() + " COMPLETE");
+                LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Polling for summary on provider " + provider.getClass().getName() + " COMPLETE");
                 if (lst != null) {
                     for (RouteData rd : lst) {
                         if (rd != null) {
@@ -94,67 +107,84 @@ public class ProviderService extends BaseService implements IProviderService {
                         }
                     }
                 } else {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.WARNING, "Could not fetch summary for provider " + provider.getClass().getName());
+                    LogService.getInstance().insert(LogTypeEnum.Error, ProviderService.class.getName(), "Could not fetch summary for provider " + provider.getClass().getName()); 
                 }
             }
         }));
 
+        // voor alle routes
         List<Route> routes = routeService.getRoutes();
         for (Route route : routes) {
             Route r = route; // CLOSURE!
             long curTime = new Date().getTime();
+            
+            // schedule per provider een poll voor de route
             for (IProvider prov : perRouteProviders) {
                 IProvider provider = prov; // CLOSURE
                 futures.add(pool.submit(() -> {
-
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Polling for route " + r.getId() + " on provider " + provider.getClass().getName());
+                    LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Polling for route " + r.getId() + " on provider " + provider.getClass().getName());
                     RouteData data = provider.poll(r);
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Polling for route " + r.getId() + " on provider " + provider.getClass().getName() + " COMPLETE");
+                    LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Polling for route " + r.getId() + " on provider " + provider.getClass().getName() + " COMPLETE");
                     if (data != null) {
                         saveRouteData(data);
                     } else {
-                        Logger.getLogger(ProviderService.class.getName()).log(Level.WARNING, "Could not fetch route for provider " + provider.getClass().getName() + " for route " + route.getId() + " - " + r.getName());
+                        LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), "Could not fetch route for provider " + provider.getClass().getName() + " for route " + route.getId() + " - " + r.getName());
                     }
                 }));
             }
 
-            // block until everything is finished
+            // wacht tot alle gegevens zijn opgevraagd zodat er geen 2
+            // requests tegelijk naar dezelfde provider kan verstuurd worden
             for (Future future : futures) {
                 try {
                     future.get(60, TimeUnit.SECONDS);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+                    LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
                 } catch (ExecutionException ex) {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+                    LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
                 } catch (TimeoutException ex) {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+                    LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
                 }
             }
             futures.clear();
 
+            // wacht de resterende tijd van de 5sec
             long diff = new Date().getTime() - curTime;
             if (diff > 0 && diff < 5000) { // sleep resterende van de 5 seconden
                 try {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.INFO, "Waiting for " + (5000 - diff) + "ms before continuing");
+                    LogService.getInstance().insert(LogTypeEnum.Info, ProviderService.class.getName(), "Waiting for " + (5000 - diff) + "ms before continuing");
                     Thread.sleep(5000 - diff);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+                    LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
                 }
             }
         }
     }
 
+    /**
+     * Geeft de route data terug voor een bepaalde periode voor een route
+     * @param routeId
+     * @param from
+     * @param to
+     * @return 
+     */
     @Override
     public List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to) {
         return repo.getRouteDataSet().getItemsForRoute(routeId, from, to);
     }
 
+    /**
+     * Polled alle POI providers om nieuwe POI's te detecteren en op te slaan
+     * @param bbox
+     * @throws ClassNotFoundException 
+     */
     @Override
     public void pollPOI(BoundingBox bbox) throws ClassNotFoundException {
         ExecutorService pool = Executors.newFixedThreadPool(6);
 
         List<Future> futures = new ArrayList<>();
 
+        // schedule een poll voor alle poll providers
         for (IPOIProvider prov : poiProviders) {
             futures.add(pool.submit(() -> {
 
@@ -164,7 +194,7 @@ public class ProviderService extends BaseService implements IProviderService {
                 if (pois != null) {
                     for (POI poi : pois) {
                         if (existingPOIsByReferenceId.containsKey(poi.getReferenceId())) {
-                            // poi bestaat al, update waarden?
+                            // poi bestaat al, update waarden
                             POI oldPOI = existingPOIsByReferenceId.get(poi.getReferenceId());
                             // id & matched overnemen
                             poi.setId(oldPOI.getId());
@@ -187,15 +217,16 @@ public class ProviderService extends BaseService implements IProviderService {
             }));
         }
 
+        // wacht tot alle geschedulede polls gedaan zijn
         for (Future future : futures) {
             try {
                 future.get(60, TimeUnit.SECONDS);
             } catch (InterruptedException ex) {
-                Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+                LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
             } catch (ExecutionException ex) {
-                Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+                LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
             } catch (TimeoutException ex) {
-                Logger.getLogger(ProviderService.class.getName()).log(Level.SEVERE, null, ex);
+                LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
             }
         }
         futures.clear();

@@ -1,5 +1,7 @@
 package be.ugent.verkeer4.verkeerdomain.provider;
 
+import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
@@ -10,8 +12,6 @@ import be.ugent.verkeer4.verkeerdomain.provider.tomtom.TomTomClient;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvider {
 
@@ -30,7 +30,7 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
                 return result;
             }
         } catch (Exception ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId() + ", falling back to API", ex);
+            LogService.getInstance().insert(LogTypeEnum.Warning, TomTomProvider.class.getName(), "Scraping failed for route " + route.getId() + ", falling back to API" + ex.getMessage());
 
             return useAPI(route);
         }
@@ -54,7 +54,7 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
 
             return null;
         } catch (IOException ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, TomTomProvider.class.getName(), ex.getMessage());
             return null;
         }
     }
@@ -64,10 +64,10 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
         try {
             return POIHelper.scrapePOI(bbox, ProviderEnum.TomTom, "tomtompoi.pl");
         } catch (IOException ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, TomTomProvider.class.getName(), ex.getMessage());
             return null;
         } catch (Exception ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, TomTomProvider.class.getName(), ex.getMessage());
             return null;
         }
     }
@@ -78,3 +78,5 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
     }
 
 }
+
+

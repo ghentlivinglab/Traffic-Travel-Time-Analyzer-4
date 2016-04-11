@@ -1,7 +1,7 @@
 package be.ugent.verkeer4.service;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 
 public class Main {
 
@@ -23,7 +23,7 @@ public class Main {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                LogService.getInstance().insert(LogTypeEnum.Error, Main.class.getName() + ": PollService", ex.getMessage());
             }
         }
     }

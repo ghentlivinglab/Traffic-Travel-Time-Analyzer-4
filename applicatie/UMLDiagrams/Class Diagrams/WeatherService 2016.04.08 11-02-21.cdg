@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="WeatherService">
+  <ClassDiagramComponents>
+    <Class name="WeatherService" package="be.ugent.verkeer4.verkeerdomain" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="update" returnType="void" visibility="public">
+          <Argument type="WeatherData" name="data"/>
+        </Method>
+        <Method name="insert" returnType="void" visibility="public">
+          <Argument type="WeatherData" name="data"/>
+        </Method>
+        <Method name="getWeatherData" returnType="List&lt;WeatherData&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>

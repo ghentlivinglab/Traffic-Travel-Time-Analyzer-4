@@ -5,12 +5,11 @@
  */
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.provider.IWeatherProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WeatherProvider;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,7 +34,7 @@ public class WeatherProviderService extends BaseService{
                 repo.getWeatherSet().insert(data);
             } 
             else {
-                Logger.getLogger(WeatherService.class.getName()).log(Level.WARNING, "Could not fetch weather for station {0}", station);
+                LogService.getInstance().insert(LogTypeEnum.Warning, WeatherProviderService.class.getName(), "Could not fetch weather for station: " + station);
             } 
         }      
     }
