@@ -7,17 +7,16 @@ public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException {
 
-        TrafficJamAnalysisService trafficJamAnalysisService  = new TrafficJamAnalysisService();
+        TrafficJamAnalysisService trafficJamAnalysisService  = new TrafficJamAnalysisService();      
+        
+        BackgroundPOIRouteMatcherService poiMatchingService = new BackgroundPOIRouteMatcherService();
+        DataScrapingService dataScrapingService = new DataScrapingService();
+        WeatherPollService weatherPollService = new WeatherPollService();
+        
         trafficJamAnalysisService.start();
-        
-        
-    //    BackgroundPOIRouteMatcherService poiMatchingService = new BackgroundPOIRouteMatcherService();
-    //    DataScrapingService dataScrapingService = new DataScrapingService();
-    //    WeatherPollService weatherPollService = new WeatherPollService();
-        
-    //    poiMatchingService.start();
-    //    dataScrapingService.start();
-    //    weatherPollService.start();
+        poiMatchingService.start();
+        dataScrapingService.start();
+        weatherPollService.start();
 
         // run in infinite loop, de services runnen in background threads
         while (true) {

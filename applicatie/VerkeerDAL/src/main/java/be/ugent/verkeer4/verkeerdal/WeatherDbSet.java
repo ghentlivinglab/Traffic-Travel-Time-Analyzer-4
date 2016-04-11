@@ -7,7 +7,6 @@ package be.ugent.verkeer4.verkeerdal;
 
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
-import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.composite.WeatherWithDistanceToRoute;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,8 +36,8 @@ public class WeatherDbSet extends DbSet<WeatherData>{
     
     public List<WeatherWithDistanceToRoute> getWeatherForRoute(Route route, Date date)
     {
-        long midLong = (long) ((route.getToLongitude() + route.getFromLongitude()) /2);
-        long midLat = (long) ((route.getToLatitude() + route.getFromLatitude()) /2);
+        double midLong = (double) ((route.getToLongitude() + route.getFromLongitude()) /2);
+        double midLat = (double) ((route.getToLatitude() + route.getFromLatitude()) /2);
 
         try (org.sql2o.Connection con = sql2o.open()) {
             Query q = con.createQuery("SELECT *, SQRT( " +
@@ -46,12 +45,13 @@ public class WeatherDbSet extends DbSet<WeatherData>{
                                         "POW(69.1 * (:Long - longitude) * COS(latitude / 57.3), 2)) " +
                                         "AS Distance " +
                                         "FROM weatherdata " +
-                                        "WHERE UpdateTime < CURDATE() " +
+                                        "WHERE UpdateTime <= :Date " +
                                         "ORDER BY distance,UpdateTime desc " +
                                         "LIMIT 1;");
             
             q.addParameter("Lat",midLat);
             q.addParameter("Long", midLong);
+            q.addParameter("Date", date);
 
             return q.executeAndFetch(WeatherWithDistanceToRoute.class);
         }

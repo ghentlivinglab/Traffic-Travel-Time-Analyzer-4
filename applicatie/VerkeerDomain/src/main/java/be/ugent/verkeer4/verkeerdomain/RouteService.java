@@ -182,7 +182,7 @@ public class RouteService extends BaseService implements IRouteService {
                     int jamId = repo.getRouteTrafficJamSet().insert(jam);
                     jam.setId(jamId);
 
-                    //AnalyzeNearByPOIsForJamCauses(poiService, jam, maxDistanceForPOIRouteMatching);
+                    AnalyzeNearByPOIsForJamCauses(poiService, jam, maxDistanceForPOIRouteMatching);
                     AnalyzeNearByWeatherForJamCauses(jam);
                 }
 
@@ -204,27 +204,92 @@ public class RouteService extends BaseService implements IRouteService {
         List<WeatherWithDistanceToRoute> lst;
         double score = 0;
         map.put("Id", jam.getRouteId());
-            
+   
         try{
             Route route = repo.getRouteSet().getItem("Id = :Id", map);
-            System.out.print(jam.getRouteId());
             if(route != null)
             {
                 lst = repo.getWeatherSet().getWeatherForRoute(route,jam.getFrom()); 
-                if(lst != null)
-                {
+                if(lst != null && lst.size() > 0)
+                {   
                     WeatherWithDistanceToRoute weather = lst.get(0);
                     switch(WeatherConditionEnum.fromInt(weather.getCondition()))
                     {
-                        case HeavyRain:
+                        case LightSnowGrains:
+                            score += 0.20;
+                            break;
+                        case LightIceCrystals:
+                            score += 0.20;
+                            break;
+                        case LightIcePellets:
+                            score += 0.20;
+                            break;
+                        case LightHail:
+                            score += 0.20;
+                            break;
+                        case LightMist:
                             score += 0.25;
                             break;
-                        case LightSnow:
+                        case LightFog:
                             score += 0.25;
+                            break;
+                        case LightFogPatches:
+                            score += 0.25;
+                            break;
+                        case LightBlowingSnow:
+                            score += 0.30;
+                            break;
+                        case LightRainMist:
+                            score += 0.30;
+                            break;
+                        case LightThunderstorm:
+                            score += 0.40;
+                            break;
+                        case LightThunderstormsandRain:
+                            score += 0.40;
+                            break;
+                        case LightThunderstormsandSnow:
+                            score += 0.40;
+                            break;
+                        case HeavyRain:
+                            score += 0.35;
                             break;
                         case HeavySnow:
                             score += 0.75;
                             break;
+                        case HeavySnowGrains:
+                            score += 0.75;
+                            break;
+                        case HeavyIceCrystals:
+                            score += 0.75;
+                            break;
+                        case HeavyIcePellets:
+                            score += 0.75;
+                            break;
+                        case HeavyHail:
+                            score += 0.75;
+                            break;
+                        case HeavyFog:
+                            score += 0.75;
+                            break;
+                        case HeavyFogPatches:
+                            score += 0.75;
+                            break;
+                        case HeavyBlowingSnow:
+                            score += 0.75;
+                            break;
+                        case HeavyRainMist:
+                            score += 0.75;
+                            break;
+                        case HeavyThunderstorm:
+                            score += 0.75;
+                            break;
+                        case HeavyThunderstormsandRain:
+                            score += 0.80;
+                            break;
+                        case HeavyThunderstormsandSnow:
+                            score += 0.80;
+                            break;                                          
                     }
                         
                     if (score > 0) {
