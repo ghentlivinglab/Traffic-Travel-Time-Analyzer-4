@@ -11,10 +11,6 @@ import be.ugent.verkeer4.verkeerdomain.provider.IWeatherProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WeatherProvider;
 import java.util.List;
 
-/**
- *
- * @author Niels
- */
 public class WeatherProviderService extends BaseService{
     
     private final IWeatherProvider weatherProvider;
@@ -25,6 +21,12 @@ public class WeatherProviderService extends BaseService{
         weatherProvider = new WeatherProvider();
     }
     
+    /**
+     * Gaat voor elk weerstation opgenomen in de lijst het weer pollen via een externe REST service
+     * en deze data aan de weer tabel toevoegen.
+     * @param stations
+     * @throws ClassNotFoundException 
+     */
     public void pollWeather(List<String> stations) throws ClassNotFoundException {
         
         for(String station : stations)

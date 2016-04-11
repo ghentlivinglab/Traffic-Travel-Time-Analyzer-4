@@ -232,6 +232,7 @@ public class RouteService extends BaseService implements IRouteService {
 
     // als een last traffic time check null is in een route
     private final Date initialTrafficJamStartPoint = new GregorianCalendar(2016, 01, 01).getTime();
+    
     /**
      * Berekent alle files voor alle dagen kleiner dan vandaag voor een bepaalde route
      * (zodat enkel volledige dagen gefinaliseerd worden) en sla de bekomen files en oorzaken
@@ -283,20 +284,29 @@ public class RouteService extends BaseService implements IRouteService {
         }
     }
 
+    /**
+     * Analyseert alle weersomstandigheden van het dichtst bijzijnd weerstation
+     * om te kijken of het weer een invloed kon gehad hebben op de file op die route.
+     * @param jam 
+     */
     private void analyzeNearByWeatherForJamCauses(RouteTrafficJam jam) {
         
         Map<String, Object> map = new HashMap<>();
         List<WeatherWithDistanceToRoute> lst;
+        //Initieel op 0
         double score = 0;
         map.put("Id", jam.getRouteId());
    
         try{
+            //Route ophalen met doorgegeven route id.
             Route route = repo.getRouteSet().getItem("Id = :Id", map);
             if(route != null)
             {
+                //Dichtst bijzijnde weerstation opzoeken en data terughalen van die datum
                 lst = repo.getWeatherSet().getWeatherForRoute(route,jam.getFrom()); 
                 if(lst != null && lst.size() > 0)
                 {   
+                    //Geeft maar 1 rij terug
                     WeatherWithDistanceToRoute weather = lst.get(0);
                     switch(WeatherConditionEnum.fromInt(weather.getCondition()))
                     {
@@ -376,7 +386,8 @@ public class RouteService extends BaseService implements IRouteService {
                             score += 0.80;
                             break;                                          
                     }
-                        
+                    
+                    //Score samenstellen en toevoegen aan de databank.
                     if (score > 0) {
                         RouteTrafficJamCause cause = new RouteTrafficJamCause();
                         cause.setCategory(RouteTrafficJamCauseCategoryEnum.Weather);
