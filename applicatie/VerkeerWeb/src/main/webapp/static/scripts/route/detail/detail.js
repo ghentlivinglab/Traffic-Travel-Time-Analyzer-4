@@ -24,14 +24,12 @@
             showClear: true,
             defaultDate: moment().startOf("day")
         });
-        datePickerEnd.datetimepicker(
-            {
-                format: "DD/MM/YYYY HH:mm",
-                showTodayButton: true,
-                showClear: true,
-                defaultDate: moment().endOf("day")
-            }
-        );
+        datePickerEnd.datetimepicker({
+            format: "DD/MM/YYYY HH:mm",
+            showTodayButton: true,
+            showClear: true,
+            defaultDate: moment().endOf("day")
+        });
         updateBtn.addEventListener("click", trajectDetail.getRouteData);
         toggleBtn.addEventListener("click", routeChart.toggleChart);
         trajectDetail.markExtremeProviders();
