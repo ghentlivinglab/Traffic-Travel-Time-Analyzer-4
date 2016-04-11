@@ -66,9 +66,17 @@ public class DbSet<T> {
     }
 
     public List<T> getItems(String condition, Map<String, Object> parameters) {
-        try (org.sql2o.Connection con = sql2o.open()) {
-            Query q = con.createQuery("SELECT * from " + getTableName() + " WHERE " + condition);
+        return getItems(condition, parameters, null);
+    }
 
+    public List<T> getItems(String condition, Map<String, Object> parameters, String order) {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            String query = "SELECT * from " + getTableName() + " WHERE " + condition;
+            if(order != null){
+                query += " ORDER BY " + order;
+            }
+
+            Query q = con.createQuery(query);
             if (parameters != null) {
                 for (Entry<String, Object> parameter : parameters.entrySet()) {
                     q.addParameter(parameter.getKey(), parameter.getValue());
@@ -76,7 +84,6 @@ public class DbSet<T> {
             }
 
             List<T> lst = q.executeAndFetch(this.type);
-
             return lst;
         }
     }

@@ -137,6 +137,7 @@
         <script src="<c:url value="/static/scripts/libs/highcharts.js" />"></script>
         <script src="<c:url value="/static/scripts/libs/exporting.js" />"></script>
         <script src="<c:url value="/static/scripts/libs/export-csv.js" />"></script>
+        <script src="<c:url value="/static/scripts/route/route-chart.js" />"></script>
         <script src="<c:url value="/static/scripts/route/detail/detail.js" />"></script>
     </body>
 </html>

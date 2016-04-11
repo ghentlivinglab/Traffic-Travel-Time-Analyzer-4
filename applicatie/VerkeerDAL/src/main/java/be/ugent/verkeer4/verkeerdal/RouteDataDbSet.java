@@ -16,13 +16,13 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         super(RouteData.class, sql2o);
     }
 
-    public List<RouteData> getItemsForRoute(int routeId, Date from, Date to) {
+    public List<RouteData> getItemsForRoute(int routeId, Date from, Date to, String order) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("RouteId", routeId);
         map.put("From", from);
         map.put("To", to);
 
-        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map);
+        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map, order);
     }
 
     public List<RouteData> getRouteDataAlignedTo5min(String condition, Map<String, Object> parameters) {

@@ -44,6 +44,10 @@ public class RouteService extends BaseService implements IRouteService {
         return repo.getRouteSet().getItems();
     }
 
+    public List<Route> getRoutesInfo() throws ClassNotFoundException {
+        return repo.getRouteSet().getRoutesInfo();
+    }
+
     /**
      * Geeft de route met gegeven id terug
      * @param id
