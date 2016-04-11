@@ -5,8 +5,6 @@ import be.ugent.verkeer4.verkeerdomain.LogService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -15,7 +13,7 @@ import java.util.List;
 public class TrafficJamAnalysisService extends BaseService {
 
     public TrafficJamAnalysisService() {
-        super(300000, "Traffic Jam Analysis");
+        super(60 * 60 * 24, "Traffic Jam Analysis");
     }
 
     
