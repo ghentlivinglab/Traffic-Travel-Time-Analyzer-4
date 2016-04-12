@@ -30,42 +30,21 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Timestamp</th>
-                                        <th>Type</th>
-                                        <th>Message</th>
+                                        <th>Category</th>
+                                        <th># Info</th>
+                                        <th># Warning</th>
+                                        <th># Error</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="info">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Warning</td>
-                                        <td>TomTom scraper failed, used API as fallback</td>
-                                    </tr>
-                                    <tr class="danger">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Error</td>
-                                        <td>Failed to connect to the database</td>
-                                    </tr>
-                                    <tr class="warning">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Error</td>
-                                        <td>Failed to connect to HereMaps API</td>
-                                    </tr>
-                                    <tr class="info">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Warning</td>
-                                        <td>TomTom scraper failed, used API as fallback</td>
-                                    </tr>
-                                    <tr class="danger">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Error</td>
-                                        <td>Failed to connect to the database</td>
-                                    </tr>
-                                    <tr class="warning">
-                                        <td>2014-05-22T16:14:39-06:00</td>
-                                        <td>Error</td>
-                                        <td>Failed to connect to HereMaps API</td>
-                                    </tr>
+                                    <c:forEach var="logHomeEntry" items="${logHomeOverview.logEntries}">
+                                        <tr>
+                                                <td><a href="#">${logHomeEntry.category}</a></td>
+                                                <td>${logHomeEntry.infoCount}</td>
+                                                <td>${logHomeEntry.warningCount}</td>
+                                                <td>${logHomeEntry.errorCount}</td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
@@ -98,7 +77,7 @@
                                         <td>5' 12"</td>
                                         <td>Accident</td>
                                     </tr>
-                                    <tr>
+                                    <tr class="info">
                                         <td><a href="#">Detail</a></td>
                                         <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
                                         <td>15 km</td>
@@ -126,14 +105,14 @@
                                         <td>5' 12"</td>
                                         <td>Wegenwerken</td>
                                     </tr>
-                                    <tr class="success">
+                                    <tr class="warning">
                                         <td><a href="#">Detail</a></td>
                                         <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
                                         <td>15 km</td>
                                         <td>5' 12"</td>
                                         <td>Autovrij weekend</td>
                                     </tr>
-                                    <tr class="success">
+                                    <tr class="info">
                                         <td><a href="#">Detail</a></td>
                                         <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
                                         <td>15 km</td>

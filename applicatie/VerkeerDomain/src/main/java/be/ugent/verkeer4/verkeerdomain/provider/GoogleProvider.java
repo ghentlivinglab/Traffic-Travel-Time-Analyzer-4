@@ -5,6 +5,8 @@
  */
 package be.ugent.verkeer4.verkeerdomain.provider;
 
+import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
@@ -12,8 +14,6 @@ import be.ugent.verkeer4.verkeerdomain.provider.google.Element;
 import be.ugent.verkeer4.verkeerdomain.provider.google.GoogleMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.google.Row;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -46,7 +46,7 @@ public class GoogleProvider extends BaseProvider implements IProvider {
 
             return null;
         } catch (Exception ex) {
-             Logger.getLogger(GoogleProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId(), ex);
+            LogService.getInstance().insert(LogTypeEnum.Warning, GoogleProvider.class.getName(), "Scraping failed for route " + route.getId() + ex.getMessage());
             return null;
         }     
     }   

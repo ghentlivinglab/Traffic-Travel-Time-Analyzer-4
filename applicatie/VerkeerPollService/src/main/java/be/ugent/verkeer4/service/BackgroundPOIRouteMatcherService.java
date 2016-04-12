@@ -2,10 +2,11 @@ package be.ugent.verkeer4.service;
 
 import be.ugent.verkeer4.verkeerdomain.IPOIService;
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
+import be.ugent.verkeer4.verkeerdomain.LogService;
 import be.ugent.verkeer4.verkeerdomain.POIService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
+
 
 public class BackgroundPOIRouteMatcherService extends BaseService {
 
@@ -23,12 +24,12 @@ public class BackgroundPOIRouteMatcherService extends BaseService {
     @Override
     protected void action() {
         try {
-            Logger.getLogger(Main.class.getName()).log(Level.INFO, "Starting POI matching");
+            LogService.getInstance().insert(LogTypeEnum.Info, BackgroundPOIRouteMatcherService.class.getName(), "Starting POI matching");
             poiService.matchPOIsWithRoute();
-            Logger.getLogger(Main.class.getName()).log(Level.INFO, "Finished POI matching");
+            LogService.getInstance().insert(LogTypeEnum.Info, BackgroundPOIRouteMatcherService.class.getName(), "Finished POI matching");
 
         } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, BackgroundPOIRouteMatcherService.class.getName(), ex.getMessage());
         }
     }
 }

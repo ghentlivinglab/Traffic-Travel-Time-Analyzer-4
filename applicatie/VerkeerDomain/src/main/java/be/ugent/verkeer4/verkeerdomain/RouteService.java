@@ -1,5 +1,6 @@
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.BoundingBox;
 import be.ugent.verkeer4.verkeerdomain.data.POICategoryEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
@@ -8,7 +9,9 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJam;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerdomain.data.RouteTrafficJamCauseCategoryEnum;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
+import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
+import be.ugent.verkeer4.verkeerdomain.data.composite.WeatherWithDistanceToRoute;
 import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.CalculateRouteResponse;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Leg;
@@ -23,8 +26,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class RouteService extends BaseService implements IRouteService {
 
@@ -41,6 +42,10 @@ public class RouteService extends BaseService implements IRouteService {
     public List<Route> getRoutes() throws ClassNotFoundException {
 
         return repo.getRouteSet().getItems();
+    }
+
+    public List<Route> getRoutesInfo() throws ClassNotFoundException {
+        return repo.getRouteSet().getRoutesInfo();
     }
 
     /**
@@ -80,7 +85,7 @@ public class RouteService extends BaseService implements IRouteService {
                 this.updateWayPoints(r);
             }
         } catch (Exception ex) {
-            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, RouteService.class.getName(), ex.getMessage());
         }
     }
 
@@ -231,7 +236,7 @@ public class RouteService extends BaseService implements IRouteService {
 
     // als een last traffic time check null is in een route
     private final Date initialTrafficJamStartPoint = new GregorianCalendar(2016, 01, 01).getTime();
-
+    
     /**
      * Berekent alle files voor alle dagen kleiner dan vandaag voor een bepaalde route
      * (zodat enkel volledige dagen gefinaliseerd worden) en sla de bekomen files en oorzaken
@@ -251,7 +256,7 @@ public class RouteService extends BaseService implements IRouteService {
             IPOIService poiService = new POIService(this);
 
             double maxDistanceForPOIRouteMatching = Settings.getInstance().getMaxDistanceForPOIRouteMatching();
-
+            
             // voor elke dag kleiner dan vandaag
             while (lastTrafficJamCheck.getTime() < today.getTime()) {
 
@@ -267,8 +272,8 @@ public class RouteService extends BaseService implements IRouteService {
                     jam.setId(jamId);
 
                     analyzeNearByPOIsForJamCauses(poiService, jam, maxDistanceForPOIRouteMatching);
+                    analyzeNearByWeatherForJamCauses(jam);
 
-                    // TODO analyze weather etc...
                 }
 
                 // next day
@@ -279,10 +284,130 @@ public class RouteService extends BaseService implements IRouteService {
 
             repo.getRouteSet().update(route);
         } catch (Exception ex) {
-            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, RouteService.class.getName(), ex.getMessage());
         }
     }
 
+    /**
+     * Analyseert alle weersomstandigheden van het dichtst bijzijnd weerstation
+     * om te kijken of het weer een invloed kon gehad hebben op de file op die route.
+     * @param jam 
+     */
+    private void analyzeNearByWeatherForJamCauses(RouteTrafficJam jam) {
+        
+        Map<String, Object> map = new HashMap<>();
+        List<WeatherWithDistanceToRoute> lst;
+        //Initieel op 0
+        double score = 0;
+        map.put("Id", jam.getRouteId());
+   
+        try{
+            //Route ophalen met doorgegeven route id.
+            Route route = repo.getRouteSet().getItem("Id = :Id", map);
+            if(route != null)
+            {
+                //Dichtst bijzijnde weerstation opzoeken en data terughalen van die datum
+                lst = repo.getWeatherSet().getWeatherForRoute(route,jam.getFrom()); 
+                if(lst != null && lst.size() > 0)
+                {   
+                    //Geeft maar 1 rij terug
+                    WeatherWithDistanceToRoute weather = lst.get(0);
+                    switch(WeatherConditionEnum.fromInt(weather.getCondition()))
+                    {
+                        case LightSnowGrains:
+                            score += 0.20;
+                            break;
+                        case LightIceCrystals:
+                            score += 0.20;
+                            break;
+                        case LightIcePellets:
+                            score += 0.20;
+                            break;
+                        case LightHail:
+                            score += 0.20;
+                            break;
+                        case LightMist:
+                            score += 0.25;
+                            break;
+                        case LightFog:
+                            score += 0.25;
+                            break;
+                        case LightFogPatches:
+                            score += 0.25;
+                            break;
+                        case LightBlowingSnow:
+                            score += 0.30;
+                            break;
+                        case LightRainMist:
+                            score += 0.30;
+                            break;
+                        case LightThunderstorm:
+                            score += 0.40;
+                            break;
+                        case LightThunderstormsandRain:
+                            score += 0.40;
+                            break;
+                        case LightThunderstormsandSnow:
+                            score += 0.40;
+                            break;
+                        case HeavyRain:
+                            score += 0.35;
+                            break;
+                        case HeavySnow:
+                            score += 0.75;
+                            break;
+                        case HeavySnowGrains:
+                            score += 0.75;
+                            break;
+                        case HeavyIceCrystals:
+                            score += 0.75;
+                            break;
+                        case HeavyIcePellets:
+                            score += 0.75;
+                            break;
+                        case HeavyHail:
+                            score += 0.75;
+                            break;
+                        case HeavyFog:
+                            score += 0.75;
+                            break;
+                        case HeavyFogPatches:
+                            score += 0.75;
+                            break;
+                        case HeavyBlowingSnow:
+                            score += 0.75;
+                            break;
+                        case HeavyRainMist:
+                            score += 0.75;
+                            break;
+                        case HeavyThunderstorm:
+                            score += 0.75;
+                            break;
+                        case HeavyThunderstormsandRain:
+                            score += 0.80;
+                            break;
+                        case HeavyThunderstormsandSnow:
+                            score += 0.80;
+                            break;                                          
+                    }
+                    
+                    //Score samenstellen en toevoegen aan de databank.
+                    if (score > 0) {
+                        RouteTrafficJamCause cause = new RouteTrafficJamCause();
+                        cause.setCategory(RouteTrafficJamCauseCategoryEnum.Weather);
+                        cause.setRouteTrafficJamId(jam.getId());
+                        cause.setSubCategory(weather.getCondition());
+                        cause.setProbability(score);
+                        cause.setReferenceId(weather.getId());
+                        repo.getRouteTrafficJamCauseSet().insert(cause);
+                    }
+                }
+            }       
+        } catch (Exception ex) {
+            LogService.getInstance().insert(LogTypeEnum.Error, RouteService.class.getName(), ex.getMessage());
+        }
+    }
+    
     /***
      * Analyseert alle POI's die dicht bij een route liggen en actief waren tijdens
      * de file en kunnen ze als oorzaak van de file gekozen worden
@@ -291,6 +416,7 @@ public class RouteService extends BaseService implements IRouteService {
      * @param maxDistanceForPOIRouteMatching 
      */
     private void analyzeNearByPOIsForJamCauses(IPOIService poiService, RouteTrafficJam jam, double maxDistanceForPOIRouteMatching) {
+
         // TODO determine causes
         double jamDurationSeconds = (jam.getTo().getTime() - jam.getFrom().getTime()) / 1000;
 

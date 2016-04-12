@@ -9,10 +9,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-/**
- *
- * @author Niels
- */
 public interface WeatherService {
     ///api/9cd758a0fe0cfc1d/conditions/q/50.997336,3.756638.json
   @GET("api/{key}/conditions/q/pws:{station}.json")

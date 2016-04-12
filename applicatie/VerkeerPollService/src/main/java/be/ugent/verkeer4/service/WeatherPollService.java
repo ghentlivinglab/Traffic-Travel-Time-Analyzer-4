@@ -5,11 +5,11 @@
  */
 package be.ugent.verkeer4.service;
 
+import be.ugent.verkeer4.verkeerdomain.LogService;
 import be.ugent.verkeer4.verkeerdomain.WeatherProviderService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -40,10 +40,10 @@ public class WeatherPollService extends BaseService {
     @Override
     protected void action() {
         try {
-            Logger.getLogger(Main.class.getName()).log(Level.INFO, "Starting weather poll..");
+            LogService.getInstance().insert(LogTypeEnum.Info, WeatherPollService.class.getName(), "Starting weahter poll...");
             weatherService.pollWeather(stations);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(WeatherPollService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, WeatherPollService.class.getName(), ex.getMessage());
         }
     }    
 }

@@ -7,6 +7,7 @@ public class UnitOfWork extends BaseRepository implements IUnitOfWork {
     private RouteWaypointDbSet routeWaypoints;
     private POIDbSet pois;
     private WeatherDbSet weather;
+    private LogEntryDbSet logs;
 
     private RouteTrafficJamDbSet routeTrafficJams;
     private RouteTrafficJamCauseDbSet routeTrafficJamCauses;
@@ -24,6 +25,7 @@ public class UnitOfWork extends BaseRepository implements IUnitOfWork {
         this.weather = new WeatherDbSet(sql2o);
         this.routeTrafficJams = new RouteTrafficJamDbSet(sql2o);
         this.routeTrafficJamCauses = new RouteTrafficJamCauseDbSet(sql2o);
+        this.logs = new LogEntryDbSet(sql2o);
     }
 
     @Override
@@ -59,6 +61,11 @@ public class UnitOfWork extends BaseRepository implements IUnitOfWork {
     @Override
     public RouteTrafficJamCauseDbSet getRouteTrafficJamCauseSet() {
         return this.routeTrafficJamCauses;
+    }
+  
+    @Override
+    public LogEntryDbSet getLogEntrySet() {
+        return this.logs;
     }
 
 }

@@ -2,15 +2,23 @@ package be.ugent.verkeer4.verkeerdal.test;
 
 import be.ugent.verkeer4.verkeerdal.IUnitOfWork;
 import be.ugent.verkeer4.verkeerdal.UnitOfWork;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
+import be.ugent.verkeer4.verkeerdomain.data.Logging;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherDirectionEnum;
+import be.ugent.verkeer4.verkeerdomain.data.composite.LogCount;
+import be.ugent.verkeer4.verkeerdomain.data.composite.WeatherWithDistanceToRoute;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -83,6 +91,30 @@ public class DbAccessTest extends TestCase {
         }
     }
     
+    public void testGetRoute21()
+    {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            List<WeatherWithDistanceToRoute> lst;
+            map.put("Id", 44);
+            
+            Route route = repo.getRouteSet().getItem("Id = :Id", map);
+            if(route != null)
+            {
+                lst = repo.getWeatherSet().getWeatherForRoute(route, new Date());
+                
+                for(WeatherWithDistanceToRoute w : lst)
+                {
+                    System.out.print(w.getDistance());
+                }
+            }
+            
+        } catch(Exception e) {
+            fail("Error: " + e.getMessage());
+        }
+        
+    }
+    
     public void testInsertWeather()
     {
         WeatherData data = new WeatherData();
@@ -134,7 +166,7 @@ public class DbAccessTest extends TestCase {
     public void testUpdateRoute() {
 
         Route t = repo.getRouteSet().getItems().get(0);
-        t.setId(0);
+        t.setId(0);        
         int id = repo.getRouteSet().insert(t); // copy
         t.setId(id);
         t.setName("Updated naam" + t.getName());
@@ -155,5 +187,52 @@ public class DbAccessTest extends TestCase {
 
         Route storedTraject = repo.getRouteSet().getItem(lastTraject.getId());
         assertNull("Traject is niet verwijderd", storedTraject);
+    }
+    
+    /**
+     * Deze methode haalt alle logs uit de logEntry tabel
+     */
+    public void testGetLogs(){
+        try {
+            List<Logging> logs = repo.getLogEntrySet().getItems();
+            assertFalse("Geen logs gevonden", logs.isEmpty());
+        } catch (Exception e) {
+            fail("Error: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Deze methode plaatst een nieuw logbericht in de logEntry tabel
+     */
+    public void testInsertLog() {
+        Date now = new Date();
+        
+        Logging log = new Logging();
+        log.setType(LogTypeEnum.Info);
+        log.setDate(now);
+        log.setCategory("Test");
+        log.setMessage("Dit is een test");
+
+        int id = repo.getLogEntrySet().insert(log);
+        assertNotSame("Id is 0", 0, id);
+
+        Logging storedLog = repo.getLogEntrySet().getItem(id);
+
+        assertEquals("Type is niet hetzelfde", log.getType(), storedLog.getType());
+        assertEquals("Category is niet hetzelfde", log.getCategory(), storedLog.getCategory());
+        
+        repo.getLogEntrySet().delete(id);
+    }
+    
+    public void testLogCountOverview() {
+        //Hier moeten de logs nog meer gespecifieerd worden!
+        List<LogCount> logs = null;
+        
+        try {
+            logs = repo.getLogEntrySet().getLogCount();
+        } catch (Exception ex) {
+            
+        }
+
     }
 }

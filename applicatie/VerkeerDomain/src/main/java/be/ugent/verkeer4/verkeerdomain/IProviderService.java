@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IProviderService {
 
-    List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to);
+    List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to, String order);
 
     void poll() throws ClassNotFoundException;
     
