@@ -6,7 +6,7 @@
 use JSON;
 use strict;
 
-if(scalar @ARGV < 5) {
+if(scalar @ARGV < 4) {
 	print "Usage: waze.pl fromlat fromlng tolat tolng avoidPrimaries\n";
 	exit(1);
 }
