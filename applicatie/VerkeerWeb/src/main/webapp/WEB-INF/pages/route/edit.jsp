@@ -49,7 +49,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label for="toAddress">Naar</label>
+                                                <label for="toAddress">To</label>
                                                 <form:input class="form-control" path="toAddress" id="toAddress"/>
                                                 <form:input class="form-control" path="toLatLng" id="toLatLng"/>
 
@@ -73,7 +73,7 @@
                                 </div>
 
                                 <div class="panel-footer">
-                                    <button type="submit" class="btn btn-primary">Opslaan</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                     <a href="${pageContext.servletContext.contextPath}/route/detail/${routeEdit.id}">Route details</a>
                                 </div>
                             </form:form>
