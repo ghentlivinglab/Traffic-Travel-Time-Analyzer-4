@@ -4,7 +4,7 @@
 use strict;
 
 # de naam van de cache file om de api gegevens tijdelijk te cachen
-my $cachename = "here.cache";
+my $cacheName = "here.cache";
 
 if(scalar @ARGV < 4) {
 	print "Usage: here fromlat fromlng tolat tolng avoidHighways\n";
@@ -60,7 +60,7 @@ sub main {
 ##################
 sub readCache {
 	my @args = @ARGV;
-	@ARGV = ( $cachename );
+	@ARGV = ( $cacheName );
 	
 	# check de last modified time van de  cache file
 	(my $dev,my $ino,my $mode,my $nlink,my $uid,my $gid,my $rdev,my $size,
@@ -93,7 +93,7 @@ sub saveCache {
 	(my $cache) = @_;
 	
 	my %c = %{ $cache };
-	open my $fh, ">" . $cachename;
+	open my $fh, ">" . $cacheName;
 	for my $k (keys %c) {
 		print $fh $k . "=" . $c{$k} . "\n";
 	}
