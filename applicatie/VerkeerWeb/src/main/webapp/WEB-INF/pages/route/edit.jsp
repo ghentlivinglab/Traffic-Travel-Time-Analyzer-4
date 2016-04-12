@@ -24,7 +24,7 @@
                             <form:form method="POST" modelAttribute="obj" commandName="routeEdit">
                                 <div class="panel-body">
                                     <div class="form-group">
-                                        <label for="name">Naam</label>
+                                        <label for="name">Name</label>
                                         <form:input class="form-control" path="name"/>
                                         <span>Attention: The name has to correspond with the route in coyote in order to read the data correctly.</span>
                                         <form:errors path="name" cssClass="error"/>
@@ -32,7 +32,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label for="fromAddress">Van</label>
+                                                <label for="fromAddress">From</label>
                                                 <form:input class="form-control" path="fromAddress" id="fromAddress"/>
                                                 <form:input class="form-control" path="fromLatLng" id="fromLatLng"/>
 
@@ -49,7 +49,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label for="toAddress">Naar</label>
+                                                <label for="toAddress">To</label>
                                                 <form:input class="form-control" path="toAddress" id="toAddress"/>
                                                 <form:input class="form-control" path="toLatLng" id="toLatLng"/>
 
@@ -73,7 +73,7 @@
                                 </div>
 
                                 <div class="panel-footer">
-                                    <button type="submit" class="btn btn-primary">Opslaan</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                     <a href="${pageContext.servletContext.contextPath}/route/detail/${routeEdit.id}">Route details</a>
                                 </div>
                             </form:form>

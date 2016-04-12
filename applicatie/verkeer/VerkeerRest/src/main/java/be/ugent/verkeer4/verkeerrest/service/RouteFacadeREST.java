@@ -56,12 +56,19 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
     }
 
     @GET
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Route find(@PathParam("id") Integer id) {
+    @Path("{id}/xml")
+    @Produces({MediaType.APPLICATION_XML})
+    public Route findXml(@PathParam("id") Integer id) {
         return super.find(id);
     }
-
+    
+    @GET
+    @Path("{id}/json")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Route findJson(@PathParam("id") Integer id) {
+        return super.find(id);
+    }
+    
     @GET
     @Override
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
