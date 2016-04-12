@@ -4,8 +4,9 @@ import be.ugent.verkeer4.verkeerdomain.ILogService;
 import be.ugent.verkeer4.verkeerdomain.LogService;
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Logging;
-import be.ugent.verkeer4.verkeerweb.viewmodels.LogEntryVM;
-import be.ugent.verkeer4.verkeerweb.viewmodels.LogOverviewVM;
+import be.ugent.verkeer4.verkeerdomain.data.composite.LogCount;
+import be.ugent.verkeer4.verkeerweb.viewmodels.LogHomeEntryVM;
+import be.ugent.verkeer4.verkeerweb.viewmodels.LogHomeOverviewVM;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -23,54 +24,33 @@ public class HomeController {
         ILogService logService = new LogService(); 
         
         //logs overview model opbouwen
-        LogOverviewVM logOverview = getLogOverviewModel(logService);
+        LogHomeOverviewVM logHomeOverview = getLogHomeOverviewModel(logService);
         
         // geef mee als model aan view
         ModelAndView model = new ModelAndView("home/index");
-        model.addObject("logOverview", logOverview);
+        model.addObject("logHomeOverview", logHomeOverview);
         
         return model;
     }
     
-    private LogOverviewVM getLogOverviewModel(ILogService logService) throws ClassNotFoundException {
-        
-        //haal logs op
-        List<Logging> lst = logService.getLogs();
+    private LogHomeOverviewVM getLogHomeOverviewModel(ILogService logService) throws ClassNotFoundException {
+        //haal logCounts op
+        List<LogCount> lst = logService.getLogCount();
         
         //maak het viewmodel object aan
-        LogOverviewVM logOverview = new LogOverviewVM();
+        LogHomeOverviewVM logHomeOverview = new LogHomeOverviewVM();
         
-        //Datum converteren naar enkel datum (zonder tijd)
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        
-        //Datum converteren naar tijd.
-        SimpleDateFormat localTimeFormat = new SimpleDateFormat("HH:mm:ss");
-        
-        //overlopen van de logEntries in de database
-        //enkel de laatste 100 entries weergeven
-        for(int i = lst.size()-1; i >= (lst.size() - 50); i--){
-            Logging l = lst.get(i);
-            LogEntryVM entry = new LogEntryVM();
-            entry.setId(l.getId());
-            entry.setDate(localDateFormat.format(l.getDate()));
-            entry.setTime(localTimeFormat.format(l.getDate()));
+        //overlopen van de logCount voor elke category.
+        for(LogCount l : lst){
+            LogHomeEntryVM entry = new LogHomeEntryVM();
             entry.setCategory(l.getCategory());
-            entry.setMessage(l.getMessage());
+            entry.setInfoCount(l.getInfoCount());
+            entry.setWarningCount(l.getWarningCount());
+            entry.setErrorCount(l.getErrorCount());
             
-            //aanpassen naar het gewenste type voor de ViewModel
-            if(l.getType() == LogTypeEnum.Info){
-                entry.setType("info");
-            } 
-            else if (l.getType() == LogTypeEnum.Warning){
-                entry.setType("warning");
-            }
-            else{
-                entry.setType("danger");
-            }
-            
-            logOverview.getLogEntries().add(entry);
+            logHomeOverview.getLogEntries().add(entry);
         }
   
-        return logOverview;
+        return logHomeOverview;
     }
 }
