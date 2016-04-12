@@ -23,53 +23,25 @@
         });
 
         routeChart.buildChart(chartId);
-        //compare.getRouteData();
+        compare.getRouteData();
     });
 
     compare.getRouteData = function () {
+        var providers = [0,1,2];
         $.ajax({
             method: "GET",
-            url: "routedata",
+            url: "comparedata",
             data: {
-                id: 11,
-                startDate: new Date(2016, 2, 22, 0, 0, 0),
-                endDate: new Date(2016, 2, 23, 0, 0, 0)
+                routeId1: 11,
+                routeId2: 12,
+                startDate: new Date(2016, 2, 21, 0, 0, 0),
+                endDate: new Date(2016, 2, 21, 23, 59, 59)
             },
             success: function (data) {
-                // todo not finished! Needs to be server side!
-                return;
-
-                if (!data || !data.values || data.values.length === 0) {
-                    return;
-                }
-
-                var provider = {
-                    name: "test",
-                    data: []
-                };
-
-                var routeData = data.values;
-                var start = routeData[0].timestamp;
-                var results = [];
-                while (routeData.length >= 0) {
-                    var baseTime = 0;
-                    var amount = 0;
-                    while (routeData.length >= 0) {
-                        if (routeData[0] && routeData[0].timestamp <= (start + 60)) {
-                            baseTime += routeData[0].baseTime;
-                            amount++;
-                        }
-                        routeData.shift();
-                    }
-                    if (amount > 0) {
-                        var avg = baseTime / amount;
-                        results.push([start, avg]);
-                    }
-                    start += 60;
-                }
-
-                provider.data = results;
-                routeChart.setChartData(provider);
+                var series = [];
+                series.push({name: "Route 1", data: data.route1TravelTime});
+                series.push({name: "Route 2", data: data.route2TravelTime});
+                routeChart.setChartData(series);
             }
         });
     };
