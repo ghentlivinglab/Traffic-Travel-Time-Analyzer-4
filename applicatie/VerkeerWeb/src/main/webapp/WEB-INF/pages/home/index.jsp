@@ -30,19 +30,19 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Time</th>
-                                        <th>Class</th>
-                                        <th>Message</th>
+                                        <th>Category</th>
+                                        <th># Info</th>
+                                        <th># Warning</th>
+                                        <th># Error</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="loggingEntry" items="${logOverview.logEntries}">
-                                        <tr class="${loggingEntry.type}">
-                                                <td>${loggingEntry.date}</td>
-                                                <td>${loggingEntry.time}</td>
-                                                <td>${loggingEntry.category}</td>
-                                                <td>${loggingEntry.message}</td>
+                                    <c:forEach var="logHomeEntry.catgory" items="${logHomeOverview.logEntries}">
+                                        <tr>
+                                                <td>${logHomeEntry.catgory}</td>
+                                                <td>${logHomeEntry.infoCount}</td>
+                                                <td>${logHomeEntry.warningCount}</td>
+                                                <td>${logHomeEntry.errorCount}</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>

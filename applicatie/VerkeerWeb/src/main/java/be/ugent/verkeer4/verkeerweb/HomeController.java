@@ -34,38 +34,19 @@ public class HomeController {
     }
     
     private LogHomeOverviewVM getLogHomeOverviewModel(ILogService logService) throws ClassNotFoundException {
-        
-        
-        //MAAK HIERVOOR EEN NIEUW TYPE OBJECT AAN IN DE VerkeerDomain.Data.composite, dit mag een speciaal object zijn voor deze weergave.
-        //Zie voorbeeld GroupedRouteTrafficJamCause
-        
-        //haal logs op
+        //haal logCounts op
         List<LogCount> lst = logService.getLogCount();
         
         //maak het viewmodel object aan
         LogHomeOverviewVM logHomeOverview = new LogHomeOverviewVM();
         
-        //overlopen van de logEntries in de database
-        //enkel de laatste 100 entries weergeven
-        for(int i = lst.size()-1; i >= (lst.size() - 50); i--){
-            Logging l = lst.get(i);
+        //overlopen van de logCount voor elke category.
+        for(LogCount l : lst){
             LogHomeEntryVM entry = new LogHomeEntryVM();
-            entry.setId(l.getId());
-            entry.setDate(localDateFormat.format(l.getDate()));
-            entry.setTime(localTimeFormat.format(l.getDate()));
             entry.setCategory(l.getCategory());
-            entry.setMessage(l.getMessage());
-            
-            //aanpassen naar het gewenste type voor de ViewModel
-            if(l.getType() == LogTypeEnum.Info){
-                entry.setType("info");
-            } 
-            else if (l.getType() == LogTypeEnum.Warning){
-                entry.setType("warning");
-            }
-            else{
-                entry.setType("danger");
-            }
+            entry.setInfoCount(l.getInfoCount());
+            entry.setWarningCount(l.getWarningCount());
+            entry.setErrorCount(l.getErrorCount());
             
             logHomeOverview.getLogEntries().add(entry);
         }
