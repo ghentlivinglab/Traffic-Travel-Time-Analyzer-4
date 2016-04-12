@@ -2,6 +2,7 @@ package be.ugent.verkeer4.verkeerdomain;
 
 import be.ugent.verkeer4.verkeerdomain.data.Logging;
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
+import be.ugent.verkeer4.verkeerdomain.data.composite.LogCount;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -38,6 +39,7 @@ public class LogService extends BaseService implements ILogService {
      * @param category
      * @param message 
      */
+    @Override
     public void insert(LogTypeEnum type, String category, String message) {
         //logs krijgen de huidige datum mee
         Date now = new Date();
@@ -63,8 +65,8 @@ public class LogService extends BaseService implements ILogService {
      * Deze wordeng gebruikt om weer te geven op het dashboard.
      * @return Lijst van logentries
      */
+    @Override
     public List<Logging> getLogs() {
-        //Hier moeten de logs nog meer gespecifieerd worden!
         List<Logging> logs = null;
         
         try {
@@ -74,5 +76,23 @@ public class LogService extends BaseService implements ILogService {
         }
         
         return logs;
+    }
+    
+    /**
+     * 
+     * @return Lijst van LoggingCount entries
+     */
+    @Override
+    public List<LogCount> getLogCounts(){
+        //Hier moeten de logs nog meer gespecifieerd worden!
+        List<LogCount> logs = null;
+        
+        try {
+            logs = repo.getLogEntrySet().getLogCount();
+        } catch (Exception ex) {
+            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex); 
+        }
+        return logs;
+        
     }
 }
