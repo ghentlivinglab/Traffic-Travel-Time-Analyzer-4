@@ -29,6 +29,11 @@ import org.springframework.validation.BindingResult;
 @Controller
 public class RouteController {
 
+    /**
+     * Toont het overzicht van alle routes
+     * @return
+     * @throws ClassNotFoundException 
+     */
     @RequestMapping(value = "route/list", method = RequestMethod.GET)
     public ModelAndView getList() throws ClassNotFoundException {
 
@@ -43,6 +48,12 @@ public class RouteController {
         return model;
     }
 
+    /**
+     * Bouwt een route overview viewmodel op om te gebruiken bij de route list
+     * @param routeService
+     * @return
+     * @throws ClassNotFoundException 
+     */
     private RouteOverviewVM getRouteOverviewModel(IRouteService routeService) throws ClassNotFoundException {
         // haal routes op
         List<Route> lst = routeService.getRoutes();
@@ -91,6 +102,14 @@ public class RouteController {
         return overview;
     }
 
+    /**
+     * Geeft de details van een route in json terug
+     * @param id
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws ClassNotFoundException 
+     */
     @ResponseBody
     @RequestMapping(value = "route/routedata", method = RequestMethod.GET)
     public RouteDetailData ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
@@ -101,14 +120,17 @@ public class RouteController {
         
         RouteDetailData data = new RouteDetailData();
         
+        // vraag de vertraging van alle providers tussen de start & end date op
         List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate, "Timestamp");
         data.setValues(routeData);
         
+        // vraag alle files op voor de route & de oorzaken
         List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);
         List<GroupedRouteTrafficJamCause> causes = routeService.getRouteTrafficJamCausesForRouteBetween(id, startDate, endDate);
+        // groepeer de oorzaken per file
         Map<Integer, List<GroupedRouteTrafficJamCause>> causesByTrafficJamId = causes.stream().collect(Collectors.groupingBy(c -> c.getRouteTrafficJamId()));
         
-        
+        // bouw per file de oorzaken op in de data
         List<RouteDetailTrafficJam> detailJams = new ArrayList<>();
         for (RouteTrafficJam j : jams) {
             RouteDetailTrafficJam detailJam = new RouteDetailTrafficJam(j);
@@ -125,6 +147,12 @@ public class RouteController {
         return data;
     }
 
+    /**
+     * Geeft de detailpagina van een route
+     * @param id
+     * @return
+     * @throws ClassNotFoundException 
+     */
     @RequestMapping(value = "route/detail/{id}", method = RequestMethod.GET)
     public ModelAndView getDetail(@PathVariable("id") int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
