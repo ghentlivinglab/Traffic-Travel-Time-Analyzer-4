@@ -37,9 +37,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="logHomeEntry.catgory" items="${logHomeOverview.logEntries}">
+                                    <c:forEach var="logHomeEntry" items="${logHomeOverview.logEntries}">
                                         <tr>
-                                                <td>${logHomeEntry.catgory}</td>
+                                                <td><a href="#">${logHomeEntry.category}</a></td>
                                                 <td>${logHomeEntry.infoCount}</td>
                                                 <td>${logHomeEntry.warningCount}</td>
                                                 <td>${logHomeEntry.errorCount}</td>
