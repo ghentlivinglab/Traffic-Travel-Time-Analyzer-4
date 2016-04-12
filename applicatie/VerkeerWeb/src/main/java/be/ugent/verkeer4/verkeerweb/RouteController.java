@@ -158,37 +158,58 @@ public class RouteController {
         IRouteService routeService = new RouteService();
         Route route = routeService.getRoute(id);
 
+        // vraag de laatste provider gegevens op uit de database
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
-       
+        // bouw view model op
         RouteDetailsVM detail = new RouteDetailsVM(route, summaries);
         ModelAndView model = new ModelAndView("route/detail");
         model.addObject("detail", detail);
         return model;
     }
 
+    /**
+     * Toont de kaartweergave
+     * @return
+     * @throws ClassNotFoundException 
+     */
     @RequestMapping(value = "route/map", method = RequestMethod.GET)
     public ModelAndView getMap() throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
 
+        // geef het overzicht van alle routes
         RouteOverviewVM overview = getRouteOverviewModel(routeService);
-
+        // en voeg het toe als model
         ModelAndView model = new ModelAndView("route/map");
         model.addObject("overview", overview);
 
         return model;
     }
 
+    /**
+     * Geeft de map gegevens als json terug
+     * @param req
+     * @return
+     * @throws ClassNotFoundException 
+     */
     @ResponseBody
     @RequestMapping(value = "route/mapdata", method = RequestMethod.GET)
     public MapData ajaxGetMapRoutes(HttpServletRequest req) throws ClassNotFoundException {
+        // als id leeg is geef alle routes gegevens terug
         if (req.getParameter("id") == null || req.getParameter("id").equalsIgnoreCase("")) {
             return getAllRouteMapData();
         } else {
+            // anders geef maar de map gegevens voor 1 route terug
             int id = Integer.parseInt(req.getParameter("id"));
             return getRouteMapData(id);
         }
     }
 
+    /**
+     * Toont de edit pagine van een route
+     * @param id
+     * @return
+     * @throws ClassNotFoundException 
+     */
     @RequestMapping(value = "route/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable("id") Integer id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
@@ -209,6 +230,13 @@ public class RouteController {
         return model;
     }
 
+    /**
+     * Valideert en slaat de gewijzigde route gegevens op
+     * @param route
+     * @param result
+     * @return
+     * @throws ClassNotFoundException 
+     */
     @RequestMapping(value = "route/edit/{id}", method = RequestMethod.POST)
     public ModelAndView edit(@Valid
             @ModelAttribute("routeEdit") RouteEditVM route, BindingResult result) throws ClassNotFoundException {
@@ -218,6 +246,7 @@ public class RouteController {
             result.rejectValue("name", "error.name", "Naam is verplicht");
         }
 
+        // parse de start lat & lng
         double fromLat = 0;
         double fromLng = 0;
         try {
@@ -227,6 +256,7 @@ public class RouteController {
             result.rejectValue("fromLatLng", "error.fromLatLng", "Ongeldige van positie");
         }
 
+        // parse de end lat & lng
         double toLat = 0;
         double toLng = 0;
         try {
@@ -236,17 +266,21 @@ public class RouteController {
             result.rejectValue("toLatLng", "error.toLatLng", "Ongeldige naar positie");
         }
 
+        // als er validation erros zijn toon de errors bij de input velden
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("route/edit", result.getModel());
             model.addObject("errors", result);
             return model;
         } else {
-
+            // vraag de bestaande route op
             IRouteService routeService = new RouteService();
             Route r = routeService.getRoute(route.getId());
 
+            // pas de gegevens aan
             r.setName(route.getName());
 
+            // als de waypoints of kortste/snelste route is geupdate
+            // dan moet de waypoints geupdate worden
             boolean updateWaypoints = r.getFromLatitude() != fromLat
                     || r.getFromLongitude() != fromLng
                     || r.getToLatitude() != toLat
@@ -262,6 +296,7 @@ public class RouteController {
             r.setToLongitude(toLng);
             r.setAvoidHighwaysOrUseShortest(route.getAvoidHighwaysOrUseShortest());
 
+            // update het route object
             routeService.updateRoute(r, updateWaypoints);
 
             return new ModelAndView(
@@ -270,21 +305,31 @@ public class RouteController {
     }
 
     
-    
+    /**
+     * Geeft de route kaart gegevens terug van een bepaald id
+     * @param id
+     * @return
+     * @throws ClassNotFoundException 
+     */
     private MapData getRouteMapData(int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         Route r = routeService.getRoute(id);
         IPOIService poiService = new POIService(routeService);
 
+        // vraag alle waypoints van de route
         List<RouteWaypoint> waypoints = routeService.getRouteWaypointsForRoute(id);
+        // vraag de laatste provider gegevens van de route
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
 
         MapData data = new MapData();
+        // verzamel de map route gegevens op basis van de route en de laatste provider gegevens
         MapRoute mr = getMapRoute(r, summaries);
 
+        // vraag alle POI gegevens op van de laatste 10min
         Date from = Date.from(java.time.LocalDateTime.now().minusMinutes(5).toInstant(ZoneOffset.UTC));
         Date to = Date.from(java.time.LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.UTC));
         List<POIWithDistanceToRoute> pois = poiService.getPOIsNearRoute(r.getId(), from, to);
+        // bouw een map poi object van het poi object op
         for (POI poi : pois) {
             MapPOI mp = getMapPOIFromPOI(poi);
             data.getPois().add(mp);
@@ -292,6 +337,7 @@ public class RouteController {
 
         data.getRoutes().add(mr);
 
+        // maak van alle waypoints map waypoints objecten
         for (RouteWaypoint waypoint : waypoints) {
             MapWaypoint wp = new MapWaypoint(waypoint.getLatitude(), waypoint.getLongitude());
             mr.getWaypoints().add(wp);
@@ -300,21 +346,37 @@ public class RouteController {
         return data;
     }
 
+    /**
+     * Berekent de percentage van de vertraging van de route aan de hand van
+     * de laatste provider gegevens
+     * @param r
+     * @param summaries
+     * @return 
+     */
     private double getTrafficDelayPercentage(Route r, RouteData[] summaries) {
         if (summaries.length <= 0) {
             return 0;
         }
 
+        // tel alle base travel times op
         double baseTravelTime = Arrays.stream(summaries).mapToDouble(rd -> rd.getBaseTime()).sum();
+        // bereken gemiddelde travel time
         double avgBaseTravelTime = baseTravelTime / (float) summaries.length;
 
+        // tel alle travel times (die delay bevatten)
         int totalTravelTime = Arrays.stream(summaries).mapToInt(rd -> rd.getTravelTime()).sum();
         double avgTravelTime = totalTravelTime / (float) summaries.length;
 
+        // bereken percentage
         double percentage = (avgTravelTime / avgBaseTravelTime) - 1;
         return percentage;
     }
 
+    /**
+     * Verzamelt alle map gegevens voor alle routes
+     * @return
+     * @throws ClassNotFoundException 
+     */
     private MapData getAllRouteMapData() throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         IPOIService poiService = new POIService(routeService);
@@ -339,6 +401,7 @@ public class RouteController {
             lst.add(summary);
         }
 
+        // vraag alle actieve pois op en map ze op map poi objectne
         List<POI> pois = poiService.getActivePOIs();
         for (POI poi : pois) {
             MapPOI mp = getMapPOIFromPOI(poi);
@@ -355,8 +418,10 @@ public class RouteController {
                 routeSummaries = summariesPerRouteId.get(r.getId());
             }
 
+            // map de route en laatste gegevens op een map route object
             MapRoute mr = getMapRoute(r, routeSummaries);
 
+            // en voeg het object toe
             mapRoutesPerId.put(r.getId(), mr);
             data.getRoutes().add(mr);
         }
@@ -370,6 +435,11 @@ public class RouteController {
         return data;
     }
 
+    /**
+     * Mapped een POI object op een MapPOI
+     * @param poi
+     * @return 
+     */
     private MapPOI getMapPOIFromPOI(POI poi) {
         MapPOI mp = new MapPOI();
         mp.setId(poi.getId());
@@ -382,6 +452,13 @@ public class RouteController {
         return mp;
     }
 
+    /**
+     * Bouwt een map route object op adhv van een route en de recenste
+     * provider gegevens
+     * @param r
+     * @param routeSummaries
+     * @return 
+     */
     private MapRoute getMapRoute(Route r, List<RouteData> routeSummaries) {
         MapRoute mr = new MapRoute();
         mr.setName(r.getName());
