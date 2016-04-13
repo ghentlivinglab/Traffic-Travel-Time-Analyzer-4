@@ -52,8 +52,8 @@ public class RouteDataDbSet extends DbSet<RouteData> {
             if (condition != null) {
                 where += "WHERE " + condition + " ";
             }
-            String query = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd " + where + " group by routeId, provider) ";
-
+            String query;// = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd " + where + " group by routeId, provider) ";
+            query = "select r.* from routedata r join (select max(rd.id) as mid from routedata rd " + where + " group by routeId, provider) as tmp on tmp.mid = r.id";
             Query q = con.createQuery(query);
 
             if (parameters != null) {

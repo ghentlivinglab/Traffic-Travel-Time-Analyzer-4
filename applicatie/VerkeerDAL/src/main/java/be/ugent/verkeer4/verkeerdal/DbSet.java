@@ -113,8 +113,6 @@ public class DbSet<T> {
 
     public int insert(T object) {
         try (org.sql2o.Connection con = sql2o.open()) {
-
-            Logger.getLogger(DbSet.class.getName()).log(Level.INFO, "Executing query " + insertQuery);
             Query q = con.createQuery(insertQuery);
 
             for (Field field : this.type.getDeclaredFields()) {

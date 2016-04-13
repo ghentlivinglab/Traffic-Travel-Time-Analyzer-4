@@ -40,7 +40,9 @@ public class LogService extends BaseService implements ILogService {
      * @param message 
      */
     @Override
-    public void insert(LogTypeEnum type, String category, String message) {
+    public void insert(LogTypeEnum type, String category, String message) {        
+        Logger.getLogger(RouteService.class.getName()).log(type == LogTypeEnum.Error ? Level.SEVERE : Level.INFO, message);
+        
         //logs krijgen de huidige datum mee
         Date now = new Date();
         
