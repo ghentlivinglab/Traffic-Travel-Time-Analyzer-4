@@ -25,14 +25,14 @@ public class Route {
     private Date lastTrafficJamCheck;
     
     /**
-     * @return the id
+     * @return the Id
      */
     public int getId() {
         return id;
     }
 
     /**
-     * @param id the id to set
+     * @param id the Id to set
      */
     public void setId(int id) {
         this.id = id;

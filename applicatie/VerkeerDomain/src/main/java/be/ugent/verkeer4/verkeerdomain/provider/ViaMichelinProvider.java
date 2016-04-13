@@ -1,10 +1,10 @@
 package be.ugent.verkeer4.verkeerdomain.provider;
 
+import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ViaMichelinProvider extends BaseProvider implements IProvider {
 
@@ -17,8 +17,8 @@ public class ViaMichelinProvider extends BaseProvider implements IProvider {
         try {
             return scrape(route, "viamichelin.pl");
         } catch (Exception ex) {
-            Logger.getLogger(TomTomProvider.class.getName()).log(Level.WARNING, "Scraping failed for route " + route.getId(), ex);
-
+            LogService.getInstance().insert(LogTypeEnum.Warning, ViaMichelinProvider.class.getName(), "Scraping failed for route " + route.getId() + ": " + ex.getMessage());
+            
             return null;
         }
     }

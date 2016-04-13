@@ -1,27 +1,40 @@
+############################
+# Hehre.pl scraped de route details met gegeven  van - tot geocoordinaten
+############################
 use strict;
 
-my $cachename = "here.cache";
+# de naam van de cache file om de api gegevens tijdelijk te cachen
+my $cacheName = "here.cache";
 
 if(scalar @ARGV < 4) {
 	print "Usage: here fromlat fromlng tolat tolng avoidHighways\n";
 	exit(1);
 }
 
+# Argumenten
+# geo coordinaten
 my $fromLat = @ARGV[0]; #"51.05633";
 my $fromLng = @ARGV[1]; #"3.69485";
 my $toLat = @ARGV[2]; #"51.038768";
 my $toLng = @ARGV[3]; #"3.736953";
+
+# flag dat aangeeft of we de highways moeten avoiden of niet
 my $avoidHighways = 0;
 if(scalar @ARGV >= 5) {
 	$avoidHighways = @ARGV[4];
 }
+
+# voer de main functie uit de de gegevens zal opvragen en printen
 main();
 
 sub main {
 
+	# we moeten eerst op zoek gaan naar een geldige API Key die we kunnen gebruiken
+	# de API Key cachen we in een file zodat dit niet steeds opnieuw moet opgevraagd worden
 	my $appCode;
 	my $appId;
 	
+	# check of de api gecached is
 	my $cache = readCache();
 	if(exists $cache->{"appCode"} && $cache->{"appCode"} ne "" && 
 	   exists $cache->{"appId"} && $cache->{"appId"} ne "") {
@@ -37,17 +50,21 @@ sub main {
 	$appCode = $cache->{"appCode"};
 	$appId = $cache->{"appId"};
 	
-	#print "\n";
+	# haal de route gegevens op
 	printRouteData($appCode, $appId);
 
 }
 
+##################
+# Leest de gecachede properties van de cache file
+##################
 sub readCache {
 	my @args = @ARGV;
-	@ARGV = ( $cachename );
+	@ARGV = ( $cacheName );
 	
+	# check de last modified time van de  cache file
 	(my $dev,my $ino,my $mode,my $nlink,my $uid,my $gid,my $rdev,my $size,
-   my $atime,my $mtime,my $ctime,my $blksize,my $blocks) =  stat("here.cache");
+   my $atime,my $mtime,my $ctime,my $blksize,my $blocks) =  stat($cacheName);
    
    # als cache ouder is dan een uur gebruik cache niet meer
    my $age = time - $mtime;
@@ -56,59 +73,62 @@ sub readCache {
 		return {};
    }		
 	
+	# lees alle lijnen van de vorm key=value en steek ze in een hash
 	my $obj = {};
-	
 	while(<>) {
 		chomp;
 		my @parts = split("=", $_);
 		$obj->{$parts[0]} = $parts[1];
 	}
 	
+	# restore de oorpsronkelijke args en return de hash
 	@ARGV = @args;
 	return $obj;
 }
 
+#################
+# Saved de API key gegevens in de cache
+#################
 sub saveCache {
 	(my $cache) = @_;
 	
 	my %c = %{ $cache };
-	open my $fh, ">" . $cachename;
+	open my $fh, ">" . $cacheName;
 	for my $k (keys %c) {
 		print $fh $k . "=" . $c{$k} . "\n";
 	}
 	close $fh;
 }
 
-
-
-
+########################
+# Haalt de API Key gegevens op uit de website html
+########################
 sub getAppCodeAndId {
+	# bouw url op
 	my $url = 'https://maps.here.com/directions/drive/N' . $fromLat . '-,-E' . $fromLng . ':' . $fromLat . ',' . $fromLng . '/N' . $toLat . '-,-E' . $toLng .':' . $toLat . ',' . $toLng .'?map=' . $toLat . ',' . $toLng . ',normal&avoid=carHOV';
 	
+	# vraag html response op met curl
 	my $response = `curl --insecure -s -o - "$url"`;
 	
-	#print "parsing api key\n";
-	# "appCode":"djPZyynKsbTjIUDOBcHZ2g","appId":"xWVIueSv6JL0aJ5xqTxb"
-	
 	# eerst substringen naar de apikey: is STUKKEN sneller
-	#print $response;
 	my $idx = index($response, "appCode");
 	my $part = substr($response,$idx, 200);
 	
 	my $appCode;
 	my $appId;
-	#print $part;
+	
+	# parse de appcode uit de  response
 	if($part =~ /.*?\"?appCode\"?\:\s*(\'|\")(.*?)(\1).*?/gc) {
-		#print "Code: " . $2;
 		$appCode = $2;
 	}
 	
 	my $part2 = $part;
+	# parse de appid uit de  response
 	if($part2 =~ /.*?\"?appId\"?\:\s*(\'|\")(.*?)(\1).*?/gc) {
-		#print "Id: " . $2;
 		$appId = $2;
 	}
 	
+	# als er een appcode en app id gevonden is geef ze terug
 	if($appCode ne "" && $appId ne "") {
 		my $obj = { "appCode" => $appCode, "appId" => $appId };
 		return $obj;
@@ -117,47 +137,53 @@ sub getAppCodeAndId {
 	exit(1);
 }
 
-
+##############################
+# Print de route data met behulp van de gegeven api key
+##############################
 sub printRouteData {
 	(my $appCode, my $appId) = @_;
 	
+	# als we highways moeten avoiden is dit de extra parameter die moet meegegeven worden
 	my $motorways = "";
 	if($avoidHighways) {
 		$motorways = "motorway:-2";
 	}
+	
+	# bouw url op om de route jsonp response terug te krijgen
 	my $url = 'https://route.api.here.com/routing/7.2/calculateroute.json?alternatives=0&app_code=' . $appCode .'&app_id=' . $appId . '&jsonAttributes=41&language=en_US&legattributes=all&linkattributes=none,sh,ds,rn,ro,nl,pt,ns,le,fl&maneuverattributes=all&metricSystem=metric&mode=fastest;car;traffic:enabled;' .$motorways . '&routeattributes=none,sh,wp,sm,bb,lg,no,li,tx,la&transportModeType=car&waypoint0=geo!' . $fromLat . ',' . $fromLng . '&waypoint1=geo!' . $toLat . ',' . $toLng . '';
 	
-	#print $url;
-	
+	# vraag gegevens op met curl en store de json response
 	my $response = `curl --insecure -s -o - "$url"`;
 	
+	# haal het stuk met de gegevens uit de response, dat is sneller dan over kilobytes aan text regexxen
 	my $idx = index($response, "summary");
 	my $part = substr($response,$idx, 500);
 	
+	# parameters die er uit moeten gehaald worden
 	my $distance;
 	my $trafficTime;
 	my $baseTime;
-	#print $part;
+	
+	# Parse met regex de afstand uit de json
 	if($part =~ /.*?\"?distance\"?\:\s*(.*?),.*?/g) {
 		$distance = $1;
 	}
+	
+	# Parse met regex de trafficTime uit de json
 	if($part =~ /.*?\"?trafficTime\"?\:\s*(.*?),.*?/g) {
 		$trafficTime = $1;
 	}
+	
+	# Parse met regex de baseTime uit de json
 	if($part =~ /.*?\"?baseTime\"?\:\s*(.*?),.*?/g) {
 		$baseTime = $1;
 	}
 	
-	#print "Base time: $baseTime\n";
-	#print "Traffic time: $trafficTime\n";
-	
+	# bereken de vertraging
 	my $delay = $trafficTime - $baseTime;
 	
+	# print de header en gegevens
 	print "totalDistanceMeters;totalTimeSeconds;totalDelaySeconds\n";
 	print $distance . ";" . $trafficTime . ";" . $delay . "\n";
 		
-		
-		#print "\n-----------------------\n";
-	
-	
 }

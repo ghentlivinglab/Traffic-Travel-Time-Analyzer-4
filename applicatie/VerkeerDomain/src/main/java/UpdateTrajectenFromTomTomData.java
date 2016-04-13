@@ -1,6 +1,8 @@
 
 import be.ugent.verkeer4.verkeerdomain.IRouteService;
+import be.ugent.verkeer4.verkeerdomain.LogService;
 import be.ugent.verkeer4.verkeerdomain.RouteService;
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.CalculateRouteResponse;
@@ -8,8 +10,6 @@ import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Leg;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Point;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.TomTomClient;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class UpdateTrajectenFromTomTomData {
 
@@ -48,9 +48,9 @@ class UpdateTrajectenFromTomTomData {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UpdateTrajectenFromTomTomData.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, UpdateTrajectenFromTomTomData.class.getName(), ex.getMessage());
         } catch (IOException ex) {
-            Logger.getLogger(UpdateTrajectenFromTomTomData.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, UpdateTrajectenFromTomTomData.class.getName(), ex.getMessage());
         }
 
     }

@@ -5,17 +5,12 @@
  */
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.provider.IWeatherProvider;
 import be.ugent.verkeer4.verkeerdomain.provider.WeatherProvider;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author Niels
- */
 public class WeatherProviderService extends BaseService{
     
     private final IWeatherProvider weatherProvider;
@@ -26,6 +21,12 @@ public class WeatherProviderService extends BaseService{
         weatherProvider = new WeatherProvider();
     }
     
+    /**
+     * Gaat voor elk weerstation opgenomen in de lijst het weer pollen via een externe REST service
+     * en deze data aan de weer tabel toevoegen.
+     * @param stations
+     * @throws ClassNotFoundException 
+     */
     public void pollWeather(List<String> stations) throws ClassNotFoundException {
         
         for(String station : stations)
@@ -35,7 +36,7 @@ public class WeatherProviderService extends BaseService{
                 repo.getWeatherSet().insert(data);
             } 
             else {
-                Logger.getLogger(WeatherService.class.getName()).log(Level.WARNING, "Could not fetch weather for station {0}", station);
+                LogService.getInstance().insert(LogTypeEnum.Warning, WeatherProviderService.class.getName(), "Could not fetch weather for station: " + station);
             } 
         }      
     }

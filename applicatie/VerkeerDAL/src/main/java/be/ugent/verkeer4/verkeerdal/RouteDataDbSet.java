@@ -16,13 +16,13 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         super(RouteData.class, sql2o);
     }
 
-    public List<RouteData> getItemsForRoute(int routeId, Date from, Date to) {
+    public List<RouteData> getItemsForRoute(int routeId, Date from, Date to, String order) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("RouteId", routeId);
         map.put("From", from);
         map.put("To", to);
 
-        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map);
+        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map, order);
     }
 
     public List<RouteData> getRouteDataAlignedTo5min(String condition, Map<String, Object> parameters) {
@@ -52,8 +52,8 @@ public class RouteDataDbSet extends DbSet<RouteData> {
             if (condition != null) {
                 where += "WHERE " + condition + " ";
             }
-            String query = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd " + where + " group by routeId, provider) ";
-
+            String query;// = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd " + where + " group by routeId, provider) ";
+            query = "select r.* from routedata r join (select max(rd.id) as mid from routedata rd " + where + " group by routeId, provider) as tmp on tmp.mid = r.id";
             Query q = con.createQuery(query);
 
             if (parameters != null) {

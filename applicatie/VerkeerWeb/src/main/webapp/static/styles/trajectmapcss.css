@@ -37,7 +37,7 @@ th, td {
 }
 
 th:nth-child(1), td:nth-child(1) {
-    width: 180px;
+    width: 260px;
 }
 th:last-child,td:last-child {
     width:inherit;

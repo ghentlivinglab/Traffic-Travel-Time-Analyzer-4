@@ -1,5 +1,6 @@
 package be.ugent.verkeer4.verkeerdomain;
 
+import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.POINearRoute;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
@@ -10,8 +11,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.geometry.Point3D;
 
 public class POIService extends BaseService implements IPOIService {
@@ -42,7 +41,7 @@ public class POIService extends BaseService implements IPOIService {
         try {
             repo.getPOISet().update(poi);
         } catch (Exception ex) {
-            Logger.getLogger(POIService.class.getName()).log(Level.SEVERE, null, ex);
+            LogService.getInstance().insert(LogTypeEnum.Error, POIService.class.getName(), ex.getMessage()); 
         }
     }
 
@@ -177,7 +176,7 @@ public class POIService extends BaseService implements IPOIService {
                             repo.getPOISet().insertPOINearRoute(near);
                         }
                         catch(Exception ex) {
-                            Logger.getLogger(POIService.class.getName()).log(Level.WARNING, null, ex);
+                            LogService.getInstance().insert(LogTypeEnum.Error, POIService.class.getName(), ex.getMessage()); 
                         }
                         notMatchedForRoute = false;
                     }

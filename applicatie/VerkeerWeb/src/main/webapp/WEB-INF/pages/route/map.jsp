@@ -22,18 +22,18 @@
                     <div class="panel-body">
 
 
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="map" id="map" style="height:800px">
 
                             </div>        
                         </div>   
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <table class="table sortable">
                                 <thead>
                                     <tr>
                                         <th><input name="routecheckAll" type="checkbox" class="routecheckAll" checked="checked"></input>Name</th>
                                         <th>Distance</th>
-                                        <th>Current Travel Time</th>
+                                        <th>CTT</th>
                                         <th>Delay</th>
                                     </tr>
                                 </thead>
