@@ -27,7 +27,7 @@
                         </div>
                         <div class="panel-body">
                             <!-- Table -->
-                            <table class="table">
+                            <table class="table sortable">
                                 <thead>
                                     <tr>
                                         <th>Category</th>
