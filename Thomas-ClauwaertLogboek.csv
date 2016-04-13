@@ -36,3 +36,6 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 18/03/16,16:00,17:00,Thuis,"Dashboard frontend + nieuwe overview per route prototype",#47,
 25/03/16,17:00,17:30,Thuis,"Onderzoek Selenium Testing en POC",,
 04/04/16,20:45,21:45,Thuis,"Autostrade route's toegevoegd",#69,
+12/04/16,08:15,12:00,School,"Standup meeting, takenverdeling overlopen einde Sprint 2, aanpassen van loggingtabel op dashboard, masterproef en stage powerpoints gevolgd",,
+12/04/16,20:00,21:00,Thuis,"Test deployment op Digital Ocean voor installatiehandleiding + echte productiedeployment",,
+13/04/16,20:00,22:00,Thuis,"Use cases upgrade, uc diagram, projectdossier updaten",,
