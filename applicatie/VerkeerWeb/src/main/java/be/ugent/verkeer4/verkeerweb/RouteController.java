@@ -163,8 +163,8 @@ public class RouteController {
         CompareData data = new CompareData();
 
         // De "delegates"
-        ICompareDataMember travelTimeGetter = routeData -> routeData.getTravelTime();
-        ICompareDataMember delayGetter = routeData -> routeData.getDelay();
+        ICompareDataMember travelTimeGetter = RouteData::getTravelTime;
+        ICompareDataMember delayGetter = RouteData::getDelay;
 
         // Fill the data object
         long start = startDate.getTime();
@@ -188,7 +188,7 @@ public class RouteController {
                 index++;
             }
 
-            // check if no data match in this minute
+            // check if no data match in this time frame
             if (previousAmount == amount) {
                 // calculate avg
                 if (amount > 0) {
