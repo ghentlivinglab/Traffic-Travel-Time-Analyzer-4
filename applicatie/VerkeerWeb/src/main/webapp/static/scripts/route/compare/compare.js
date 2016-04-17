@@ -59,7 +59,18 @@
         routeChart.setChartData(series);
     };
 
+    compare.getCheckedProviders = function () {
+        var providers = [];
+        var checkboxes = document.querySelectorAll("input[name=providers]:checked");
+        for (var i = 0; i < checkboxes.length; i++) {
+            providers.push(checkboxes[i].value);
+        }
+        return providers;
+    };
+
     compare.fetchRouteData = function () {
+        var providers = compare.getCheckedProviders();
+
         $.ajax({
             method: "GET",
             url: "comparedata",
@@ -78,7 +89,7 @@
         });
     };
 
-    compare.getSelectedRoute = function(optionsId) {
+    compare.getSelectedRoute = function (optionsId) {
         var routeOptions = document.getElementById(optionsId);
         var id = routeOptions.options[routeOptions.selectedIndex].value;
         var name = routeOptions.options[routeOptions.selectedIndex].text;

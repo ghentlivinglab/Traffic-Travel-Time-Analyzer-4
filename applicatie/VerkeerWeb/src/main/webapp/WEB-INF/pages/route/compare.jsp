@@ -64,12 +64,10 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="providers">Select providers</label>
-                    <select multiple id="providers" class="form-control">
-                        <c:forEach var="provider" items="${providers}">
-                            <option value="${provider}">${provider}</option>
-                        </c:forEach>
-                    </select>
+                    <label>Select providers</label><br>
+                    <c:forEach var="provider" items="${providers}">
+                        <input type="checkbox" name="providers" id="${provider}" value="${provider}" checked>${provider}<br>
+                    </c:forEach>
                 </div>
             </div>
             <!-- Buttons row -->
