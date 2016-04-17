@@ -39,3 +39,8 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 12/04/16,08:15,12:00,School,"Standup meeting, takenverdeling overlopen einde Sprint 2, aanpassen van loggingtabel op dashboard, masterproef en stage powerpoints gevolgd",,
 12/04/16,20:00,21:00,Thuis,"Test deployment op Digital Ocean voor installatiehandleiding + echte productiedeployment",,
 13/04/16,20:00,22:00,Thuis,"Use cases upgrade, uc diagram, projectdossier updaten",,
+15/04/16,16:00,17:30,Thuis,"Projectdossier, Installatiehandleiding",#82,
+15/04/16,18:00,18:15,Thuis,"Projectdossier, Use case diagram update",#57,
+17/04/16,11:00,13:00,Thuis,"Projectdossier, Use case tests scenario's",#85,
+17/04/16,14:00,16:00,Thuis,"Projectdossier, Load Tests + filmpje",#83,
+17/04/16,23:00,23:30,Thuis,"Selenium Tests testproject",#84,
