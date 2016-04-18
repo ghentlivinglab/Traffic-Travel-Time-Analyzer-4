@@ -46,7 +46,7 @@ public class SeleniumTestDetail {
     @Test
     public void testTTT() throws Exception {
         baseUrl = "http://verkeer-4.vop.tiwi.be/route/detail/";
-        for(int i=11; i<15;i++) {
+        for(int i=11; i<13;i++) {
             driver.get(baseUrl + i);
             
             try {
@@ -96,7 +96,7 @@ public class SeleniumTestDetail {
     @Test
     public void testDelay() throws Exception {
         baseUrl = "http://verkeer-4.vop.tiwi.be/route/detail/";
-        for(int i=11; i<15;i++) {
+        for(int i=11; i<13;i++) {
             driver.get(baseUrl + i);
             
             try {
@@ -145,7 +145,7 @@ public class SeleniumTestDetail {
     @Test
     public void testFrom() throws Exception {
         baseUrl = "http://verkeer-4.vop.tiwi.be/route/detail/";
-        for(int i=11; i<15;i++) {
+        for(int i=11; i<13;i++) {
             
             driver.get(baseUrl + i);
             
@@ -162,7 +162,7 @@ public class SeleniumTestDetail {
     @Test
     public void testTo() throws Exception {
         baseUrl = "http://verkeer-4.vop.tiwi.be/route/detail/";
-        for(int i=11; i<15;i++) {
+        for(int i=11; i<13;i++) {
             driver.get(baseUrl + i);
             
             try {
