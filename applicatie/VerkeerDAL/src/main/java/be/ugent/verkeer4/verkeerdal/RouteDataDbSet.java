@@ -16,13 +16,30 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         super(RouteData.class, sql2o);
     }
 
+    // Todo refactor beide overloads zodat andere opties dan where beter geregeld worden
     public List<RouteData> getItemsForRoute(int routeId, Date from, Date to, String order) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("RouteId", routeId);
         map.put("From", from);
         map.put("To", to);
-
         return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map, order);
+    }
+
+    public List<RouteData> getItemsForRoute(int routeId, Date from, Date to, String order, int[] providers) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("RouteId", routeId);
+        map.put("From", from);
+        map.put("To", to);
+
+        StringBuilder builder = new StringBuilder();
+        for (int i=0; i<providers.length-1; i++) {
+            builder.append(i);
+            builder.append(',');
+        }
+        builder.append(providers[providers.length-1]);
+        map.put("providers", builder.toString());
+
+        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To AND Provider in (:providers)", map, order);
     }
 
     public List<RouteData> getRouteDataAlignedTo5min(String condition, Map<String, Object> parameters) {

@@ -169,6 +169,19 @@ public class ProviderService extends BaseService implements IProviderService {
         return repo.getRouteDataSet().getItemsForRoute(routeId, from, to, order);
     }
 
+
+    /**
+     * Geeft de route data terug voor een bepaalde periode voor een route
+     * @param routeId
+     * @param from
+     * @param to
+     * @return
+     */
+    @Override
+    public List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to, String order, int[] providers) {
+        return repo.getRouteDataSet().getItemsForRoute(routeId, from, to, order, providers);
+    }
+
     /**
      * Polled alle POI providers om nieuwe POI's te detecteren en op te slaan
      * @param bbox

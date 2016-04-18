@@ -78,7 +78,8 @@
                 routeId1: route1Selection.id,
                 routeId2: route2Selection.id,
                 startDate: datePickerBegin.data("DateTimePicker").date().toDate(),
-                endDate: datePickerEnd.data("DateTimePicker").date().toDate()
+                endDate: datePickerEnd.data("DateTimePicker").date().toDate(),
+                providers: providers.toString()
             },
             success: function (routeData) {
                 data = routeData;

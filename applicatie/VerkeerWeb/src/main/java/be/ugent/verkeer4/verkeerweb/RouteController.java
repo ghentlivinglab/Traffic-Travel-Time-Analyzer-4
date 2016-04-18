@@ -152,14 +152,20 @@ public class RouteController {
     @ResponseBody
     @RequestMapping(value = "route/comparedata", method = RequestMethod.GET)
     public CompareData ajaxGetCompareData(@RequestParam("routeId1") int routeId1, @RequestParam("routeId2") int routeId2,
-                                   @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
+                                   @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate, @RequestParam("providers") String[] providers)
             throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         IPOIService poiService = new POIService(routeService);
         IProviderService providerService = new ProviderService(routeService, poiService);
 
-        List<RouteData> routeData1 = providerService.getRouteDataForRoute(routeId1, startDate, endDate, "Timestamp");
-        List<RouteData> routeData2 = providerService.getRouteDataForRoute(routeId2, startDate, endDate, "Timestamp");
+        int[] providerIds = new int[providers.length];
+        for (int i = 0; i < providerIds.length; i++) {
+            providerIds[i] = ProviderEnum.valueOf(ProviderEnum.class, providers[i]).getValue();
+
+        }
+
+        List<RouteData> routeData1 = providerService.getRouteDataForRoute(routeId1, startDate, endDate, "Timestamp", providerIds);
+        List<RouteData> routeData2 = providerService.getRouteDataForRoute(routeId2, startDate, endDate, "Timestamp", providerIds);
         CompareData data = new CompareData();
 
         // De "delegates"

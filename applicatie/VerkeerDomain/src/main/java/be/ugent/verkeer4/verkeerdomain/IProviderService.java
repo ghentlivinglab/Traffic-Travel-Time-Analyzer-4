@@ -8,6 +8,7 @@ import java.util.List;
 public interface IProviderService {
 
     List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to, String order);
+    List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to, String order, int[] providers);
 
     void poll() throws ClassNotFoundException;
     
