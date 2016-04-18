@@ -25,6 +25,15 @@
         toggleTitle = title;
     };
 
+    routeChart.showDefaultTitle = function () {
+        chart.setTitle({text: defaultTitle});
+    };
+
+    routeChart.showToggleTitle = function () {
+        chart.setTitle({text: toggleTitle});
+    };
+
+    // todo weg
     routeChart.getRouteData = function (options) {
         $.ajax({
             method: "GET",
