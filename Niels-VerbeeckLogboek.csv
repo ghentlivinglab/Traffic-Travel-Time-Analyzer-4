@@ -43,3 +43,7 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 02/04/49,16:00,18:10,Thuis,"Front end code geschreven om afbeeldingen en tekst te weergeven wanneer deze een oorzaak kunnen zijn van de file.",77,
 11/04/16,08:30,11:30,Thuis,"Debuggen van code rond het matchen van het weer met files (Hij gaf elke keer dezelfde afstand terug). Opkuisen van code en optimaliseren van queries. Mergen met develop.",77,
 11/04/16,12:30,16:00,Thuis,"Onderzoek rond REST service. Opzetten van RESTful webservice met JAX-RS. Uittesten en debuggen van webservice (Condition is gereserveerde naam in mariadb, JSON bug in glassfish 1.4.4)",80,
+12/04/16,08:15,10:30,School,"Scrum meeting, planning & taakverdeling",,
+14/04/16,14:00,15:30,School,"Gebruikershandleiding herschrijven naar nieuwere versie",,
+15/04/16,19:00,20:00,Thuis,"Gebruikershandleiding afwerken en herwerken in LaTeX (eerste keer in LaTeX)",,
+17/04/16,11:00,13:00,Thuis,"Usability test uitvoeren, verwerken en documenteren",,
