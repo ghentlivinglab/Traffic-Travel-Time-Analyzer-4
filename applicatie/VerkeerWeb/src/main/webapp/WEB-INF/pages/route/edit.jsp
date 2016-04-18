@@ -6,7 +6,7 @@
 <html>
     <head>
         <jsp:include page="/WEB-INF/shared/head.jsp">
-            <jsp:param name="title" value="Route wijzigen"/>
+            <jsp:param name="title" value="Edit route"/>
         </jsp:include>
         <jsp:include page="/WEB-INF/shared/maprequirements.jsp"/>
         <script src="<c:url value="/static/scripts/route/edit.js" />"></script>

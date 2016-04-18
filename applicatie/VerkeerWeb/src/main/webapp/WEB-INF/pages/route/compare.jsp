@@ -4,7 +4,7 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/shared/head.jsp">
-        <jsp:param name="title" value="Trajecten veranderen"/>
+        <jsp:param name="title" value="Compare routes"/>
     </jsp:include>
 </head>
 <body>

@@ -5,7 +5,7 @@
 <html>
     <head>
         <jsp:include page="/WEB-INF/shared/head.jsp">
-            <jsp:param name="title" value="Traject ${detail.name}"/>
+            <jsp:param name="title" value="Route ${detail.name}"/>
         </jsp:include>
         <jsp:include page="/WEB-INF/shared/maprequirements.jsp"/>
         <link href="<c:url value="/static/styles/route/detail.css" />" rel="stylesheet">

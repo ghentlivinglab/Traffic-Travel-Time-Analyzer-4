@@ -153,6 +153,8 @@ public class ProviderService extends BaseService implements IProviderService {
                 }
             }
         }
+        
+        pool.shutdownNow();
     }
 
     /**
@@ -219,6 +221,7 @@ public class ProviderService extends BaseService implements IProviderService {
                 LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
             }
         }
-        futures.clear();
+        
+        pool.shutdownNow();
     }
 }
