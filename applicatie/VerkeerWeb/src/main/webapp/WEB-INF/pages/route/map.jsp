@@ -5,7 +5,7 @@
 <html>
     <head>
         <jsp:include page="/WEB-INF/shared/head.jsp">
-            <jsp:param name="title" value="Kaartweergave" />
+            <jsp:param name="title" value="Map view" />
         </jsp:include>
         <jsp:include page="/WEB-INF/shared/maprequirements.jsp" />
         <script src="<c:url value="/static/scripts/route/map.js" />"></script>            

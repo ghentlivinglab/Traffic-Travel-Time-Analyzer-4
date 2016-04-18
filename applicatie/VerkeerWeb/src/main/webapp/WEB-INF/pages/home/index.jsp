@@ -27,7 +27,7 @@
                         </div>
                         <div class="panel-body">
                             <!-- Table -->
-                            <table class="table">
+                            <table class="table sortable">
                                 <thead>
                                     <tr>
                                         <th>Category</th>
@@ -141,7 +141,7 @@
                 <div class="col-sm-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Wheater</h3>
+                            <h3 class="panel-title">Weather</h3>
                         </div>
                         <div class="panel-body">
                             <!--<span style="display: block !important; width: 180px; text-align: center; font-family: sans-serif; font-size: 12px;"><a href="http://dutch.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:00000.7.06434&bannertypeclick=wu_blueglass" title="Gent, Belgium Weather Forecast" target="_blank"><img src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass_metric&airportcode=EBCV&ForcedCity=Gent&ForcedState=Belgium&wmo=06434&language=NL" alt="Find more about Weather in Gent, BX" width="160" /></a><br></span>

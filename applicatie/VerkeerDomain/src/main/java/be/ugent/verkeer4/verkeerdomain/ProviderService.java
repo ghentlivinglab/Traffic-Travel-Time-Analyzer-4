@@ -153,6 +153,8 @@ public class ProviderService extends BaseService implements IProviderService {
                 }
             }
         }
+        
+        pool.shutdownNow();
     }
 
     /**
@@ -165,6 +167,19 @@ public class ProviderService extends BaseService implements IProviderService {
     @Override
     public List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to, String order) {
         return repo.getRouteDataSet().getItemsForRoute(routeId, from, to, order);
+    }
+
+
+    /**
+     * Geeft de route data terug voor een bepaalde periode voor een route
+     * @param routeId
+     * @param from
+     * @param to
+     * @return
+     */
+    @Override
+    public List<RouteData> getRouteDataForRoute(int routeId, Date from, Date to, String order, int[] providers) {
+        return repo.getRouteDataSet().getItemsForRoute(routeId, from, to, order, providers);
     }
 
     /**
@@ -219,6 +234,7 @@ public class ProviderService extends BaseService implements IProviderService {
                 LogService.getInstance().insert(LogTypeEnum.Warning, ProviderService.class.getName(), ex.getMessage());
             }
         }
-        futures.clear();
+        
+        pool.shutdownNow();
     }
 }

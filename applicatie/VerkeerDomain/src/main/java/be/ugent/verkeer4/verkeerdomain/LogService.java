@@ -43,6 +43,9 @@ public class LogService extends BaseService implements ILogService {
     public void insert(LogTypeEnum type, String category, String message) {        
         Logger.getLogger(RouteService.class.getName()).log(type == LogTypeEnum.Error ? Level.SEVERE : Level.INFO, message);
         
+        if(type == LogTypeEnum.Info) // geen info logging
+            return;
+        
         //logs krijgen de huidige datum mee
         Date now = new Date();
         
