@@ -1,0 +1,59 @@
+De applicatie is onderverdeeld in 3 lagen:
+\begin{itemize}
+\item De GUI layer: dit is de volledige MVC website met glassfish als server en bevat
+  \begin{itemize}
+  \item Controllers: de controllers beheren de HTTP acties, valideren de user input en roepen de overeenkomstige services uit het domain aan.
+  \item Views: de views bestaan uit standaard JSP pages die met behulp van een model dat eraan meegegeven wordt in de controllers de html kan genereren.
+  \item ViewModels: de gegevens die de controllers verzamelen van de domain services worden omgezet en indien nodig gecombineerd tot viewmodels die alle gegevens bevatten dat moet getoond worden in de pagina.
+  \item DataObjects: voor ajax calls wordt er JSON teruggegeven die in de javascript code kan verwerkt worden. De json wordt automatisch gegenereerd van de data objecten die de controller teruggeeft. In feite zijn de view models en data objects gelijkaardig, de view models worden verwerkt aan server side, terwijl de data objects aan client side verwerkt worden.
+  \item Shared Views: er zijn een aantal shared views voorzien zodat er geen html moet gecopy paste worden tussen meerdere views, zoals de inhoud van de head tag. Zodra html op meerdere views wordt gebruikt is het interessant om hiervoor een shared view te voorzien (met eventueel op te geven parameters zoals de title parameter in de head shared view).
+  \item Javascript/Typescript: de code die aan client side uitgevoerd moet worden is deels geschreven in Typescript (een superset van javascript met een strong type system en transpiled naar javascript) en deels in plain javascript. De scripts zitten per pagina elk afzonderlijk in aparte bestanden die met script tags geinclude worden in de views.
+  \item CSS: Er wordt gebruik gemaakt van Bootstrap als layout framework. Wanneer extra CSS moet toegepast worden op een pagina is hiervoor een apart stylesheet bestand voorzien die met een link tag wordt geinclude in de view.
+  \end{itemize}
+\item De Domain layer: de domain layer is opgesplitst in 2 delen:
+  \begin{itemize}
+  \item Domain: hierin zitten alle services die de business logic van de applicatie verwerken. De services maken gebruik van de domain objects. Voor elke service is een interface voorzien en hun bijhorende implementatie, hierdoor kan later nog gebruik gemaakt worden van dependency injection om de services automatisch te construeren. Elke service erft over van de BaseService die de UnitOfWork instantie voorziet om de gegevens uit de DAL op te vragen. De services zijn ongeveer ingedeeld volgens business unit:
+  	\begin{itemize}
+    \item RouteService: de Route service beheert alles omtrent de routes zelf en zorgt dat routes kunnen opgevraagd worden met hun onderliggende data, waypoints en gedetecteerde files, kunnen geupdate worden
+    
+    \item ProviderService: de Provider service voorziet alle nodige implementatie om de route data van alle routes efficient te verzamelen van verschillende providers. Zowel de route data (vertraging, huidige reistijd, ..) als de POI's (incident, road closed, ...) worden met behulp van de verschillende geregistreerde providers opgevraagd. Alle providers zijn apart geimplementeerd in de sub package "provider" en implementeren naargelang de beschikbare functionaliteit de interfaces IProvider (route data van 1 route opvragen), ISummaryProvider (route data van alle routes in 1x opvragen), IPOIProvider (poi's opvragen binnen een bounding box), IWeatherProvider (weergegevens opvragen rondom de routes). Sommige providers maken gebruik van een API die aangesproken wordt, andere maken gebruik van perl scrape scripts die de gevraagde gegevens teruggeven. Als beide beschikbaar zijn wordt steeds de scrape scripts eerst uitgeprobeerd, hierdoor wordt er geen verbruik om de API keys geregistreerd.
+    
+    \item POIService: de POI Service zorgt voornamelijk voor het opslaan en opvragen van POI's binnen een regio en bepaalde periode. De service kan ook de POI's matchen met nearby routes zodat POI's steeds voor éénbepaalde route kan opgevraagd worden.
+    
+    \item WeatherService: de Weather service voorziet methodes om de opvraagde weergegevens op te slaan in de databank en terug op te vragen.
+    \end{itemize}
+  
+  \item Domain Objects: dit zijn alle data objecten die gebruikt worden en zijn ook de objecten die in de DAL layer worden gemapped naar tabels in de database. De volgende objecten worden momenteel gebruikt:
+  	\begin{itemize}
+    \item Route: stelt een route voor met basisgegevens als naam en start en eindpunt (in latitude en longitude). Verder is er nog een flag dat aangeeft of routes moeten berekend worden als snelste of eerder als kortste (of avoid highways). Dit is nodig voor bepaalde routes die anders de autostrade zouden kiezen terwijl dat niet gewenst is.
+    \item RouteData: route data is een data punt verzameld van een specifieke provider op een bepaald tijdstip en bevat de reistijd en vertraging. De afstand van de route wordt ook mee bijgehouden zodat kan gedetecteerd worden of de provider een alternatieve route heeft voorgesteld ipv de gewenste route.
+    \item RouteWaypoint: elke route is van de start tot einde onderverdeeld in segmenten. Een route waypoint is zo een tussenliggend punt en bevat enkel de geografische coordinaten. Waypoints worden berekend bij het wijzigen van de start/eind positie van een route en worden gebruikt bij het tonen van de route op een kaart en bij de controle of POI dicht bij een route ligt
+    \newline
+    \item POI: stelt een gebeurtenis voor op een bepaald punt en heeft een tijdsperiode wanneer de POI actief door de provider werd voorgesteld, de Until wordt pas ingevuld wanneer de POI niet meer wordt teruggegeven door de provider, dwz dat alle actieve POI's degene zijn met Until = NULL. POI's hebben ook een vaste categorielijst waartoe ze behoren, die op de website vertaald wordt naar de overeenkomstige icoontjes. De reference id van een POI is de unieke ID die de provider aan de POI gegeven heeft en wordt gebruikt om te detecteren bij opeenvolgende polls of het over dezelfde POI gaat of niet. Tenslotte bevat een POI ook nog een flag dat aangeeft of de POI reeds verwerkt is door de service die POI's matched met nearby routes.
+    \item POINearRoute: POI's worden periodiek gematched met naburige routes. Dit object stelt zo een matching tussen een POI en een route voor.
+    \newline
+    \item RouteTrafficJam: elke dag wordt de data van alle routes geanalyseerd en worden file periodes opgespoord en deze periodes worden opgeslagen als dit object in de databank. Hierdoor moet de zware berekening maar éénmaal gebeuren en kan men nadien gewoon deze objecten raadplegen. Buiten de start en eind van de periode bevat het object ook nog een gemiddelde en maximum van de vertraging over de periode.
+    \item RouteTrafficJamCause: voor elke file probeert de service ook oorzaken te zoeken wat de aanleiding zou geweest zijn, vb. accidenten die actief waren aan de start van de file is een goede kandidaat. Elke oorzaak wordt opgeslagen als een ROuteTrafifcJamCause object met een waarschijnlijkheidskans. Een oorzaak heeft een categorie (POI, Weer,..) en een subcategorie dat de categorie van bvb de POI zelf mee opslaat. Hierdoor kan er efficient een overzicht getrokken worden van alle files met hun oorzaken.
+    \newline
+    \item WeatherData: dit object bevat de weergegevens op een bepaald tijdstip en kan zo mee opgenomen worden als oorzaak bij files (vb mist of zware regenbui).
+    \end{itemize}
+  \end{itemize}
+De domain data bevat ook nog een aantal "composite" of samengestelde objecten die door JOINs in de database werden gecombineerd, vb POIWithDistanceToRoute is een POI object maar bevat nog een extra veld afstand dat door een join met POINearRoute is gecombineerd.
+
+\item De DAL layer: de DAL layer bevat de repositories (DbSet<T> klassen) van alle domain objecten om en voorzien standaard methodes voor de CRUD van de objecten. Als er specifieke gegevens moeten worden opgevraagd of extra filters moeten toegepast worden kan de repository van een object overgeerft worden en kan daarin de extra functionaliteit in worden voorzien. Om de applicatie efficient te houden is het nuttig om de joins reeds op de database uit te voeren en de gecombineerde gegevens terug te geven naar de domain services ipv de gegevens manueel in code te combineren.
+\newline
+Alle repositories zijn opvraagbaar via een overkoepeld UnitOfWork object dat ook opgesplitst is in een interface en implementatie. Hierdoor is het eenvoudiger de repositories te mocken voor unit testen en kan ook dependency injection gebruikt worden om in één keer de volledige DAL te initializeren.
+\newline
+De database wordt aangesproken met een micro ORM Sql2o. Deze library zorgt ervoor dat objecten kunnen vertaald worden naar parameters in de SQL queries en dat de dataset dat teruggegeven wordt automatisch vertaald wordt naar objecten. Aangezien we na verloop van tijd met veel data werken (miljoenen rijen) hebben we de overhead van de ORM zoveel mogelijk beperkt. Hibernate is gemakkelijk 10x trager dan Sql2o, dat maar een fractie trager is dan het manueel mappen van gegevens op de objecten.
+
+\end{itemize}
+
+Buiten de standaard 3-tier structuur is er ook nog een extra console applicatie voorzien dat periodiek verschillende acties uitvoert. Elke actie wordt in een aparte service geimplementeerd en erft over van de BaseService klasse die de scheduling van de actie op zich neemt. Momenteel zijn de volgende acties gedefinieerd:
+\begin{itemize}
+\item DataScrapingService: (elke 5min) deze service polled voor alle routes de RouteData gegevens aan alle providers. Per route worden de poll acties in parallel uitgevoerd zodat er zo weinig mogelijk verschil in tijd zit tussen de verkregen waarden. De service verzamelt ook alle POI gegevens voor elke provider.
+\item BackgroundPOIRouteMatcherService: (elke 5min) deze service gaat na welke POI's nog niet gematched zijn met naburige routes en zal deze gaan matchen. Hierdoor worden POINearbyRoute objecten aangemaakt en wordt nadien de POI matching status geupdate.
+\item TrafficJamAnalysisService: (elke 24u) deze service bekijkt de gegevens van alle routes dag per dag en zal de file periodes met hun oorzaken achterhalen. Alleen dagen die reeds volledig in het verleden liggen komen in aanmerking, aangezien voor die dagen geen gegevens meer zullen wijzigen.
+\item WeatherPollService: (elke 5min) deze service polled alle weer providers om de recentste weergegevens op te slaan.
+\end{itemize}
+
+De console applicatie draait momenteel in een screen sessie op de server, waardoor het mogelijk is de output gemakkelijk te bekijken.
