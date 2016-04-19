@@ -5,7 +5,7 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/shared/head.jsp">
-        <jsp:param name="title" value="Route ${detail.name}"/>
+        <jsp:param name="title" value="Route ${route.name}"/>
     </jsp:include>
     <jsp:include page="/WEB-INF/shared/maprequirements.jsp"/>
     <link href="<c:url value="/static/styles/route/detail.css" />" rel="stylesheet">
@@ -13,11 +13,11 @@
 <body>
 <jsp:include page="/WEB-INF/shared/navigation.jsp"/>
 <div class="container">
-    <input type="hidden" id="routeId" value="${detail.id}"/>
+    <input type="hidden" id="routeId" value="${route.id}"/>
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">${detail.name}</h3>
+                <h3 class="panel-title">${route.name}</h3>
             </div>
             <div class="panel-body">
                 <div class="col-md-4">
@@ -30,8 +30,8 @@
                         </tr>
                         </thead>
                         <tbody id="summary-table-body">
-                        <c:forEach var="data" items="${detail.summaries}">
-                            <tr>
+                        <c:forEach var="data" items="${summaries}">
+                            <tr class="${data.extreme ? 'danger' : ''}">
                                 <td>${data.provider}</td>
                                 <td><span class="time" data-time=${data.travelTime}></span></td>
                                 <td><span class="label-delay time" data-time=${data.delay}></span></td>
@@ -41,15 +41,15 @@
                     </table>
                     <dl>
                         <dt>Standard travel time</dt>
-                        <dd><span class="humanize" data-time=${detail.defaultTravelTime}></span></dd>
+                        <dd><span class="humanize" data-time=${route.defaultTravelTime}></span></dd>
                         <dt>Distance</dt>
-                        <dd>${detail.distance} meter</dd>
+                        <dd>${route.distance} meter</dd>
                         <dt>From</dt>
-                        <dd>${detail.fromAddress}</dd>
+                        <dd>${route.fromAddress}</dd>
                         <dt>To</dt>
-                        <dd>${detail.toAddress}</dd>
+                        <dd>${route.toAddress}</dd>
                     </dl>
-                    <a href="${pageContext.servletContext.contextPath}/route/edit/${detail.id}">Edit Route</a>
+                    <a href="${pageContext.servletContext.contextPath}/route/edit/${route.id}">Edit Route</a>
                 </div>
                 <div class="col-md-8">
                     <div id="map" style="height:500px">
@@ -140,7 +140,7 @@
 
 <script src="<c:url value="/static/scripts/route/map.js" />"></script>
 <script>
-    MapManagement.intializeRouteMap("map", "<c:url value="/route/mapdata?id=${detail.id}" />");
+    MapManagement.intializeRouteMap("map", "<c:url value="/route/mapdata?id=${route.id}" />");
 </script>
 <script src="<c:url value="/static/scripts/libs/highcharts.js" />"></script>
 <script src="<c:url value="/static/scripts/libs/exporting.js" />"></script>

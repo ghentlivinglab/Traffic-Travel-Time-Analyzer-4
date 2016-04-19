@@ -19,7 +19,6 @@ import java.time.ZoneOffset;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -237,10 +236,20 @@ public class RouteController {
         // vraag de laatste provider gegevens op uit de database
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
         List<RouteDataVM> summariesVM = summaries.stream().map(RouteDataVM::new).collect(Collectors.toList());
+
+        // vindt extreme providers
+        double mean = RouteDataStatistics.mean(summaries);
+        double stdev = Math.sqrt(RouteDataStatistics.variance(mean, summaries));
+        for (int i = 0; i < summariesVM.size(); i++) {
+            if(RouteDataStatistics.withinStd(summariesVM.get(i).getTravelTime(), mean, stdev, 1)){
+                summariesVM.get(i).setExtreme(true);
+            }
+        }
+
         // bouw view model op
-        RouteDetailsVM detail = new RouteDetailsVM(route, summariesVM);
         ModelAndView model = new ModelAndView("route/detail");
-        model.addObject("detail", detail);
+        model.addObject("route", new RouteDetailsVM(route));
+        model.addObject("summaries", summariesVM);
         return model;
     }
 

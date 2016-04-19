@@ -141,30 +141,4 @@
         }
     };
 
-    verkeer.mean = function (data) {
-        var sum = 0;
-        data.forEach(function (ele) {
-            sum += ele;
-        });
-
-        return sum / data.length;
-    };
-
-    verkeer.variance = function (mean, data) {
-        var sum = 0;
-        data.forEach(function (ele) {
-            sum += Math.pow((ele - mean), 2);
-        });
-        return sum / data.length;
-    };
-
-    verkeer.standardDeviation = function (variance) {
-        return Math.sqrt(variance);
-    };
-
-    verkeer.withinStd = function (value, mean, stdev, stdevCount) {
-        var low = mean - (stdev * stdevCount);
-        var high = mean + (stdev * stdevCount);
-        return (value > low) && (value < high);
-    };
 }(window.verkeer = window.verkeer || {}, jQuery));

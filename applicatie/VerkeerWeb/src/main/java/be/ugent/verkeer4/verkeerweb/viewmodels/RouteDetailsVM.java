@@ -13,16 +13,14 @@ public class RouteDetailsVM {
     private String fromAddress;
     private String toAddress;
     private double defaultTravelTime;
-    private List<RouteDataVM> summaries;
 
-    public RouteDetailsVM(Route route, List<RouteDataVM> summaries) {
+    public RouteDetailsVM(Route route) {
         setId(route.getId());
         setName(route.getName());
         setDistance(route.getDistance());
         setFromAddress(route.getFromAddress());
         setToAddress(route.getToAddress());
         setDefaultTravelTime(route.getDefaultTravelTime());
-        setSummaries(summaries);
     }
 
     /**
@@ -89,13 +87,5 @@ public class RouteDetailsVM {
 
     public void setDefaultTravelTime(double defaultTravelTime) {
         this.defaultTravelTime = defaultTravelTime;
-    }
-
-    public List<RouteDataVM> getSummaries() {
-        return summaries;
-    }
-
-    public void setSummaries(List<RouteDataVM> summaries) {
-        this.summaries = summaries;
     }
 }

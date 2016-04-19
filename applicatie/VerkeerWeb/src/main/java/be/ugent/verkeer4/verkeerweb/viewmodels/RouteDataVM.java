@@ -45,6 +45,7 @@ public class RouteDataVM {
     private int delay;
     private int distance;
     private Date timestamp;
+    private boolean isExtreme;
 
     /**
      * @return the id
@@ -151,4 +152,11 @@ public class RouteDataVM {
         this.distance = distance;
     }
 
+    public boolean isExtreme() {
+        return isExtreme;
+    }
+
+    public void setExtreme(boolean extreme) {
+        isExtreme = extreme;
+    }
 }

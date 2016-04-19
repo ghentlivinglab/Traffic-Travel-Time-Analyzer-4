@@ -142,7 +142,6 @@
         });
         updateBtn.addEventListener("click", trajectDetail.getRouteData);
         toggleBtn.addEventListener("click", trajectDetail.toggleChart);
-        trajectDetail.markExtremeProviders();
         routeChart.buildChart(chartId);
         trajectDetail.getRouteData();
     });
@@ -221,28 +220,6 @@
         var td = row.children[1]; // second td, the traveltime
         var span = td.children[0]; // the span
         return parseInt(span.getAttribute("data-time"));
-    };
-
-    trajectDetail.markExtremeProviders = function () {
-        var table = document.getElementById("summary-table-body");
-
-        var travelTimes = [];
-        var rowLength = table.rows.length;
-        for (var i = 0; i < rowLength; i += 1) {
-            var row = table.rows[i];
-            travelTimes.push(trajectDetail.getSecondsFromSummaryRow(row));
-        }
-
-        var mean = verkeer.mean(travelTimes);
-        var variance = verkeer.variance(mean, travelTimes);
-        var stdev = verkeer.standardDeviation(variance);
-
-        for (i = 0; i < rowLength; i += 1) {
-            row = table.rows[i];
-            if (!verkeer.withinStd(travelTimes[i], mean, stdev, 1)) {
-                row.className += " danger";
-            }
-        }
     };
 
     trajectDetail.buildTrafficJamTable = function (jams) {
