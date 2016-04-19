@@ -40,7 +40,7 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 24/03/16,12:30,15:30,School,"Database query geintegreerd om laatste weergegevens op te vragen van dichtstbijzijnde weerstation. + Services geschreven die deze gegevens verwerkt.",77,
 24/03/16,20:00,21:30,Thuis,"Testen en debuggen van geimplementeerde klassen. Enkele fouten die niet snel gevonden waren. Afbeeldingen voor visuele weergave toegevoegd",77,
 25/03/16,14:00,14:30,Trein,"Integratie van afbeeldingen in javascript klassen om zo visueel te weergeven wat de oorzaak kan zijn",77,
-02/04/49,16:00,18:10,Thuis,"Front end code geschreven om afbeeldingen en tekst te weergeven wanneer deze een oorzaak kunnen zijn van de file.",77,
+02/04/16,16:00,18:10,Thuis,"Front end code geschreven om afbeeldingen en tekst te weergeven wanneer deze een oorzaak kunnen zijn van de file.",77,
 11/04/16,08:30,11:30,Thuis,"Debuggen van code rond het matchen van het weer met files (Hij gaf elke keer dezelfde afstand terug). Opkuisen van code en optimaliseren van queries. Mergen met develop.",77,
 11/04/16,12:30,16:00,Thuis,"Onderzoek rond REST service. Opzetten van RESTful webservice met JAX-RS. Uittesten en debuggen van webservice (Condition is gereserveerde naam in mariadb, JSON bug in glassfish 1.4.4)",80,
 12/04/16,08:15,10:30,School,"Scrum meeting, planning & taakverdeling",,
