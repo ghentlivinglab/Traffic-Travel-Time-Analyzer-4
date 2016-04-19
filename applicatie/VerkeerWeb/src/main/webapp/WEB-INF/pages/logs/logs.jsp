@@ -18,7 +18,57 @@
                 <div class="col-sm-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Status - Errors</h3>
+                            <h3 class="panel-title">Filter Logs</h3>
+                        </div>
+                        <div class="panel-body">
+                            <!-- Row with all filter options -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- Filters -->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="category">Select category</label>
+                                            <select id="category" class="form-control">
+                                                <c:forEach var="route" items="${category}">
+                                                    <option value="${category.name}">${category.getCategory}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="datetimepicker-begin-input">Start Date</label>
+                                            <div class="form-group">
+                                                <div class='input-group date' id='datetimepicker-begin'>
+                                                    <input type='text' class="form-control" id="datetimepicker-begin-input"/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="datetimepicker-end-input">End Date</label>
+                                            <div class="form-group">
+                                                <div class='input-group date' id='datetimepicker-end'>
+                                                    <input type='text' class="form-control" id="datetimepicker-end-input"/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Buttons row -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button id="update-btn" type="button" class="btn btn-primary">
+                                        <span id="refresh-icon" class="glyphicon glyphicon-refresh"></span>
+                                        <span id="update-btn-txt">Update</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <hr>
                         </div>
                         <div class="panel-body">
                             <!-- Table -->
@@ -26,9 +76,9 @@
                                 <thead>
                                     <tr>
                                         <th>Category</th>
-                                        <th># Info</th>
-                                        <th># Warning</th>
-                                        <th># Error</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Message</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -44,12 +94,13 @@
                             </table>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
-        <script>
-            MapManagement.intializeRouteMap("map", "<c:url value="/route/mapdata" />");
-        </script>
+
+        
+<script src="<c:url value="/static/scripts/route/logs/logs.js" />"></script>
 
     </body>
 </html>
