@@ -98,12 +98,12 @@
     };
 
     compare.toggleChart = function () {
-        if (!toggled) {
-            routeChart.showToggleTitle();
-            compare.showRoutesOnChart(data.route1Delay, data.route2Delay);
-        } else {
+        if (toggled) {
             routeChart.showDefaultTitle();
             compare.showRoutesOnChart(data.route1TravelTime, data.route2TravelTime);
+        } else {
+            routeChart.showToggleTitle();
+            compare.showRoutesOnChart(data.route1Delay, data.route2Delay);
         }
         toggled = !toggled;
     };

@@ -5,10 +5,24 @@
     var toggleBtn;
     var datePickerBegin;
     var datePickerEnd;
+    var toggled = false;
 
     var id;
-    const url = "../routedata";
+    const apiUrl = "../routedata";
     const chartId = "container";
+    var travelTimes = [];
+    var delays = [];
+
+    var providerSettings = {
+        Coyote: {color: "#7cb5ec", symbol: "circle"},
+        BeMobile: {color: "#434348", symbol: "diamond"},
+        ViaMichelin: {color: "#90ed7d", symbol: "square"},
+        HereMaps: {color: "#f7a35c", symbol: "triangle"},
+        Bing: {color: "#8085e9", symbol: "triangle-down"},
+        Waze: {color: "#f15c80", symbol: "circle"},
+        TomTom: {color: "#e4d354", symbol: "diamond"},
+        GoogleMaps: {color: "#2b908f", symbol: "square"}
+    };
 
     // weather data
     const weatherConditions = {
@@ -127,7 +141,7 @@
             defaultDate: moment().endOf("day")
         });
         updateBtn.addEventListener("click", trajectDetail.getRouteData);
-        toggleBtn.addEventListener("click", routeChart.toggleChart);
+        toggleBtn.addEventListener("click", trajectDetail.toggleChart);
         trajectDetail.markExtremeProviders();
         routeChart.buildChart(chartId);
         trajectDetail.getRouteData();
@@ -136,20 +150,71 @@
     trajectDetail.getRouteData = function () {
         // spin the update button
         refreshIcon.classList.add("spinning");
-        var options = {
-            url: url,
-            id: id,
-            beginDate: datePickerBegin.data("DateTimePicker").date().toDate(),
-            endDate: datePickerEnd.data("DateTimePicker").date().toDate(),
-            onSuccess: function (data) {
+        $.ajax({
+            method: "GET",
+            url: apiUrl,
+            data: {
+                id: id,
+                startDate: datePickerBegin.data("DateTimePicker").date().toDate(),
+                endDate: datePickerEnd.data("DateTimePicker").date().toDate()
+            },
+            success: function (data) {
+                toggled = false;
+                routeChart.showDefaultTitle();
+                trajectDetail.combineRouteData(data.values, "travelTime", travelTimes);
+                routeChart.setChartData(travelTimes);
+                trajectDetail.combineRouteData(data.values, "delay", delays);
                 trajectDetail.buildTrafficJamTable(data.jams);
             },
-            onComplete: function () {
+            complete: function () {
                 // stop the update button spinning
                 refreshIcon.classList.remove("spinning");
             }
-        };
-        routeChart.getRouteData(options);
+        });
+    };
+
+    trajectDetail.toggleChart = function () {
+        if (toggled) {
+            routeChart.setDefaultTitle();
+            routeChart.setChartData(travelTimes);
+        } else {
+            routeChart.setToggleTitle();
+            routeChart.setChartData(delays);
+        }
+        toggled = !toggled;
+    };
+
+    trajectDetail.combineRouteData = function (routeData, xAxisProperty, container) {
+        var dict = {}; // <provider name, provider object>
+
+        // combine all data in one object per provider
+        routeData.forEach(function (ele) {
+            var provider = dict[ele.provider];
+            if (!provider) {
+                var providerSetting = providerSettings[ele.provider];
+                provider = {
+                    name: ele.provider,
+                    color: providerSetting ? providerSetting.color : null,
+                    marker: {
+                        symbol: providerSetting ? providerSetting.symbol : null
+                    },
+                    data: []
+                };
+                dict[ele.provider] = provider;
+            }
+            provider.data.push([ele.timestamp, ele[xAxisProperty]]);
+        });
+
+        // empty container
+        container.length = 0;
+        // fill container
+        for (var providerKey in dict) {
+            container.push(dict[providerKey]);
+        }
+        // sort the providers by name
+        container.sort(function (a, b) {
+            return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+        });
     };
 
     trajectDetail.getSecondsFromSummaryRow = function (row) {
