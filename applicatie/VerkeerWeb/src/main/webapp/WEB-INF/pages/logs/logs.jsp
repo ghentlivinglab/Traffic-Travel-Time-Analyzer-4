@@ -26,7 +26,7 @@
                                 <div class="col-md-12">
                                     <!-- Filters -->
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label for="category">Select category</label>
                                             <select id="category" class="form-control">
                                                 <c:forEach var="logs" items="${logs}">
@@ -34,7 +34,7 @@
                                                 </c:forEach>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="datetimepicker-begin-input">Start Date</label>
                                             <div class="form-group">
                                                 <div class='input-group date' id='datetimepicker-begin'>
@@ -45,7 +45,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="datetimepicker-end-input">End Date</label>
                                             <div class="form-group">
                                                 <div class='input-group date' id='datetimepicker-end'>
