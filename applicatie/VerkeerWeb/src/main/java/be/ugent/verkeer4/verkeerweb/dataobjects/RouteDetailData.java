@@ -8,15 +8,15 @@ import java.util.List;
 
 public class RouteDetailData {
     
-    private List<RouteDataVM> values;
+    private List<RouteData> values;
     
     private List<RouteDetailTrafficJam> jams;
 
-    public List<RouteDataVM> getValues() {
+    public List<RouteData> getValues() {
         return values;
     }
 
-    public void setValues(List<RouteDataVM> values) {
+    public void setValues(List<RouteData> values) {
         this.values = values;
     }
 

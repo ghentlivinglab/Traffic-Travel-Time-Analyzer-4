@@ -136,8 +136,7 @@ public class RouteController {
 
         // vraag de vertraging van alle providers tussen de start & end date op
         List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate, "Timestamp");
-        List<RouteDataVM> routeDataVM = routeData.stream().map(RouteDataVM::new).collect(Collectors.toList());
-        data.setValues(routeDataVM);
+        data.setValues(routeData);
         // vraag alle files op voor de route & de oorzaken
         List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);
         List<GroupedRouteTrafficJamCause> causes = routeService.getRouteTrafficJamCausesForRouteBetween(id, startDate, endDate);
