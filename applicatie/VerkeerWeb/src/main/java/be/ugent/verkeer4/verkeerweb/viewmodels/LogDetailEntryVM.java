@@ -13,7 +13,7 @@ import java.util.Date;
  *
  * @author Tomas Bolckmans
  */
-public class LogEntryVM {
+public class LogDetailEntryVM {
     private int id;
     private String type;
     private String date;

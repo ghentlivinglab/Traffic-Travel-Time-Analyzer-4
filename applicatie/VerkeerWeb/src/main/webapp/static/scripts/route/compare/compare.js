@@ -1,14 +1,28 @@
 (function (compare, routeChart, $) {
 
+    // view
     const chartId = "container";
+    var refreshIcon;
+    var updateBtn;
+    var toggleBtn;
     var datePickerBegin;
     var datePickerEnd;
 
-    routeChart.setDefaultTitle("Travel time comparison");
-    routeChart.setToggleTitle("Delay comparison");
+    // data
+    var data;
+    var toggled = false;
+    var route1Selection;
+    var route2Selection;
+
     $(document).ready(function () {
+        // find buttons
+        refreshIcon = document.getElementById("refresh-icon");
+        updateBtn = document.getElementById("update-btn");
+        toggleBtn = document.getElementById("toggle-btn");
         datePickerBegin = $("#datetimepicker-begin");
         datePickerEnd = $("#datetimepicker-end");
+
+        // init datepickers
         datePickerBegin.datetimepicker({
             format: "DD/MM/YYYY HH:mm",
             showTodayButton: true,
@@ -22,56 +36,76 @@
             defaultDate: moment().endOf("day")
         });
 
+        // set button actions
+        updateBtn.addEventListener("click", compare.updateChart);
+        toggleBtn.addEventListener("click", compare.toggleChart);
+
+        // init chart
+        routeChart.setDefaultTitle("Travel time comparison");
+        routeChart.setToggleTitle("Delay comparison");
         routeChart.buildChart(chartId);
-        //compare.getRouteData();
     });
 
-    compare.getRouteData = function () {
+    compare.updateChart = function () {
+        route1Selection = compare.getSelectedRoute("route1");
+        route2Selection = compare.getSelectedRoute("route2");
+        compare.fetchRouteData();
+    };
+
+    compare.showRoutesOnChart = function (route1Data, route2Data) {
+        var series = [];
+        series.push({name: route1Selection.name, data: route1Data});
+        series.push({name: route2Selection.name, data: route2Data});
+        routeChart.setChartData(series);
+    };
+
+    compare.getCheckedProviders = function () {
+        var providers = [];
+        var checkboxes = document.querySelectorAll("input[name=providers]:checked");
+        for (var i = 0; i < checkboxes.length; i++) {
+            providers.push(checkboxes[i].value);
+        }
+        return providers;
+    };
+
+    compare.fetchRouteData = function () {
+        var providers = compare.getCheckedProviders();
+
         $.ajax({
             method: "GET",
-            url: "routedata",
+            url: "comparedata",
             data: {
-                id: 11,
-                startDate: new Date(2016, 2, 22, 0, 0, 0),
-                endDate: new Date(2016, 2, 23, 0, 0, 0)
+                routeId1: route1Selection.id,
+                routeId2: route2Selection.id,
+                startDate: datePickerBegin.data("DateTimePicker").date().toDate(),
+                endDate: datePickerEnd.data("DateTimePicker").date().toDate(),
+                providers: providers.toString()
             },
-            success: function (data) {
-                // todo not finished! Needs to be server side!
-                return;
-
-                if (!data || !data.values || data.values.length === 0) {
-                    return;
-                }
-
-                var provider = {
-                    name: "test",
-                    data: []
-                };
-
-                var routeData = data.values;
-                var start = routeData[0].timestamp;
-                var results = [];
-                while (routeData.length >= 0) {
-                    var baseTime = 0;
-                    var amount = 0;
-                    while (routeData.length >= 0) {
-                        if (routeData[0] && routeData[0].timestamp <= (start + 60)) {
-                            baseTime += routeData[0].baseTime;
-                            amount++;
-                        }
-                        routeData.shift();
-                    }
-                    if (amount > 0) {
-                        var avg = baseTime / amount;
-                        results.push([start, avg]);
-                    }
-                    start += 60;
-                }
-
-                provider.data = results;
-                routeChart.setChartData(provider);
+            success: function (routeData) {
+                data = routeData;
+                toggled = false;
+                routeChart.showDefaultTitle();
+                compare.showRoutesOnChart(data.route1TravelTime, data.route2TravelTime);
             }
         });
+    };
+
+    compare.getSelectedRoute = function (optionsId) {
+        var routeOptions = document.getElementById(optionsId);
+        var id = routeOptions.options[routeOptions.selectedIndex].value;
+        var name = routeOptions.options[routeOptions.selectedIndex].text;
+        return {id: id, name: name};
+    };
+
+    compare.toggleChart = function () {
+        if (!toggled) {
+            routeChart.showToggleTitle();
+            compare.showRoutesOnChart(data.route1Delay, data.route2Delay);
+        } else {
+            routeChart.showDefaultTitle();
+            compare.showRoutesOnChart(data.route1TravelTime, data.route2TravelTime);
+        }
+        toggled = !toggled;
     };
 
 }(window.verkeer.compare = window.verkeer.compare || {}, verkeer.routeChart, jQuery));

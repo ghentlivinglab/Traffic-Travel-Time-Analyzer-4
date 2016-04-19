@@ -7,6 +7,7 @@ package be.ugent.verkeer4.verkeerdomain;
 
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Logging;
+import be.ugent.verkeer4.verkeerdomain.data.composite.LogCount;
 import java.util.List;
 
 
@@ -20,4 +21,6 @@ public interface ILogService {
     public void insert(LogTypeEnum type, String category, String message);
     
     public List<Logging> getLogs(); 
+    
+    public List<LogCount> getLogCount();
 }

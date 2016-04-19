@@ -30,10 +30,13 @@ import org.springframework.validation.BindingResult;
 @Controller
 public class RouteController {
 
+    private static final int COMPARISON_THRESHOLD_MILLIESECONDS = 60 * 5 * 1000;
+
     /**
      * Toont het overzicht van alle routes
+     *
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @RequestMapping(value = "route/list", method = RequestMethod.GET)
     public ModelAndView getList() throws ClassNotFoundException {
@@ -51,9 +54,10 @@ public class RouteController {
 
     /**
      * Bouwt een route overview viewmodel op om te gebruiken bij de route list
+     *
      * @param routeService
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     private RouteOverviewVM getRouteOverviewModel(IRouteService routeService) throws ClassNotFoundException {
         // haal routes op
@@ -92,7 +96,7 @@ public class RouteController {
             entry.setDelay(avgDelay);
 
             // bereken traffic delay percentage ( travelTime / baseTime) - 1
-            double delayPercentage = getTrafficDelayPercentage(r, summaryPerProvider.values().stream().toArray(RouteData[]::new));
+            double delayPercentage = getTrafficDelayPercentage(r, summaryPerProvider.values().stream().toArray(RouteDataVM[]::new));
             entry.setTrafficDelayPercentage(delayPercentage);
 
             // bereken gemiddelde travel time (met traffic)
@@ -105,11 +109,12 @@ public class RouteController {
 
     /**
      * Geeft de details van een route in json terug
+     *
      * @param id
      * @param startDate
      * @param endDate
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @ResponseBody
     @RequestMapping(value = "route/routedata", method = RequestMethod.GET)
@@ -118,42 +123,104 @@ public class RouteController {
         IRouteService routeService = new RouteService();
         IPOIService poiService = new POIService(routeService);
         IProviderService providerService = new ProviderService(routeService, poiService);
-        
+
         RouteDetailData data = new RouteDetailData();
-        
+
         // vraag de vertraging van alle providers tussen de start & end date op
         List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate, "Timestamp");
         List<RouteDataVM> routeDataVM = routeData.stream().map(RouteDataVM::new).collect(Collectors.toList());
         data.setValues(routeDataVM);
-        
         // vraag alle files op voor de route & de oorzaken
         List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);
         List<GroupedRouteTrafficJamCause> causes = routeService.getRouteTrafficJamCausesForRouteBetween(id, startDate, endDate);
         // groepeer de oorzaken per file
         Map<Integer, List<GroupedRouteTrafficJamCause>> causesByTrafficJamId = causes.stream().collect(Collectors.groupingBy(c -> c.getRouteTrafficJamId()));
-        
+
         // bouw per file de oorzaken op in de data
         List<RouteDetailTrafficJam> detailJams = new ArrayList<>();
         for (RouteTrafficJam j : jams) {
             RouteDetailTrafficJam detailJam = new RouteDetailTrafficJam(j);
-            
+
             List<GroupedRouteTrafficJamCause> lst = causesByTrafficJamId.get(j.getId());
-            if(lst != null)
+            if (lst != null) {
                 detailJam.setCauses(lst);
-            
-                        
+            }
+
             detailJams.add(detailJam);
         }
         data.setJams(detailJams);
-        
+
         return data;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "route/comparedata", method = RequestMethod.GET)
+    public CompareData ajaxGetCompareData(@RequestParam("routeId1") int routeId1, @RequestParam("routeId2") int routeId2,
+            @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate, @RequestParam("providers") String[] providers)
+            throws ClassNotFoundException {
+        IRouteService routeService = new RouteService();
+        IPOIService poiService = new POIService(routeService);
+        IProviderService providerService = new ProviderService(routeService, poiService);
+
+        int[] providerIds = new int[providers.length];
+        for (int i = 0; i < providerIds.length; i++) {
+            providerIds[i] = ProviderEnum.valueOf(ProviderEnum.class, providers[i]).getValue();
+
+        }
+
+        List<RouteData> routeData1 = providerService.getRouteDataForRoute(routeId1, startDate, endDate, "Timestamp", providerIds);
+        List<RouteData> routeData2 = providerService.getRouteDataForRoute(routeId2, startDate, endDate, "Timestamp", providerIds);
+        CompareData data = new CompareData();
+
+        // De "delegates"
+        ICompareDataMember travelTimeGetter = RouteData::getTravelTime;
+        ICompareDataMember delayGetter = RouteData::getDelay;
+
+        // Fill the data object
+        long start = startDate.getTime();
+        data.setRoute1TravelTime(calculateAvgRoute(routeData1, start, travelTimeGetter));
+        data.setRoute1Delay(calculateAvgRoute(routeData1, start, delayGetter));
+        data.setRoute2TravelTime(calculateAvgRoute(routeData2, start, travelTimeGetter));
+        data.setRoute2Delay(calculateAvgRoute(routeData2, start, delayGetter));
+        return data;
+    }
+
+    private List<long[]> calculateAvgRoute(List<RouteData> routeData, long startDate, ICompareDataMember dataMember) {
+        List<long[]> results = new ArrayList<>();
+        int index = 0;
+        int sum = 0;
+        int amount = 0;
+        while (index < routeData.size()) {
+            int previousAmount = amount;
+            if (routeData.get(index).getTimestamp().getTime() < startDate + COMPARISON_THRESHOLD_MILLIESECONDS) {
+                sum += dataMember.get(routeData.get(index));
+                amount++;
+                index++;
+            }
+
+            // check if no data match in this time frame
+            if (previousAmount == amount) {
+                // calculate avg
+                if (amount > 0) {
+                    int avg = sum / amount;
+                    long[] data = {startDate, avg};
+                    results.add(data);
+                }
+                // init vars for next iteration
+                sum = 0;
+                amount = 0;
+                startDate += COMPARISON_THRESHOLD_MILLIESECONDS;
+            }
+        }
+        return results;
     }
 
     /**
      * Geeft de detailpagina van een route
+     *
      * @param id
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @RequestMapping(value = "route/detail/{id}", method = RequestMethod.GET)
     public ModelAndView getDetail(@PathVariable("id") int id) throws ClassNotFoundException {
@@ -162,9 +229,7 @@ public class RouteController {
 
         // vraag de laatste provider gegevens op uit de database
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
-        
         List<RouteDataVM> summariesVM = summaries.stream().map(RouteDataVM::new).collect(Collectors.toList());
-        
         // bouw view model op
         RouteDetailsVM detail = new RouteDetailsVM(route, summariesVM);
         ModelAndView model = new ModelAndView("route/detail");
@@ -174,8 +239,9 @@ public class RouteController {
 
     /**
      * Toont de kaartweergave
+     *
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @RequestMapping(value = "route/map", method = RequestMethod.GET)
     public ModelAndView getMap() throws ClassNotFoundException {
@@ -192,9 +258,10 @@ public class RouteController {
 
     /**
      * Geeft de map gegevens als json terug
+     *
      * @param req
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @ResponseBody
     @RequestMapping(value = "route/mapdata", method = RequestMethod.GET)
@@ -211,9 +278,10 @@ public class RouteController {
 
     /**
      * Toont de edit pagine van een route
+     *
      * @param id
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @RequestMapping(value = "route/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable("id") Integer id) throws ClassNotFoundException {
@@ -237,10 +305,11 @@ public class RouteController {
 
     /**
      * Valideert en slaat de gewijzigde route gegevens op
+     *
      * @param route
      * @param result
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @RequestMapping(value = "route/edit/{id}", method = RequestMethod.POST)
     public ModelAndView edit(@Valid
@@ -309,12 +378,12 @@ public class RouteController {
         }
     }
 
-    
     /**
      * Geeft de route kaart gegevens terug van een bepaald id
+     *
      * @param id
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     private MapData getRouteMapData(int id) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
@@ -325,10 +394,11 @@ public class RouteController {
         List<RouteWaypoint> waypoints = routeService.getRouteWaypointsForRoute(id);
         // vraag de laatste provider gegevens van de route
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
+        List<RouteDataVM> summariesVM = summaries.stream().map(RouteDataVM::new).collect(Collectors.toList());
 
         MapData data = new MapData();
         // verzamel de map route gegevens op basis van de route en de laatste provider gegevens
-        MapRoute mr = getMapRoute(r, summaries);
+        MapRoute mr = getMapRoute(r, summariesVM);
 
         // vraag alle POI gegevens op van de laatste 10min
         Date from = Date.from(java.time.LocalDateTime.now().minusMinutes(5).toInstant(ZoneOffset.UTC));
@@ -352,13 +422,14 @@ public class RouteController {
     }
 
     /**
-     * Berekent de percentage van de vertraging van de route aan de hand van
-     * de laatste provider gegevens
+     * Berekent de percentage van de vertraging van de route aan de hand van de
+     * laatste provider gegevens
+     *
      * @param r
      * @param summaries
-     * @return 
+     * @return
      */
-    private double getTrafficDelayPercentage(Route r, RouteData[] summaries) {
+    private double getTrafficDelayPercentage(Route r, RouteDataVM[] summaries) {
         if (summaries.length <= 0) {
             return 0;
         }
@@ -379,8 +450,9 @@ public class RouteController {
 
     /**
      * Verzamelt alle map gegevens voor alle routes
+     *
      * @return
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     private MapData getAllRouteMapData() throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
@@ -391,19 +463,19 @@ public class RouteController {
 
         MapData data = new MapData();
         Map<Integer, MapRoute> mapRoutesPerId = new HashMap<>();
-        Map<Integer, List<RouteData>> summariesPerRouteId = new HashMap<>();
+        Map<Integer, List<RouteDataVM>> summariesPerRouteId = new HashMap<>();
 
         // vraag alle meest recente route data op 
         // en voeg ze toe in de map
         for (RouteData summary : routeService.getMostRecentRouteSummaries()) {
-            List<RouteData> lst;
+            List<RouteDataVM> lst;
             if (!summariesPerRouteId.containsKey(summary.getRouteId())) {
                 summariesPerRouteId.put(summary.getRouteId(), lst = new ArrayList<>());
             } else {
                 lst = summariesPerRouteId.get(summary.getRouteId());
             }
 
-            lst.add(summary);
+            lst.add(new RouteDataVM(summary));
         }
 
         // vraag alle actieve pois op en map ze op map poi objectne
@@ -416,7 +488,7 @@ public class RouteController {
         // overloop alle trajecten en bereken aan de hand van de verzamelde route data's in
         // de map de gemiddelde delay & percentage
         for (Route r : routes) {
-            List<RouteData> routeSummaries;
+            List<RouteDataVM> routeSummaries;
             if (!summariesPerRouteId.containsKey(r.getId())) {
                 routeSummaries = new ArrayList<>();
             } else {
@@ -442,8 +514,9 @@ public class RouteController {
 
     /**
      * Mapped een POI object op een MapPOI
+     *
      * @param poi
-     * @return 
+     * @return
      */
     private MapPOI getMapPOIFromPOI(POI poi) {
         MapPOI mp = new MapPOI();
@@ -458,20 +531,21 @@ public class RouteController {
     }
 
     /**
-     * Bouwt een map route object op adhv van een route en de recenste
-     * provider gegevens
+     * Bouwt een map route object op adhv van een route en de recenste provider
+     * gegevens
+     *
      * @param r
      * @param routeSummaries
-     * @return 
+     * @return
      */
-    private MapRoute getMapRoute(Route r, List<RouteData> routeSummaries) {
+    private MapRoute getMapRoute(Route r, List<RouteDataVM> routeSummaries) {
         MapRoute mr = new MapRoute();
         mr.setName(r.getName());
         mr.setDistance(r.getDistance());
         mr.setId(r.getId());
-        double traficDelayPercentage = getTrafficDelayPercentage(r, routeSummaries.stream().toArray(RouteData[]::new));
+        double traficDelayPercentage = getTrafficDelayPercentage(r, routeSummaries.stream().toArray(RouteDataVM[]::new));
         mr.setTrafficDelayPercentage(traficDelayPercentage);
-        int totalDelay = routeSummaries.stream().mapToInt(RouteData::getDelay).sum();
+        int totalDelay = routeSummaries.stream().mapToInt(RouteDataVM::getDelay).sum();
         double avgDelay = totalDelay / (float) routeSummaries.size();
         mr.setCurrentDelay(avgDelay);
         int totalTravelTime = routeSummaries.stream().mapToInt(rd -> rd.getTravelTime()).sum();

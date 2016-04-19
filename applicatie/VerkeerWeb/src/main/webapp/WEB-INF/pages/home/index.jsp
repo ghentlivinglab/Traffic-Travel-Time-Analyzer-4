@@ -27,22 +27,22 @@
                         </div>
                         <div class="panel-body">
                             <!-- Table -->
-                            <table class="table">
+                            <table class="table sortable">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Time</th>
-                                        <th>Class</th>
-                                        <th>Message</th>
+                                        <th>Category</th>
+                                        <th># Info</th>
+                                        <th># Warning</th>
+                                        <th># Error</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="loggingEntry" items="${logOverview.logEntries}">
-                                        <tr class="${loggingEntry.type}">
-                                                <td>${loggingEntry.date}</td>
-                                                <td>${loggingEntry.time}</td>
-                                                <td>${loggingEntry.category}</td>
-                                                <td>${loggingEntry.message}</td>
+                                    <c:forEach var="logHomeEntry" items="${logHomeOverview.logEntries}">
+                                        <tr>
+                                                <td><a href="#">${logHomeEntry.category}</a></td>
+                                                <td>${logHomeEntry.infoCount}</td>
+                                                <td>${logHomeEntry.warningCount}</td>
+                                                <td>${logHomeEntry.errorCount}</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
@@ -141,7 +141,7 @@
                 <div class="col-sm-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Wheater</h3>
+                            <h3 class="panel-title">Weather</h3>
                         </div>
                         <div class="panel-body">
                             <!--<span style="display: block !important; width: 180px; text-align: center; font-family: sans-serif; font-size: 12px;"><a href="http://dutch.wunderground.com/cgi-bin/findweather/getForecast?query=zmw:00000.7.06434&bannertypeclick=wu_blueglass" title="Gent, Belgium Weather Forecast" target="_blank"><img src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_blueglass_metric&airportcode=EBCV&ForcedCity=Gent&ForcedState=Belgium&wmo=06434&language=NL" alt="Find more about Weather in Gent, BX" width="160" /></a><br></span>

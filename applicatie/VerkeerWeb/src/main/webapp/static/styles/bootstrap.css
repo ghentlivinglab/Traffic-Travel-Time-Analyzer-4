@@ -2389,26 +2389,14 @@ table th[class*="col-"] {
 .table > thead > tr.info > th,
 .table > tbody > tr.info > th,
 .table > tfoot > tr.info > th {
-  background-color: #008000;
-  color: #ffffff;
+  background-color: #d9edf7;
 }
-
-.table > thead > tr.info > td > a,
-.table > tbody > tr.info > td > a,
-.table > tfoot > tr.info > td > a,
-.table > thead > tr.info > th > a,
-.table > tbody > tr.info > th > a,
-.table > tfoot > tr.info > th > a {
-  color: #ffffff;
-}
-
 .table-hover > tbody > tr > td.info:hover,
 .table-hover > tbody > tr > th.info:hover,
 .table-hover > tbody > tr.info:hover > td,
 .table-hover > tbody > tr:hover > .info,
 .table-hover > tbody > tr.info:hover > th {
-  background-color: #008000;
-  color: #ffffff;
+  background-color: #c4e3f3;
 }
 .table > thead > tr > td.warning,
 .table > tbody > tr > td.warning,
@@ -2422,25 +2410,14 @@ table th[class*="col-"] {
 .table > thead > tr.warning > th,
 .table > tbody > tr.warning > th,
 .table > tfoot > tr.warning > th {
-  background-color: #ffa500;
-  color: #ffffff;
+  background-color: #fcf8e3;
 }
 .table-hover > tbody > tr > td.warning:hover,
 .table-hover > tbody > tr > th.warning:hover,
 .table-hover > tbody > tr.warning:hover > td,
 .table-hover > tbody > tr:hover > .warning,
 .table-hover > tbody > tr.warning:hover > th {
-  background-color: #ffa500;
-  color: #ffffff;
-}
-
-.table > thead > tr.warning > td > a,
-.table > tbody > tr.warning > td > a,
-.table > tfoot > tr.warning > td > a,
-.table > thead > tr.warning > th > a,
-.table > tbody > tr.warning > th > a,
-.table > tfoot > tr.warning > th > a {
-  color: #ffffff;
+  background-color: #faf2cc;
 }
 .table > thead > tr > td.danger,
 .table > tbody > tr > td.danger,
@@ -2454,27 +2431,15 @@ table th[class*="col-"] {
 .table > thead > tr.danger > th,
 .table > tbody > tr.danger > th,
 .table > tfoot > tr.danger > th {
-  background-color: #ff0000;
-  color: #ffffff;
+  background-color: #f2dede;
 }
 .table-hover > tbody > tr > td.danger:hover,
 .table-hover > tbody > tr > th.danger:hover,
 .table-hover > tbody > tr.danger:hover > td,
 .table-hover > tbody > tr:hover > .danger,
 .table-hover > tbody > tr.danger:hover > th {
-  background-color: #ff0000;
-  color: #ffffff;
+  background-color: #ebcccc;
 }
-
-.table > thead > tr.danger > td > a,
-.table > tbody > tr.danger > td > a,
-.table > tfoot > tr.danger > td > a,
-.table > thead > tr.danger > th > a,
-.table > tbody > tr.danger > th > a,
-.table > tfoot > tr.danger > th > a {
-  color: #ffffff;
-}
-
 .table-responsive {
   min-height: .01%;
   overflow-x: auto;
