@@ -29,8 +29,8 @@
                                         <div class="col-md-4">
                                             <label for="category">Select category</label>
                                             <select id="category" class="form-control">
-                                                <c:forEach var="route" items="${category}">
-                                                    <option value="${category.name}">${category.getCategory}</option>
+                                                <c:forEach var="logs" items="${logs}">
+                                                    <option value="${logs.category}">${logs.category}</option>
                                                 </c:forEach>
                                             </select>
                                         </div>

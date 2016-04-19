@@ -29,12 +29,12 @@ public class LogController {
         
         //logs overview model opbouwen
         LogHomeOverviewVM logHomeOverview = getLogHomeOverviewModel(logService);
-        List<LogCount> categories = logService.getLogCount();
+        List<LogCount> logCounts = logService.getLogCount();
         
         // geef mee als model aan view
         ModelAndView model = new ModelAndView("logs/logs");
         model.addObject("logHomeOverview", logHomeOverview);
-        model.addObject("category", categories);
+        model.addObject("logs", logCounts);
                 
         return model;
     }
