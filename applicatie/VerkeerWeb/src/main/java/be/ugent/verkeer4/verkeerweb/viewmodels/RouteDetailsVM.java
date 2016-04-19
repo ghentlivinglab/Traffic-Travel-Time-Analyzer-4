@@ -13,9 +13,9 @@ public class RouteDetailsVM {
     private String fromAddress;
     private String toAddress;
     private double defaultTravelTime;
-    private List<RouteData> summaries;
+    private List<RouteDataVM> summaries;
 
-    public RouteDetailsVM(Route route, List<RouteData> summaries) {
+    public RouteDetailsVM(Route route, List<RouteDataVM> summaries) {
         setId(route.getId());
         setName(route.getName());
         setDistance(route.getDistance());
@@ -91,11 +91,11 @@ public class RouteDetailsVM {
         this.defaultTravelTime = defaultTravelTime;
     }
 
-    public List<RouteData> getSummaries() {
+    public List<RouteDataVM> getSummaries() {
         return summaries;
     }
 
-    public void setSummaries(List<RouteData> summaries) {
+    public void setSummaries(List<RouteDataVM> summaries) {
         this.summaries = summaries;
     }
 }

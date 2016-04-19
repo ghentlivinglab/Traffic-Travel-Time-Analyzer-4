@@ -26,7 +26,12 @@
         var times = $(".time");
         for (var i = 0; i < times.length; i++) {
             var seconds = parseInt($(times[i]).attr("data-time"));
-            var text = verkeer.secondsToText(seconds);
+            
+            var text;
+            if(seconds = -1)
+                text = "--:--";
+            else
+                text = verkeer.secondsToText(seconds);
             $(times[i]).text(text);
         }
     };

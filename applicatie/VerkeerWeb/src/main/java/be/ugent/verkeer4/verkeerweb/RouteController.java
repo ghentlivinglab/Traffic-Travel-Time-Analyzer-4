@@ -11,6 +11,7 @@ import be.ugent.verkeer4.verkeerdomain.data.*;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
 import be.ugent.verkeer4.verkeerweb.dataobjects.*;
+import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDataVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetailsVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEditVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverviewVM;
@@ -76,17 +77,17 @@ public class RouteController {
         // overloop alle recente route data en steek vul de routesummaryentry object aan
         for (RouteData sum : mostRecentRouteSummaries) {
 
-            Map<ProviderEnum, RouteData> summaryPerProvider = entries.get(sum.getRouteId()).getRecentSummaries();
-            summaryPerProvider.put(sum.getProvider(), sum);
+            Map<ProviderEnum, RouteDataVM> summaryPerProvider = entries.get(sum.getRouteId()).getRecentSummaries();
+            summaryPerProvider.put(sum.getProvider(), new RouteDataVM(sum));
         }
         // nu dat alle summary per provider per route entry toegevoegd zijn overlopen
         // we nogmaals alle routes om de gemiddelden te berekenen
         for (Route r : lst) {
             RouteSummaryEntryVM entry = entries.get(r.getId());
-            Map<ProviderEnum, RouteData> summaryPerProvider = entry.getRecentSummaries();
+            Map<ProviderEnum, RouteDataVM> summaryPerProvider = entry.getRecentSummaries();
 
             // bereken gemiddelde van delay
-            int totalDelay = summaryPerProvider.values().stream().mapToInt(RouteData::getDelay).sum();
+            int totalDelay = summaryPerProvider.values().stream().filter(rvm -> rvm.getDelay() >= 0).mapToInt(RouteDataVM::getDelay).sum();
             double avgDelay = totalDelay / (float) summaryPerProvider.size();
             entry.setDelay(avgDelay);
 
@@ -95,7 +96,7 @@ public class RouteController {
             entry.setTrafficDelayPercentage(delayPercentage);
 
             // bereken gemiddelde travel time (met traffic)
-            int totalTravelTime = summaryPerProvider.values().stream().mapToInt(RouteData::getTravelTime).sum();
+            int totalTravelTime = summaryPerProvider.values().stream().filter(rvm -> rvm.getDelay() >= 0).mapToInt(RouteDataVM::getTravelTime).sum();
             double avgCurrentTravelTime = totalTravelTime / (float) summaryPerProvider.size();
             entry.setAverageCurrentTravelTime(avgCurrentTravelTime);
         }
@@ -122,7 +123,8 @@ public class RouteController {
         
         // vraag de vertraging van alle providers tussen de start & end date op
         List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate, "Timestamp");
-        data.setValues(routeData);
+        List<RouteDataVM> routeDataVM = routeData.stream().map(RouteDataVM::new).collect(Collectors.toList());
+        data.setValues(routeDataVM);
         
         // vraag alle files op voor de route & de oorzaken
         List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);
@@ -160,8 +162,11 @@ public class RouteController {
 
         // vraag de laatste provider gegevens op uit de database
         List<RouteData> summaries = routeService.getMostRecentRouteSummariesForRoute(id);
+        
+        List<RouteDataVM> summariesVM = summaries.stream().map(RouteDataVM::new).collect(Collectors.toList());
+        
         // bouw view model op
-        RouteDetailsVM detail = new RouteDetailsVM(route, summaries);
+        RouteDetailsVM detail = new RouteDetailsVM(route, summariesVM);
         ModelAndView model = new ModelAndView("route/detail");
         model.addObject("detail", detail);
         return model;
