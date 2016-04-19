@@ -15,25 +15,30 @@ public class RouteDataVM {
 
     public RouteDataVM(RouteData data) {
         this.setId(data.getId());
-        
-        if(data.getTimestamp().before(Date.from(LocalDateTime.now().minusMinutes(30).atZone(ZoneId.systemDefault()).toInstant())))
+
+        if (data.getTimestamp().before(Date.from(LocalDateTime.now().minusMinutes(30).atZone(ZoneId.systemDefault()).toInstant()))) {
             this.setDelay(-1);
-        else {
-            if(data.getDelay() < 0)
+            this.setTravelTime(-1);
+        } else {
+            if (data.getDelay() < 0)
                 this.setDelay(0);
             else
                 this.setDelay(data.getDelay());
+
+            if (data.getTravelTime() < 0) {
+                this.setTravelTime(0);
+            } else {
+                this.setTravelTime(data.getTravelTime());
+            }
         }
-        
+
         this.setProvider(data.getProvider());
         this.setDistance(data.getDistance());
         this.setRouteId(data.getRouteId());
         this.setTimestamp(data.getTimestamp());
-        this.setTravelTime(data.getTravelTime());
     }
-    
-    
-        private int id;
+
+    private int id;
     private int routeId;
     private int provider;
     private int travelTime;
@@ -93,12 +98,12 @@ public class RouteDataVM {
 
     /**
      * Basis tijd om route af te leggen zonder delay
-     * @return 
+     * @return
      */
     public double getBaseTime() {
         return travelTime - delay;
     }
-    
+
     /**
      * @param travelTime the travelTime to set
      */
@@ -125,7 +130,7 @@ public class RouteDataVM {
     }
 
     /**
-     * Traffic delay (in seconden) 
+     * Traffic delay (in seconden)
      * @return the delay
      */
     public int getDelay() {

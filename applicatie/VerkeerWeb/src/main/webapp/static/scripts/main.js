@@ -28,10 +28,11 @@
             var seconds = parseInt($(times[i]).attr("data-time"));
             
             var text;
-            if(seconds = -1)
-                text = "--:--";
-            else
+            if(seconds === -1) {
+                text = "--'--\"";
+            } else {
                 text = verkeer.secondsToText(seconds);
+            }
             $(times[i]).text(text);
         }
     };
