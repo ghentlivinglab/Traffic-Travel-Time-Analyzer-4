@@ -19,6 +19,7 @@ import java.time.ZoneOffset;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -90,19 +91,26 @@ public class RouteController {
             RouteSummaryEntryVM entry = entries.get(r.getId());
             Map<ProviderEnum, RouteDataVM> summaryPerProvider = entry.getRecentSummaries();
 
-            // bereken gemiddelde van delay
-            int totalDelay = summaryPerProvider.values().stream().filter(rvm -> rvm.getDelay() >= 0).mapToInt(RouteDataVM::getDelay).sum();
-            double avgDelay = totalDelay / (float) summaryPerProvider.size();
-            entry.setDelay(avgDelay);
+            List<RouteDataVM> items = summaryPerProvider.values().stream().filter(rvm -> rvm.getDelay() >= 0).collect(Collectors.toList());
+            if (items.size() > 0) {
+                // bereken gemiddelde van delay
+                int totalDelay = items.stream().mapToInt(RouteDataVM::getDelay).sum();
+                double avgDelay = totalDelay / (float) items.size();
+                entry.setDelay(avgDelay);
 
-            // bereken traffic delay percentage ( travelTime / baseTime) - 1
-            double delayPercentage = getTrafficDelayPercentage(r, summaryPerProvider.values().stream().toArray(RouteDataVM[]::new));
-            entry.setTrafficDelayPercentage(delayPercentage);
+                // bereken traffic delay percentage ( travelTime / baseTime) - 1
+                double delayPercentage = getTrafficDelayPercentage(r, summaryPerProvider.values().stream().toArray(RouteDataVM[]::new));
+                entry.setTrafficDelayPercentage(delayPercentage);
 
-            // bereken gemiddelde travel time (met traffic)
-            int totalTravelTime = summaryPerProvider.values().stream().filter(rvm -> rvm.getDelay() >= 0).mapToInt(RouteDataVM::getTravelTime).sum();
-            double avgCurrentTravelTime = totalTravelTime / (float) summaryPerProvider.size();
-            entry.setAverageCurrentTravelTime(avgCurrentTravelTime);
+                // bereken gemiddelde travel time (met traffic)
+                int totalTravelTime = items.stream().mapToInt(RouteDataVM::getTravelTime).sum();
+                double avgCurrentTravelTime = totalTravelTime / (float) items.size();
+                entry.setAverageCurrentTravelTime(avgCurrentTravelTime);
+            }
+            else {
+                entry.setAverageCurrentTravelTime(-1);
+                entry.setDelay(-1);
+            }
         }
         return overview;
     }
