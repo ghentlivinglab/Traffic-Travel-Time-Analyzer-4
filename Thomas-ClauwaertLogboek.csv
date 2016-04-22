@@ -46,3 +46,6 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 17/04/16,23:00,23:30,Thuis,"Selenium Tests testproject",#84,
 18/04/16,18:30,19:15,Thuis,"Installatiehandleiding getest + selenium extra test",#84,
 18/04/16,20:00,22:30,Thuis,"Sprint 2 afwerkingen, projectdossier, memory leak",,
+19/04/16,08:15,12:15,School,"Sprint 2 presentatie, overlopen issues en werk verdelen",,
+19/04/16,14:30,15:30,School,"Opzoeking en test hoe glassfish error-code's kan afhandelen",#81,
+22/04/16,18:30,19:00,Thuis,"Error-code afgewerkt",#81,
