@@ -32,5 +32,5 @@ public class LogEntryDbSet extends DbSet<Logging>  {
 
             return q.executeAndFetch(LogCount.class);
         }
-    }    
+    }
 }

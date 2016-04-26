@@ -3,6 +3,7 @@ package be.ugent.verkeer4.verkeerdal;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.POINearRoute;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
+import be.ugent.verkeer4.verkeerdomain.data.composite.POICount;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -102,6 +103,22 @@ public class POIDbSet extends DbSet<POI> {
 
     public List<POI> getUnmatchedPOIs() {
         return getItems("MatchedWithRoutes = 0 or MatchedWithRoutes is null", null);
+    }
+    
+    public List<POICount> getPOICount() {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            String query = 
+                    "SELECT category "
+                    + ", count(1) AS amount "
+                    + "FROM poi "
+                    + "WHERE Until is NULL "
+                    + "GROUP BY category "
+                    + "ORDER BY category";
+
+            Query q = con.createQuery(query);
+
+            return q.executeAndFetch(POICount.class);
+        }
     }
 
 }

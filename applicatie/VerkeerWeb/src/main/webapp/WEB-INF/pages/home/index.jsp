@@ -31,7 +31,6 @@
                                 <thead>
                                     <tr>
                                         <th>Category</th>
-                                        <th># Info</th>
                                         <th># Warning</th>
                                         <th># Error</th>
                                     </tr>
@@ -39,8 +38,7 @@
                                 <tbody>
                                     <c:forEach var="logHomeEntry" items="${logHomeOverview.logEntries}">
                                         <tr>
-                                                <td><a href="#">${logHomeEntry.category}</a></td>
-                                                <td>${logHomeEntry.infoCount}</td>
+                                                <td><a href="/logs">${logHomeEntry.category}</a></td>
                                                 <td>${logHomeEntry.warningCount}</td>
                                                 <td>${logHomeEntry.errorCount}</td>
                                         </tr>
@@ -59,66 +57,22 @@
                             <h3 class="panel-title">POI Overview</h3>
                         </div>
                         <div class="panel-body">
-                            <table class="table table-striped table-bordered table-hover" width="744">
+                            <table class="table sortable" width="744">
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Name</th>
-                                        <th>Traffic Jam</th>
-                                        <th>Delay</th>
-                                        <th>Remarks</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="danger">
-                                        <td><a href="#">Detail</a></td>
-                                        <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
-                                        <td>15 km</td>
-                                        <td>5' 12"</td>
-                                        <td>Accident</td>
-                                    </tr>
-                                    <tr class="info">
-                                        <td><a href="#">Detail</a></td>
-                                        <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
-                                        <td>15 km</td>
-                                        <td>5' 12"</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="danger">
-                                        <td><a href="#">Detail</a></td>
-                                        <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
-                                        <td>15 km</td>
-                                        <td>5' 12"</td>
-                                        <td>Accident</td>
-                                    </tr>
-                                    <tr class="info">
-                                        <td><a href="#">Detail</a></td>
-                                        <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
-                                        <td>15 km</td>
-                                        <td>5' 12"</td>
-                                        <td>Trajectcontrole</td>
-                                    </tr>
-                                    <tr class="warning">
-                                        <td><a href="#">Detail</a></td>
-                                        <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
-                                        <td>15 km</td>
-                                        <td>5' 12"</td>
-                                        <td>Wegenwerken</td>
-                                    </tr>
-                                    <tr class="warning">
-                                        <td><a href="#">Detail</a></td>
-                                        <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
-                                        <td>15 km</td>
-                                        <td>5' 12"</td>
-                                        <td>Autovrij weekend</td>
-                                    </tr>
-                                    <tr class="info">
-                                        <td><a href="#">Detail</a></td>
-                                        <td><a href="#">Gasmeterlaan (R40) eastbound</a></td>
-                                        <td>15 km</td>
-                                        <td>5' 12"</td>
-                                        <td>Omloop Nieuwsblad</td>
-                                    </tr>
+                                    <c:forEach var="POIs" items="${POIs}">
+                                    <tr>
+                                        <td><img src="<c:url value="${POIs.iconUrl}" />"/>
+                                        <td>${POIs.category}</td>
+                                        <td>${POIs.amount}</td>  
+                                    </tr>    
+                                    </c:forEach>
                                 </tbody>
                             </table>
 

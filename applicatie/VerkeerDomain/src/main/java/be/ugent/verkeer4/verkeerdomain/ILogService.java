@@ -23,4 +23,5 @@ public interface ILogService {
     public List<Logging> getLogs(); 
     
     public List<LogCount> getLogCount();
+
 }

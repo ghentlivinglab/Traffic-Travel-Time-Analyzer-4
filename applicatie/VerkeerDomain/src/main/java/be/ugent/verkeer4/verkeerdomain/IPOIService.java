@@ -2,6 +2,7 @@ package be.ugent.verkeer4.verkeerdomain;
 
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
+import be.ugent.verkeer4.verkeerdomain.data.composite.POICount;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import java.util.Date;
 import java.util.List;
@@ -21,5 +22,7 @@ public interface IPOIService {
     public List<POIWithDistanceToRoute> getPOIsNearRoute(int routeId, Date from, Date to);
     
     public void matchPOIsWithRoute() throws ClassNotFoundException;
+    
+    public List<POICount> getPOICount();
     
 }

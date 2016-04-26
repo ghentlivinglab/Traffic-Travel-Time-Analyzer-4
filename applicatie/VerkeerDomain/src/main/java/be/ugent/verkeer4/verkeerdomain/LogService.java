@@ -90,7 +90,7 @@ public class LogService extends BaseService implements ILogService {
      */
     @Override
     public List<LogCount> getLogCount(){
-        //Hier moeten de logs nog meer gespecifieerd worden!
+        //Hier moeten de logs nog meer gespecifieerd worden
         List<LogCount> logs = null;
         
         try {
@@ -99,6 +99,6 @@ public class LogService extends BaseService implements ILogService {
             Logger.getLogger(LogService.class.getName()).log(Level.SEVERE, null, ex); 
         }
         return logs;
-        
     }
+    
 }
