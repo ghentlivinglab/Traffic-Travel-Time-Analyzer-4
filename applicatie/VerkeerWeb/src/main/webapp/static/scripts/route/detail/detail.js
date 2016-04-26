@@ -6,12 +6,12 @@
     var datePickerBegin;
     var datePickerEnd;
     var toggled = false;
+    var routeDataFinished = false, trafficDataFinished = false;
 
     var id;
-    const apiUrl = "../routedata";
     const chartId = "container";
-    var travelTimes = [];
-    var delays = [];
+    var travelTimes;
+    var delays;
 
     var providerSettings = {
         Coyote: {color: "#7cb5ec", symbol: "circle"},
@@ -149,71 +149,78 @@
     trajectDetail.getRouteData = function () {
         // spin the update button
         refreshIcon.classList.add("spinning");
+        var startDate = datePickerBegin.data("DateTimePicker").date().toDate();
+        var endDate = datePickerEnd.data("DateTimePicker").date().toDate();
         $.ajax({
             method: "GET",
-            url: apiUrl,
+            url: "../routedata",
             data: {
                 id: id,
-                startDate: datePickerBegin.data("DateTimePicker").date().toDate(),
-                endDate: datePickerEnd.data("DateTimePicker").date().toDate()
+                startDate: startDate,
+                endDate: endDate
             },
             success: function (data) {
                 toggled = false;
+                travelTimes = data.travelTimes;
+                delays = data.delayData;
                 routeChart.showDefaultTitle();
-                trajectDetail.combineRouteData(data.values, "travelTime", travelTimes);
+                trajectDetail.setSeriesViewSettings(travelTimes);
+                trajectDetail.setSeriesViewSettings(delays);
                 routeChart.setChartData(travelTimes);
-                trajectDetail.combineRouteData(data.values, "delay", delays);
-                trajectDetail.buildTrafficJamTable(data.jams);
             },
             complete: function () {
-                // stop the update button spinning
-                refreshIcon.classList.remove("spinning");
+                routeDataFinished = true;
+                trajectDetail.stopSpinning();
             }
+        });
+
+        $.ajax({
+            method: "GET",
+            url: "../trafficdata",
+            data: {
+                id: id,
+                startDate: startDate,
+                endDate: endDate
+            },
+            success: function (data) {
+                trajectDetail.buildTrafficJamTable(data);
+            },
+            complete: function () {
+                trafficDataFinished = true;
+                trajectDetail.stopSpinning();
+            }
+        });
+    };
+
+    trajectDetail.stopSpinning = function () {
+        if(routeDataFinished && trafficDataFinished){
+            refreshIcon.classList.remove("spinning");
+            routeDataFinished = false;
+            trafficDataFinished = false;
+        }
+    };
+
+    trajectDetail.setSeriesViewSettings = function (providersData) {
+        providersData.forEach(function (ele) {
+            var setting = providerSettings[ele.name];
+            var color = setting ? setting.color : null;
+            var symbol = setting ? setting.symbol : null;
+            ele.color = color;
+            ele.marker = {
+                symbol: symbol
+            };
         });
     };
 
     trajectDetail.toggleChart = function () {
         if (toggled) {
-            routeChart.setDefaultTitle();
+            routeChart.showDefaultTitle();
             routeChart.setChartData(travelTimes);
         } else {
-            routeChart.setToggleTitle();
+            routeChart.showToggleTitle();
             routeChart.setChartData(delays);
         }
         toggled = !toggled;
-    };
-
-    trajectDetail.combineRouteData = function (routeData, xAxisProperty, container) {
-        var dict = {}; // <provider name, provider object>
-
-        // combine all data in one object per provider
-        routeData.forEach(function (ele) {
-            var provider = dict[ele.provider];
-            if (!provider) {
-                var providerSetting = providerSettings[ele.provider];
-                provider = {
-                    name: ele.provider,
-                    color: providerSetting ? providerSetting.color : null,
-                    marker: {
-                        symbol: providerSetting ? providerSetting.symbol : null
-                    },
-                    data: []
-                };
-                dict[ele.provider] = provider;
-            }
-            provider.data.push([ele.timestamp, ele[xAxisProperty]]);
-        });
-
-        // empty container
-        container.length = 0;
-        // fill container
-        for (var providerKey in dict) {
-            container.push(dict[providerKey]);
-        }
-        // sort the providers by name
-        container.sort(function (a, b) {
-            return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-        });
     };
 
     trajectDetail.getSecondsFromSummaryRow = function (row) {

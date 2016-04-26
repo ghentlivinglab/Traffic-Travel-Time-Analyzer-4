@@ -1,7 +1,5 @@
 package be.ugent.verkeer4.verkeerweb;
 
-import java.util.List;
-
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteSummaryEntryVM;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +15,7 @@ import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEditVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverviewVM;
 import java.time.ZoneOffset;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -125,17 +119,58 @@ public class RouteController {
      */
     @ResponseBody
     @RequestMapping(value = "route/routedata", method = RequestMethod.GET)
-    public RouteDetailData ajaxGetRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
+    public RouteDataAggregate restRouteData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
             throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         IPOIService poiService = new POIService(routeService);
         IProviderService providerService = new ProviderService(routeService, poiService);
 
-        RouteDetailData data = new RouteDetailData();
-
-        // vraag de vertraging van alle providers tussen de start & end date op
         List<RouteData> routeData = providerService.getRouteDataForRoute(id, startDate, endDate, "Timestamp");
-        data.setValues(routeData);
+        // combine data per provider
+        HashMap<String, RouteRestData> travelTimeMap = new HashMap<>();
+        HashMap<String, RouteRestData> delayMap = new HashMap<>();
+        for (RouteData routeEle : routeData) {
+            String providerName = routeEle.getProvider().name();
+            // travel time data
+            if (!travelTimeMap.containsKey(providerName)) {
+                travelTimeMap.put(providerName, new RouteRestData(providerName));
+            }
+            long[] travelTimeEle = {routeEle.getTimestamp().getTime(), routeEle.getTravelTime()};
+            travelTimeMap.get(providerName).addDataElement(travelTimeEle);
+
+            // delay data
+            if (!delayMap.containsKey(providerName)) {
+                delayMap.put(providerName, new RouteRestData(providerName));
+            }
+            long[] delayEle = {routeEle.getTimestamp().getTime(), routeEle.getDelay()};
+            delayMap.get(providerName).addDataElement(delayEle);
+        }
+
+        // sort by provider name
+        List<RouteRestData> travelTime = new ArrayList<>(travelTimeMap.values());
+        Collections.sort(travelTime, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+        List<RouteRestData> delay = new ArrayList<>(delayMap.values());
+        Collections.sort(delay, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+
+        RouteDataAggregate aggregate = new RouteDataAggregate(travelTime, delay);
+        return aggregate;
+    }
+
+    /**
+     * Geeft de traffic data van een route in json terug
+     *
+     * @param id
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws ClassNotFoundException
+     */
+    @ResponseBody
+    @RequestMapping(value = "route/trafficdata", method = RequestMethod.GET)
+    public List<RouteDetailTrafficJam> restTrafficData(@RequestParam("id") int id, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate)
+            throws ClassNotFoundException {
+        IRouteService routeService = new RouteService();
+
         // vraag alle files op voor de route & de oorzaken
         List<RouteTrafficJam> jams = routeService.getRouteTrafficJamsForRouteBetween(id, startDate, endDate);
         List<GroupedRouteTrafficJamCause> causes = routeService.getRouteTrafficJamCausesForRouteBetween(id, startDate, endDate);
@@ -154,9 +189,7 @@ public class RouteController {
 
             detailJams.add(detailJam);
         }
-        data.setJams(detailJams);
-
-        return data;
+        return detailJams;
     }
 
     @ResponseBody
