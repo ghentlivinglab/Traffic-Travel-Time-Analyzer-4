@@ -44,7 +44,7 @@ public class LogController {
     }
     
     @ResponseBody
-    @RequestMapping(value = "route/logdata", method = RequestMethod.GET)
+    @RequestMapping(value = "/logdata", method = RequestMethod.GET)
     public LogDetailOverviewVM ajaxGetLogData(@RequestParam("category") String category,@RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate) throws ClassNotFoundException {
         //dependency injection
         ILogService logService = new LogService(); 
@@ -54,7 +54,7 @@ public class LogController {
         
         //maak het viewmodel object aan
         LogDetailOverviewVM logOverview = new LogDetailOverviewVM();
-        
+        /*
         //Datum converteren naar enkel datum (zonder tijd)
         SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         
@@ -85,7 +85,7 @@ public class LogController {
             
             logOverview.getLogEntries().add(entry);
             }
-        
+        */
         return logOverview;
     }    
 

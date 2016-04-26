@@ -58,10 +58,15 @@
                 endDate: datePickerEnd.data("DateTimePicker").date().toDate(),
             },
             success: function (logData) {
+                console.log("SUCCES");
                 data = logData;
-                log.showRoutesOnChart(data.route1TravelTime, data.route2TravelTime);
+                log.showLogs(data);
             }
         });
+    };
+    
+    log.showLogs = function(data) {
+        //overloop de logs en maak tabelrijen aan.
     };
 
 }(window.verkeer.compare = window.verkeer.compare || {}, verkeer.routeChart, jQuery));
