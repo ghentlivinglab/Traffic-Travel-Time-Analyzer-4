@@ -17,7 +17,7 @@
         <div class="panel-body">
             <!-- Row with all options + provider selection -->
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <!-- Row routes -->
                     <div class="row">
                         <div class="col-md-6">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label>Select providers</label><br>
                     <c:forEach var="provider" items="${providers}">
                         <input type="checkbox" name="providers" id="${provider}" value="${provider}" checked>${provider}<br>

@@ -2,6 +2,7 @@
 package be.ugent.verkeer4.verkeerweb.dataobjects;
 
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
+import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDataVM;
 import java.util.List;
 
 

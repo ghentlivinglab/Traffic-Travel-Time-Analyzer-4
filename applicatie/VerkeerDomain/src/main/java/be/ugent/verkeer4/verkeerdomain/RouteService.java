@@ -13,6 +13,7 @@ import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import be.ugent.verkeer4.verkeerdomain.data.composite.WeatherWithDistanceToRoute;
 import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
+import be.ugent.verkeer4.verkeerdomain.provider.google.GoogleMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.CalculateRouteResponse;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Leg;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Point;
@@ -35,8 +36,9 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Geeft alle routes terug
+     *
      * @return lijst van route objecten
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @Override
     public List<Route> getRoutes() throws ClassNotFoundException {
@@ -50,9 +52,10 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Geeft de route met gegeven id terug
+     *
      * @param id
      * @return een route of null als de route niet gevonden is
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     @Override
     public Route getRoute(int id) throws ClassNotFoundException {
@@ -64,7 +67,8 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Voegt een route waypoint toe in de database
-     * @param wp 
+     *
+     * @param wp
      */
     @Override
     public void insertRouteWaypoint(RouteWaypoint wp) {
@@ -73,8 +77,10 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Update de route gegevens voor een bepaalde route
+     *
      * @param r
-     * @param updateWaypoints geeft aan of de waypoints ook opnieuw moeten opgevraagd worden
+     * @param updateWaypoints geeft aan of de waypoints ook opnieuw moeten
+     * opgevraagd worden
      */
     @Override
     public void updateRoute(Route r, boolean updateWaypoints) {
@@ -90,26 +96,33 @@ public class RouteService extends BaseService implements IRouteService {
     }
 
     /**
-     * Update de waypoints van een route door de bestaande te verwijderen
-     * en de nieuwe waypoints op te vragen tussen de from en to van de route
+     * Update de waypoints van een route door de bestaande te verwijderen en de
+     * nieuwe waypoints op te vragen tussen de from en to van de route
+     *
      * @param r
      * @throws IOException
-     * @throws Exception 
+     * @throws Exception
      */
     private void updateWayPoints(Route r) throws IOException, Exception {
         // delete de huidige waypoints van de route
         repo.getRouteWaypointSet().deleteFromRoute(r.getId());
-        
+
         // bepaal route gegevens van TomTom
         CalculateRouteResponse response = TomTomClient.GetRoute(r.getFromLatitude(), r.getFromLongitude(), r.getToLatitude(), r.getToLongitude(), false, r.getAvoidHighwaysOrUseShortest());
+        if (response != null) {
+            UpdateRouteFromTomTom(response, r);
+        }
+    }
+
+    private void UpdateRouteFromTomTom(CalculateRouteResponse response, Route r) throws Exception {
         be.ugent.verkeer4.verkeerdomain.provider.tomtom.Route tomtomRoute = response.getRoutes().get(0);
         
         // update de afstand en default travel time op
         r.setDistance(tomtomRoute.getSummary().getLengthInMeters());
         r.setDefaultTravelTime(tomtomRoute.getSummary().getTravelTimeInSeconds());
-
+        
         repo.getRouteSet().update(r);
-
+        
         // sla alle waypoints op voor de route
         int idx = 0;
         for (Leg leg : tomtomRoute.getLegs()) {
@@ -119,7 +132,33 @@ public class RouteService extends BaseService implements IRouteService {
                 wp.setLatitude(pt.getLatitude());
                 wp.setLongitude(pt.getLongitude());
                 wp.setRouteId(r.getId());
-
+                
+                this.insertRouteWaypoint(wp);
+                System.out.println("Inserting new waypoint " + idx);
+                idx++;
+            }
+        }
+    }
+    
+    private void updateRouteFromGoogle(CalculateRouteResponse response, Route r) throws Exception {
+        be.ugent.verkeer4.verkeerdomain.provider.tomtom.Route tomtomRoute = response.getRoutes().get(0);
+        
+        // update de afstand en default travel time op
+        r.setDistance(tomtomRoute.getSummary().getLengthInMeters());
+        r.setDefaultTravelTime(tomtomRoute.getSummary().getTravelTimeInSeconds());
+        
+        repo.getRouteSet().update(r);
+        
+        // sla alle waypoints op voor de route
+        int idx = 0;
+        for (Leg leg : tomtomRoute.getLegs()) {
+            for (Point pt : leg.getPoints()) {
+                RouteWaypoint wp = new RouteWaypoint();
+                wp.setIndex(idx);
+                wp.setLatitude(pt.getLatitude());
+                wp.setLongitude(pt.getLongitude());
+                wp.setRouteId(r.getId());
+                
                 this.insertRouteWaypoint(wp);
                 System.out.println("Inserting new waypoint " + idx);
                 idx++;
@@ -129,7 +168,8 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Geeft alle route waypoints terug
-     * @return 
+     *
+     * @return
      */
     @Override
     public List<RouteWaypoint> getRouteWaypoints() {
@@ -138,8 +178,9 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Geeft alle waypoints terug voor de route met gegeven id
+     *
      * @param routeId
-     * @return 
+     * @return
      */
     @Override
     public List<RouteWaypoint> getRouteWaypointsForRoute(int routeId) {
@@ -147,7 +188,9 @@ public class RouteService extends BaseService implements IRouteService {
     }
 
     /**
-     * Geeft enkel recentste route data terug voor alle routes voor elke provider
+     * Geeft enkel recentste route data terug voor alle routes voor elke
+     * provider
+     *
      * @return
      */
     @Override
@@ -156,7 +199,9 @@ public class RouteService extends BaseService implements IRouteService {
     }
 
     /**
-     * Geeft de recentste route data terug voor een bepaalde route voor elke provider
+     * Geeft de recentste route data terug voor een bepaalde route voor elke
+     * provider
+     *
      * @param id
      * @return lijst van route data voor een specifiek route
      */
@@ -168,7 +213,8 @@ public class RouteService extends BaseService implements IRouteService {
     /**
      * Bepaalt aan de hand van de route waypoints een bounding box waarin alle
      * routes liggen
-     * @return 
+     *
+     * @return
      */
     @Override
     public BoundingBox getBoundingBoxOfAllRoutes() {
@@ -177,6 +223,7 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Geeft de files terug voor een bepaalde route tussen de gegeven periode
+     *
      * @param routeId
      * @param from
      * @param until
@@ -196,13 +243,14 @@ public class RouteService extends BaseService implements IRouteService {
     }
 
     /**
-     * Geeft een lijst van alle oorzaken van alle files voor een route voor een bepaalde periode.
-     * De oorzaken zullen gegroepeerd worden op categorie, subcategorie en omschrijving zodat
-     * er maar 1 object wordt teruggegeven.
+     * Geeft een lijst van alle oorzaken van alle files voor een route voor een
+     * bepaalde periode. De oorzaken zullen gegroepeerd worden op categorie,
+     * subcategorie en omschrijving zodat er maar 1 object wordt teruggegeven.
+     *
      * @param routeId
      * @param startDate
      * @param endDate
-     * @return 
+     * @return
      */
     @Override
     public List<GroupedRouteTrafficJamCause> getRouteTrafficJamCausesForRouteBetween(int routeId, Date startDate, Date endDate) {
@@ -211,6 +259,7 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Berekent de files voor een bepaalde route voor de gegeven dag
+     *
      * @param routeId
      * @param day
      * @return een lijst van files
@@ -236,13 +285,14 @@ public class RouteService extends BaseService implements IRouteService {
 
     // als een last traffic time check null is in een route
     private final Date initialTrafficJamStartPoint = new GregorianCalendar(2016, 01, 01).getTime();
-    
+
     /**
-     * Berekent alle files voor alle dagen kleiner dan vandaag voor een bepaalde route
-     * (zodat enkel volledige dagen gefinaliseerd worden) en sla de bekomen files en oorzaken
-     * op in de database
+     * Berekent alle files voor alle dagen kleiner dan vandaag voor een bepaalde
+     * route (zodat enkel volledige dagen gefinaliseerd worden) en sla de
+     * bekomen files en oorzaken op in de database
+     *
      * @param route
-     * @param today 
+     * @param today
      */
     @Override
     public void finalizeTrafficJams(Route route, Date today) {
@@ -256,7 +306,7 @@ public class RouteService extends BaseService implements IRouteService {
             IPOIService poiService = new POIService(this);
 
             double maxDistanceForPOIRouteMatching = Settings.getInstance().getMaxDistanceForPOIRouteMatching();
-            
+
             // voor elke dag kleiner dan vandaag
             while (lastTrafficJamCheck.getTime() < today.getTime()) {
 
@@ -290,30 +340,29 @@ public class RouteService extends BaseService implements IRouteService {
 
     /**
      * Analyseert alle weersomstandigheden van het dichtst bijzijnd weerstation
-     * om te kijken of het weer een invloed kon gehad hebben op de file op die route.
-     * @param jam 
+     * om te kijken of het weer een invloed kon gehad hebben op de file op die
+     * route.
+     *
+     * @param jam
      */
     private void analyzeNearByWeatherForJamCauses(RouteTrafficJam jam) {
-        
+
         Map<String, Object> map = new HashMap<>();
         List<WeatherWithDistanceToRoute> lst;
         //Initieel op 0
         double score = 0;
         map.put("Id", jam.getRouteId());
-   
-        try{
+
+        try {
             //Route ophalen met doorgegeven route id.
             Route route = repo.getRouteSet().getItem("Id = :Id", map);
-            if(route != null)
-            {
+            if (route != null) {
                 //Dichtst bijzijnde weerstation opzoeken en data terughalen van die datum
-                lst = repo.getWeatherSet().getWeatherForRoute(route,jam.getFrom()); 
-                if(lst != null && lst.size() > 0)
-                {   
+                lst = repo.getWeatherSet().getWeatherForRoute(route, jam.getFrom());
+                if (lst != null && lst.size() > 0) {
                     //Geeft maar 1 rij terug
                     WeatherWithDistanceToRoute weather = lst.get(0);
-                    switch(WeatherConditionEnum.fromInt(weather.getCondition()))
-                    {
+                    switch (WeatherConditionEnum.fromInt(weather.getCondition())) {
                         case LightSnowGrains:
                             score += 0.20;
                             break;
@@ -388,9 +437,9 @@ public class RouteService extends BaseService implements IRouteService {
                             break;
                         case HeavyThunderstormsandSnow:
                             score += 0.80;
-                            break;                                          
+                            break;
                     }
-                    
+
                     //Score samenstellen en toevoegen aan de databank.
                     if (score > 0) {
                         RouteTrafficJamCause cause = new RouteTrafficJamCause();
@@ -402,18 +451,20 @@ public class RouteService extends BaseService implements IRouteService {
                         repo.getRouteTrafficJamCauseSet().insert(cause);
                     }
                 }
-            }       
+            }
         } catch (Exception ex) {
             LogService.getInstance().insert(LogTypeEnum.Error, RouteService.class.getName(), ex.getMessage());
         }
     }
-    
-    /***
-     * Analyseert alle POI's die dicht bij een route liggen en actief waren tijdens
-     * de file en kunnen ze als oorzaak van de file gekozen worden
+
+    /**
+     * *
+     * Analyseert alle POI's die dicht bij een route liggen en actief waren
+     * tijdens de file en kunnen ze als oorzaak van de file gekozen worden
+     *
      * @param poiService
      * @param jam
-     * @param maxDistanceForPOIRouteMatching 
+     * @param maxDistanceForPOIRouteMatching
      */
     private void analyzeNearByPOIsForJamCauses(IPOIService poiService, RouteTrafficJam jam, double maxDistanceForPOIRouteMatching) {
 
@@ -455,8 +506,8 @@ public class RouteService extends BaseService implements IRouteService {
                 case LaneClosed:
                 case RoadClosed:
                     // poi moet bijna OP het traject liggen, anders is het een andere baan waarop gewerkt wordt
-                    if (distanceFromRoute < 0.1) { 
-                        
+                    if (distanceFromRoute < 0.1) {
+
                         if (LocalDateTime.ofInstant(poi.getSince().toInstant(), ZoneId.systemDefault()).toLocalDate().equals(LocalDateTime.ofInstant(jam.getFrom().toInstant(), ZoneId.systemDefault()).toLocalDate())) {
                             // construction or something of closed on same day
                             score += 0.75;
