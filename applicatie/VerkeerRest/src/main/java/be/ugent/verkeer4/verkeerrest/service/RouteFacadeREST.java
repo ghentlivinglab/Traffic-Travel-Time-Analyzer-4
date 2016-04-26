@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  * @author Niels
  */
 @Stateless
-@Path("be.ugent.verkeer4.verkeerrest.route")
+@Path("route")
 public class RouteFacadeREST extends AbstractFacade<Route> {
 
     @PersistenceContext(unitName = "be.ugent.verkeer4_VerkeerRest_war_1.0-SNAPSHOTPU")
@@ -54,18 +54,11 @@ public class RouteFacadeREST extends AbstractFacade<Route> {
     public void remove(@PathParam("id") Integer id) {
         super.remove(super.find(id));
     }
-
-    @GET
-    @Path("{id}/xml")
-    @Produces({MediaType.APPLICATION_XML})
-    public Route findXml(@PathParam("id") Integer id) {
-        return super.find(id);
-    }
     
     @GET
-    @Path("{id}/json")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Route findJson(@PathParam("id") Integer id) {
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Route find(@PathParam("id") Integer id) {
         return super.find(id);
     }
     

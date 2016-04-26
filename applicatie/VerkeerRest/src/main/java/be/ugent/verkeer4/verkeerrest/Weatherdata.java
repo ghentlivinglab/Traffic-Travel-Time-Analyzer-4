@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Weatherdata.findByTemperature", query = "SELECT w FROM Weatherdata w WHERE w.temperature = :temperature"),
     @NamedQuery(name = "Weatherdata.findByWindSpeed", query = "SELECT w FROM Weatherdata w WHERE w.windSpeed = :windSpeed"),
     @NamedQuery(name = "Weatherdata.findByWindDirection", query = "SELECT w FROM Weatherdata w WHERE w.windDirection = :windDirection"),
-    @NamedQuery(name = "Weatherdata.findByCondition", query = "SELECT w FROM Weatherdata w WHERE w.condition = :condition"),
+    @NamedQuery(name = "Weatherdata.findByCondition", query = "SELECT w FROM Weatherdata w WHERE w.weatherCondition = :condition"),
     @NamedQuery(name = "Weatherdata.findByLocation", query = "SELECT w FROM Weatherdata w WHERE w.location = :location")})
 public class Weatherdata implements Serializable {
 
@@ -81,8 +81,8 @@ public class Weatherdata implements Serializable {
     private int windDirection;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Condition")
-    private int condition;
+    @Column(name = "WeatherCondition")
+    private int weatherCondition;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -105,7 +105,7 @@ public class Weatherdata implements Serializable {
         this.temperature = temperature;
         this.windSpeed = windSpeed;
         this.windDirection = windDirection;
-        this.condition = condition;
+        this.weatherCondition = condition;
         this.location = location;
     }
 
@@ -173,12 +173,12 @@ public class Weatherdata implements Serializable {
         this.windDirection = windDirection;
     }
 
-    public int getCondition() {
-        return condition;
+    public int getWeatherCondition() {
+        return weatherCondition;
     }
 
-    public void setCondition(int condition) {
-        this.condition = condition;
+    public void setWeatherCondition(int condition) {
+        this.weatherCondition = condition;
     }
 
     public String getLocation() {

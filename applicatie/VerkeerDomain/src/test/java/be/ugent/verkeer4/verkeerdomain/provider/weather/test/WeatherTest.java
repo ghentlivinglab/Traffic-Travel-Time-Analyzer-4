@@ -7,8 +7,6 @@ package be.ugent.verkeer4.verkeerdomain.provider.weather.test;
 
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.provider.WeatherProvider;
-import be.ugent.verkeer4.verkeerdomain.weather.CurrentObservation;
-import java.util.Date;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -50,7 +48,7 @@ public class WeatherTest {
         }
         else
         {
-            System.out.print(d.getCondition() + " " + d.getWindDirection() + " " + d.getWindSpeed() + " " + d.getTimestamp());
+            System.out.print(d.getWeatherCondition() + " " + d.getWindDirection() + " " + d.getWindSpeed() + " " + d.getTimestamp());
         }       
     }
 }

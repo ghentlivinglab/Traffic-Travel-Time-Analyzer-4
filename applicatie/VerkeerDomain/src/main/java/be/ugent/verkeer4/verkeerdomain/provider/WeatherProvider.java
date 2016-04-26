@@ -46,7 +46,7 @@ public class WeatherProvider implements IWeatherProvider {
             data.setTemperature(current.getTempC());
             data.setWindSpeed(current.getWindKph());
             data.setWindDirection(directionMap.get(current.getWindDir()).getValue());
-            data.setCondition(conditionMap.get(current.getWeather()).getValue());
+            data.setWeatherCondition(conditionMap.get(current.getWeather()).getValue());
             data.setLocation(current.getObservationLocation().getCity());
             
             Date d = new Date(Long.parseLong(current.getObservationEpoch())*1000);      //Omvormen van unix naar miliseconden

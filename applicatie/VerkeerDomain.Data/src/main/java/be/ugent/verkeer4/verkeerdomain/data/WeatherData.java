@@ -20,7 +20,7 @@ public class WeatherData {
         private double temperature;
         private double windSpeed;
         private int windDirection;
-        private int condition;
+        private int weatherCondition;
         private String location;
 
     /**
@@ -110,15 +110,15 @@ public class WeatherData {
     /**
      * @return the condition
      */
-    public int getCondition() {
-        return condition;
+    public int getWeatherCondition() {
+        return weatherCondition;
     }
 
     /**
-     * @param condition the condition to set
+     * @param weatherCondition the condition to set
      */
-    public void setCondition(int condition) {
-        this.condition = condition;
+    public void setWeatherCondition(int weatherCondition) {
+        this.weatherCondition = weatherCondition;
     }   
 
     /**

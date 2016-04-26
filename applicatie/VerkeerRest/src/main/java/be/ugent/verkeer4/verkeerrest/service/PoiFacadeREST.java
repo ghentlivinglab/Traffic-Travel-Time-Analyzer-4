@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  * @author Niels
  */
 @Stateless
-@Path("be.ugent.verkeer4.verkeerrest.poi")
+@Path("poi")
 public class PoiFacadeREST extends AbstractFacade<Poi> {
 
     @PersistenceContext(unitName = "be.ugent.verkeer4_VerkeerRest_war_1.0-SNAPSHOTPU")

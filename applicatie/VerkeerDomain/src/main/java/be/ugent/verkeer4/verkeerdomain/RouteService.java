@@ -308,7 +308,7 @@ public class RouteService extends BaseService implements IRouteService {
                 {   
                     //Geeft maar 1 rij terug
                     WeatherWithDistanceToRoute weather = lst.get(0);
-                    switch(WeatherConditionEnum.fromInt(weather.getCondition()))
+                    switch(WeatherConditionEnum.fromInt(weather.getWeatherCondition()))
                     {
                         case LightSnowGrains:
                             score += 0.20;
@@ -387,12 +387,15 @@ public class RouteService extends BaseService implements IRouteService {
                             break;                                          
                     }
                     
+                    if(weather.getWindSpeed() >= 40)
+                        score += 0.3;
+                    
                     //Score samenstellen en toevoegen aan de databank.
                     if (score > 0) {
                         RouteTrafficJamCause cause = new RouteTrafficJamCause();
                         cause.setCategory(RouteTrafficJamCauseCategoryEnum.Weather);
                         cause.setRouteTrafficJamId(jam.getId());
-                        cause.setSubCategory(weather.getCondition());
+                        cause.setSubCategory(weather.getWeatherCondition());
                         cause.setProbability(score);
                         cause.setReferenceId(weather.getId());
                         repo.getRouteTrafficJamCauseSet().insert(cause);

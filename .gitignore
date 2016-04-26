@@ -6,6 +6,4 @@
 /applicatie/VerkeerDomain/nbproject/
 /applicatie/VerkeerDomain/src/main/resources/database-dev.conf
 /applicatie/VerkeerPollService/target/
-/applicatie/verkeer/VerkeerRest/target/
-/applicatie/verkeer/RestTest/target/
-/applicatie/verkeer/VerkeerRestTest/target/
+/applicatie/VerkeerRest/target/

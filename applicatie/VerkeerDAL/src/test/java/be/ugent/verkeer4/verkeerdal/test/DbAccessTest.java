@@ -121,7 +121,7 @@ public class DbAccessTest extends TestCase {
         data.setTemperature(10.5);
         data.setWindSpeed(3.1);
         data.setWindDirection(WeatherDirectionEnum.North.getValue());
-        data.setCondition(WeatherConditionEnum.Clear.getValue());
+        data.setWeatherCondition(WeatherConditionEnum.Clear.getValue());
        
         int newId = repo.getWeatherSet().insert(data);
     }

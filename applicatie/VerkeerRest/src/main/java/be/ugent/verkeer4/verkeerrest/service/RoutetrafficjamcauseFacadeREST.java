@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  * @author Niels
  */
 @Stateless
-@Path("be.ugent.verkeer4.verkeerrest.routetrafficjamcause")
+@Path("routetrafficjamcause")
 public class RoutetrafficjamcauseFacadeREST extends AbstractFacade<Routetrafficjamcause> {
 
     @PersistenceContext(unitName = "be.ugent.verkeer4_VerkeerRest_war_1.0-SNAPSHOTPU")

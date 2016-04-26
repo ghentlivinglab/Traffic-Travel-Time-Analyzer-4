@@ -46,7 +46,7 @@ public class Routewaypoint implements Serializable {
     private int routeId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Index")
+    @Column(name = "`Index`")
     private int index;
     @Basic(optional = false)
     @NotNull

@@ -11,9 +11,8 @@
         <module>../VerkeerDomain</module>
         <module>../VerkeerWeb</module>
         <module>../VerkeerPollService</module>
-    <module>VerkeerRest</module>
-    <module>VerkeerRestTest</module>
-  </modules>
+        <module>../VerkeerRest</module>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

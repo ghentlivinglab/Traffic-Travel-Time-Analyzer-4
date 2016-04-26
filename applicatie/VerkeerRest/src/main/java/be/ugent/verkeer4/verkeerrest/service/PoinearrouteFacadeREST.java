@@ -27,7 +27,7 @@ import javax.ws.rs.core.PathSegment;
  * @author Niels
  */
 @Stateless
-@Path("be.ugent.verkeer4.verkeerrest.poinearroute")
+@Path("poinearroute")
 public class PoinearrouteFacadeREST extends AbstractFacade<Poinearroute> {
 
     @PersistenceContext(unitName = "be.ugent.verkeer4_VerkeerRest_war_1.0-SNAPSHOTPU")
