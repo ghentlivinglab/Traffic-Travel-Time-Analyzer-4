@@ -100,7 +100,7 @@
         </div>
 
         
-<script src="<c:url value="/static/scripts/route/logs/logs.js" />"></script>
+<script src="<c:url value="/static/scripts/logs/logs.js" />"></script>
 
     </body>
 </html>

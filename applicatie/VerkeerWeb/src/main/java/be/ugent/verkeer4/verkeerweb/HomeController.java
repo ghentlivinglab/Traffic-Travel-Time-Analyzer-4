@@ -52,17 +52,19 @@ public class HomeController {
         //maak het viewmodel object aan
         LogHomeOverviewVM logHomeOverview = new LogHomeOverviewVM();
         
-        //overlopen van de logCount voor elke category.
-        for(LogCount l : lst){
-            LogHomeEntryVM entry = new LogHomeEntryVM();
-            entry.setCategory(l.getCategory());
-            entry.setInfoCount(l.getInfoCount());
-            entry.setWarningCount(l.getWarningCount());
-            entry.setErrorCount(l.getErrorCount());
-            
-            logHomeOverview.getLogEntries().add(entry);
+        if(lst.size() != 0){
+            //overlopen van de logCount voor elke category.
+            for(LogCount l : lst){
+                LogHomeEntryVM entry = new LogHomeEntryVM();
+                entry.setCategory(l.getCategory());
+                entry.setInfoCount(l.getInfoCount());
+                entry.setWarningCount(l.getWarningCount());
+                entry.setErrorCount(l.getErrorCount());
+
+                logHomeOverview.getLogEntries().add(entry);
+            }
         }
-  
+       
         return logHomeOverview;
     }
 }

@@ -1,8 +1,7 @@
-(function (compare, routeChart, $) {
+(function (log, routeChart, $) {
 
     // view
     const chartId = "container";
-    var refreshIcon;
     var updateBtn;  //calender
     var datePickerBegin;
     var datePickerEnd;
@@ -12,7 +11,6 @@
 
     $(document).ready(function () {
         // find buttons
-        refreshIcon = document.getElementById("refresh-icon");
         updateBtn = document.getElementById("update-btn");
         datePickerBegin = $("#datetimepicker-begin");
         datePickerEnd = $("#datetimepicker-end");
@@ -32,27 +30,38 @@
         });
 
         // set button actions
-        updateBtn.addEventListener("click", compare.updateChart);
+        updateBtn.addEventListener("click", log.updateLogs);
     });
+    
+    log.updateLogs = function () {
+        categorySelection = log.getSelectedCategory("category");
+        log.fetchLogData();
+    };
+    
+    
+    log.getSelectedCategory = function (optionsId) {
+        var categoryOptions = document.getElementById(optionsId);
+        var id = categoryOptions.options[categoryOptions.selectedIndex].value;
+        var name = categoryOptions.options[categoryOptions.selectedIndex].text;
+        console.log("De geselecteerde categorie is: "+id);
+        return {id: id, name: name};
+    };
 
-    compare.fetchRouteData = function () {
-        var providers = compare.getCheckedProviders();
-
+    log.fetchLogData = function () {
+        
         $.ajax({
             method: "GET",
             url: "comparedata",
             data: {
-                routeId1: route1Selection.id,
-                routeId2: route2Selection.id,
+                category: categorySelection.id,
                 startDate: datePickerBegin.data("DateTimePicker").date().toDate(),
                 endDate: datePickerEnd.data("DateTimePicker").date().toDate(),
-                providers: providers.toString()
             },
             success: function (routeData) {
                 data = routeData;
                 toggled = false;
                 routeChart.showDefaultTitle();
-                compare.showRoutesOnChart(data.route1TravelTime, data.route2TravelTime);
+                log.showRoutesOnChart(data.route1TravelTime, data.route2TravelTime);
             }
         });
     };
