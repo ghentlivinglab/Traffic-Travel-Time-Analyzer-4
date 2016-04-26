@@ -1,10 +1,16 @@
 package be.ugent.verkeer4.verkeerweb;
 
 import be.ugent.verkeer4.verkeerdomain.ILogService;
+import be.ugent.verkeer4.verkeerdomain.IPOIService;
+import be.ugent.verkeer4.verkeerdomain.IRouteService;
 import be.ugent.verkeer4.verkeerdomain.LogService;
+import be.ugent.verkeer4.verkeerdomain.POIService;
+import be.ugent.verkeer4.verkeerdomain.RouteService;
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Logging;
+import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.composite.LogCount;
+import be.ugent.verkeer4.verkeerdomain.data.composite.POICount;
 import be.ugent.verkeer4.verkeerweb.viewmodels.LogHomeEntryVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.LogHomeOverviewVM;
 import java.text.SimpleDateFormat;
@@ -22,13 +28,19 @@ public class HomeController {
         
         //dependency injection
         ILogService logService = new LogService(); 
+        IRouteService routeService = new RouteService();
+        IPOIService poiService = new POIService(routeService);
         
         //logs overview model opbouwen
         LogHomeOverviewVM logHomeOverview = getLogHomeOverviewModel(logService);
         
+        //POI's ophalen
+        List<POICount> pois = poiService.getPOICount();
+        
         // geef mee als model aan view
         ModelAndView model = new ModelAndView("home/index");
         model.addObject("logHomeOverview", logHomeOverview);
+        model.addObject("POIs", pois);
         
         return model;
     }

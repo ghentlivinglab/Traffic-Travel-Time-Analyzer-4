@@ -5,6 +5,7 @@ import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.POINearRoute;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.RouteWaypoint;
+import be.ugent.verkeer4.verkeerdomain.data.composite.POICount;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import java.util.ArrayList;
 import java.util.Date;
@@ -186,4 +187,9 @@ public class POIService extends BaseService implements IPOIService {
             repo.getPOISet().updatePOIMatchedWithRoute(poi.getId(), true);
         }
     }
+    
+    public List<POICount> getPOICount() {
+        return repo.getPOISet().getPOICount();
+    }
+            
 }
