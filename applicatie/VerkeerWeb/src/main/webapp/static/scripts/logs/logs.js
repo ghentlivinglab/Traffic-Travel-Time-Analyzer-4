@@ -51,16 +51,14 @@
         
         $.ajax({
             method: "GET",
-            url: "comparedata",
+            url: "logdata",
             data: {
                 category: categorySelection.id,
                 startDate: datePickerBegin.data("DateTimePicker").date().toDate(),
                 endDate: datePickerEnd.data("DateTimePicker").date().toDate(),
             },
-            success: function (routeData) {
-                data = routeData;
-                toggled = false;
-                routeChart.showDefaultTitle();
+            success: function (logData) {
+                data = logData;
                 log.showRoutesOnChart(data.route1TravelTime, data.route2TravelTime);
             }
         });
