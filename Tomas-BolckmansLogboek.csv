@@ -41,3 +41,5 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 12/04/16,20:00,20:35,Thuis,"Aanpassen van loggingtabel op dashboard, aantal logs per category en type wordt nu aangegeven in de plaats van een lange onoverzichtelijke lijst van logs",39,
 18/04/16,15:00,19:00,Thuis,"Werking sequentiediagram op zoeken en verscheidene sequentiediagrammen maken",,
 18/04/16,20:00,22:00,Thuis,"Drie van de gemaakte sequentiediagrammen toevoegen in projectdossier (via overleaf) en voorbereiden + nalezen presentatie",,
+19/04/16,08:15,12:15,School,"Standup meeting, presentatie Sprint 2 voor klant, meeting met klant, nieuwe pagina aanmaken voor logging met nieuwe controller en javascript",,
+26/04/16,08:15,12:00,School,"Standup meeting, verder werken aan logging pagina, invulling tabel op dashboard van het aantal actieve POI's",89,
