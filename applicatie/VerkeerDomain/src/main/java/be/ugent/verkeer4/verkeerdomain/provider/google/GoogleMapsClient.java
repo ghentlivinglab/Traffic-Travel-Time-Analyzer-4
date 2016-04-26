@@ -6,9 +6,16 @@
 package be.ugent.verkeer4.verkeerdomain.provider.google;
 
 import be.ugent.verkeer4.verkeerdomain.Settings;
+import com.google.gson.Gson;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
+import retrofit2.http.Query;
 
 /**
  *
@@ -26,19 +33,23 @@ public class GoogleMapsClient {
             avoid = "highways";
         }
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://maps.googleapis.com/maps/api/distancematrix/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        String query = "?key=" + key + "&" + "destinations=" + destinations + "&" + "origins=" + origins + "&" + "departure_time=" + departureTime + "&" + "avoid=" + avoid;
+        URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json" + query);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+        
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                (conn.getInputStream())))) {
 
-        GoogleRoutingService service = retrofit.create(GoogleRoutingService.class);
+            Gson gson = new Gson();
+            GoogleClient client = gson.fromJson(br, GoogleClient.class);
 
-        GoogleClient client = service.calculateRoute(key, destinations, origins, departureTime, avoid).execute().body();
-
-        if (client.getStatus().equalsIgnoreCase("OVER_QUERY_LIMIT")) {
-            return null;
-        } else {
-            return client.getRows().get(0);
+            if (client.getStatus().equalsIgnoreCase("OVER_QUERY_LIMIT")) {
+                return null;
+            } else {
+                return client.getRows().get(0);
+            }
         }
     }
 }
