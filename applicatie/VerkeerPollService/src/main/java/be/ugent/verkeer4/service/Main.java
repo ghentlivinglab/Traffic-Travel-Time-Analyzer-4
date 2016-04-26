@@ -18,9 +18,7 @@ import java.util.logging.Logger;
 
 public class Main {
 
-    public static void main(String[] args) throws ClassNotFoundException, InterruptedException {
-
-        for (int i = 0; i < 1000000; i++) {
+        /*  for (int i = 0; i < 1000000; i++) {
             Thread t = new Thread(() -> {
                 HereMapsProvider provider = new HereMapsProvider();
                 Route r = new Route();
@@ -38,7 +36,9 @@ public class Main {
         }
 
         System.exit(0);
-
+*/
+    
+    public static void main(String[] args) throws ClassNotFoundException, InterruptedException {
         TrafficJamAnalysisService trafficJamAnalysisService = new TrafficJamAnalysisService();
 
         BackgroundPOIRouteMatcherService poiMatchingService = new BackgroundPOIRouteMatcherService();

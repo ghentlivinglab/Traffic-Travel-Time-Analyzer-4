@@ -46,6 +46,7 @@ public class LogService extends BaseService implements ILogService {
         if(type == LogTypeEnum.Info) // geen info logging
             return;
         
+        
         //logs krijgen de huidige datum mee
         Date now = new Date();
         
