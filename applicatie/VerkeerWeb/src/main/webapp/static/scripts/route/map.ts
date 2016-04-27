@@ -306,18 +306,30 @@ namespace MapManagement {
 
     class RemoteRouteManager extends MapManager {
 
+        
         constructor(mapElementId: string, private mapRouteUrl: string) {
             super(mapElementId);
         }
 
-        updateRoutes() {
+        updateRoutes(before: Date, onDone:(data: MapData)=>void = null) {
+            let params;
+            if (before == null)
+                params = null;
+            else
+                params = { before: before };
+                
             $.ajax(this.mapRouteUrl, {
                 method: "GET",
                 dataType: "json",
+                data: params,
                 success: (data: MapData) => {
                     this.showRoutes(data);
                     this.showPOIs(data.pois);
                     this.centerMap();
+                    
+                    if(onDone) {
+                        onDone(data);
+                    }
                 },
             });
         }
@@ -331,7 +343,8 @@ namespace MapManagement {
 
     export function intializeRouteMap(elementId: string, ajaxUrl: string): MapManager {
         let mgr = new RemoteRouteManager(elementId, ajaxUrl);
-        mgr.updateRoutes();
+        mgr.updateRoutes(null);
         return mgr;
     }
+
 }

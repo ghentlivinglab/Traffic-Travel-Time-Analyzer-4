@@ -227,15 +227,25 @@ var MapManagement;
             _super.call(this, mapElementId);
             this.mapRouteUrl = mapRouteUrl;
         }
-        RemoteRouteManager.prototype.updateRoutes = function () {
+        RemoteRouteManager.prototype.updateRoutes = function (before, onDone) {
             var _this = this;
+            if (onDone === void 0) { onDone = null; }
+            var params;
+            if (before == null)
+                params = null;
+            else
+                params = { before: before };
             $.ajax(this.mapRouteUrl, {
                 method: "GET",
                 dataType: "json",
+                data: params,
                 success: function (data) {
                     _this.showRoutes(data);
                     _this.showPOIs(data.pois);
                     _this.centerMap();
+                    if (onDone) {
+                        onDone(data);
+                    }
                 }
             });
         };
@@ -249,7 +259,7 @@ var MapManagement;
     })(MapManager);
     function intializeRouteMap(elementId, ajaxUrl) {
         var mgr = new RemoteRouteManager(elementId, ajaxUrl);
-        mgr.updateRoutes();
+        mgr.updateRoutes(null);
         return mgr;
     }
     MapManagement.intializeRouteMap = intializeRouteMap;

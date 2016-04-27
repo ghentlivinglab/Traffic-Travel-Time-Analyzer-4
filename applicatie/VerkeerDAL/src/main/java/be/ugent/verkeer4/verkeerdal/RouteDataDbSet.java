@@ -32,11 +32,11 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         map.put("To", to);
 
         StringBuilder builder = new StringBuilder();
-        for (int i=0; i<providers.length-1; i++) {
+        for (int i = 0; i < providers.length - 1; i++) {
             builder.append(i);
             builder.append(',');
         }
-        builder.append(providers[providers.length-1]);
+        builder.append(providers[providers.length - 1]);
         map.put("providers", builder.toString());
 
         return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To AND Provider in (:providers)", map, order);
@@ -58,8 +58,14 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         }
     }
 
-    public List<RouteData> getMostRecentSummaries() {
-        return getMostRecentSummaries(null, null);
+    public List<RouteData> getMostRecentSummaries(Date before) {
+        if (before == null) {
+            return getMostRecentSummaries(null, null);
+        } else {
+            Map<String, Object> params = new HashMap<>();
+            params.put("Before", before);
+            return getMostRecentSummaries("rd.Timestamp < :Before", params);
+        }
     }
 
     private List<RouteData> getMostRecentSummaries(String condition, Map<String, Object> parameters) {

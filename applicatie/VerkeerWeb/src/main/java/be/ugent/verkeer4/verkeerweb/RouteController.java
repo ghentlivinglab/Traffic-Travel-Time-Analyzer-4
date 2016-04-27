@@ -13,12 +13,16 @@ import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDataVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteDetailsVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteEditVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverviewVM;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 
 @Controller
@@ -57,7 +61,7 @@ public class RouteController {
         // haal routes op
         List<Route> lst = routeService.getRoutes();
         // haal meest recentste gegevens op voor alle routes
-        List<RouteData> mostRecentRouteSummaries = routeService.getMostRecentRouteSummaries();
+        List<RouteData> mostRecentRouteSummaries = routeService.getMostRecentRouteSummaries(null);
         RouteOverviewVM overview = new RouteOverviewVM();
         // hou per route id een RouteSummaryEntry bij
         Map<Integer, RouteSummaryEntryVM> entries = new HashMap<>();
@@ -314,10 +318,13 @@ public class RouteController {
      */
     @ResponseBody
     @RequestMapping(value = "route/mapdata", method = RequestMethod.GET)
-    public MapData ajaxGetMapRoutes(HttpServletRequest req) throws ClassNotFoundException {
+    public MapData ajaxGetMapRoutes(HttpServletRequest req) throws ClassNotFoundException, ParseException {
         // als id leeg is geef alle routes gegevens terug
         if (req.getParameter("id") == null || req.getParameter("id").equalsIgnoreCase("")) {
-            return getAllRouteMapData();
+            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            
+            Date before = req.getParameter("before") == null ? null : f.parse(req.getParameter("before"));
+            return getAllRouteMapData(before);
         } else {
             // anders geef maar de map gegevens voor 1 route terug
             int id = Integer.parseInt(req.getParameter("id"));
@@ -503,7 +510,7 @@ public class RouteController {
      * @return
      * @throws ClassNotFoundException
      */
-    private MapData getAllRouteMapData() throws ClassNotFoundException {
+    private MapData getAllRouteMapData(Date before) throws ClassNotFoundException {
         IRouteService routeService = new RouteService();
         IPOIService poiService = new POIService(routeService);
         // vraag alle trajecten met hun waypoints op
@@ -514,9 +521,10 @@ public class RouteController {
         Map<Integer, MapRoute> mapRoutesPerId = new HashMap<>();
         Map<Integer, List<RouteDataVM>> summariesPerRouteId = new HashMap<>();
 
+        
         // vraag alle meest recente route data op 
         // en voeg ze toe in de map
-        for (RouteData summary : routeService.getMostRecentRouteSummaries()) {
+        for (RouteData summary : routeService.getMostRecentRouteSummaries(before)) {
             List<RouteDataVM> lst;
             if (!summariesPerRouteId.containsKey(summary.getRouteId())) {
                 summariesPerRouteId.put(summary.getRouteId(), lst = new ArrayList<>());
@@ -528,7 +536,7 @@ public class RouteController {
         }
 
         // vraag alle actieve pois op en map ze op map poi objectne
-        List<POI> pois = poiService.getActivePOIs();
+        List<POI> pois = poiService.getActivePOIs(before);
         for (POI poi : pois) {
             MapPOI mp = getMapPOIFromPOI(poi);
             data.getPois().add(mp);

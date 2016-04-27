@@ -21,9 +21,14 @@ public class POIDbSet extends DbSet<POI> {
         super(POI.class, sql2o);
     }
 
-    public List<POI> getActivePOI() {
+    public List<POI> getActivePOI(Date before) {
         HashMap<String, Object> map = new HashMap<>();
-        return this.getItems("Until is NULL", map);
+        if(before == null)
+            return this.getItems("Until is NULL", map);
+        else {
+            map.put("Before", before);
+            return this.getItems(":Before >= Since AND (:Before < Until OR Until is NULL)", map);
+        }
     }
 
     public Map<String, POI> getActivePOIPerReferenceIdForProvider(ProviderEnum provider) {

@@ -17,7 +17,7 @@ public interface IPOIService {
 
     public void insert(POI poi);
 
-    public List<POI> getActivePOIs();
+    public List<POI> getActivePOIs(Date before);
     
     public List<POIWithDistanceToRoute> getPOIsNearRoute(int routeId, Date from, Date to);
     

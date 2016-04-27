@@ -58,11 +58,13 @@ public class POIService extends BaseService implements IPOIService {
     /**
      * Geeft alle actieve POIs terug (POI's waarvan Until nog niet is ingevuld en dus
      * nog teruggeven wordt bij de polling)
+     * @param before Als before null is wordt de huidige poi's opgevraagd, anders voor de before
+     * timestap
      * @return 
      */
     @Override
-    public List<POI> getActivePOIs() {
-        return repo.getPOISet().getActivePOI();
+    public List<POI> getActivePOIs(Date before) {
+        return repo.getPOISet().getActivePOI(before);
     }
 
     /**

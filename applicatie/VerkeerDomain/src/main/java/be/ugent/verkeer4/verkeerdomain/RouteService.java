@@ -191,13 +191,16 @@ public class RouteService extends BaseService implements IRouteService {
      * Geeft enkel recentste route data terug voor alle routes voor elke
      * provider
      *
+     * @param before Als before null is wordt de laatste gegevens gereturned, 
+     * anders wordt tot op het before tijdstip gekeken
      * @return
      */
     @Override
-    public List<RouteData> getMostRecentRouteSummaries() {
-        return repo.getRouteDataSet().getMostRecentSummaries();
+    public List<RouteData> getMostRecentRouteSummaries(Date before) {
+        return repo.getRouteDataSet().getMostRecentSummaries(before);
     }
 
+    
     /**
      * Geeft de recentste route data terug voor een bepaalde route voor elke
      * provider
