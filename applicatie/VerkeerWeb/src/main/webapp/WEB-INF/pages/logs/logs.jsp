@@ -18,7 +18,7 @@
                 <div class="col-sm-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Filter Logs</h3>
+                            <h3 class="panel-title">Filter Logs - DEZE PAGINA IS NOG IN OPBOUW</h3>
                         </div>
                         <div class="panel-body">
                             <!-- Row with all filter options -->
@@ -27,6 +27,7 @@
                                     <!-- Filters -->
                                     <div class="row">
                                         <div class="col-md-6">
+                                            
                                             <label for="category">Select category</label>
                                             <select id="category" class="form-control">
                                                 <c:forEach var="logs" items="${logs}">
@@ -72,7 +73,7 @@
                         </div>
                         <div class="panel-body">
                             <!-- Table -->
-                            <table class="table sortable">
+                            <table class="table sortable" id="logtable">
                                 <thead>
                                     <tr>
                                         <th>Category</th>

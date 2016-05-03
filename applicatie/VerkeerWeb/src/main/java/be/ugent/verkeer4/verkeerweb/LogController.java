@@ -25,11 +25,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LogController {
 
+    private ILogService logService;
+    
     @RequestMapping(value = "/logs", method = RequestMethod.GET)
     public ModelAndView logs() throws ClassNotFoundException {
         
         //dependency injection
-        ILogService logService = new LogService(); 
+        logService = new LogService(); 
         
         //logs overview model opbouwen
         LogHomeOverviewVM logHomeOverview = getLogHomeOverviewModel(logService);
@@ -45,12 +47,11 @@ public class LogController {
     
     @ResponseBody
     @RequestMapping(value = "/logdata", method = RequestMethod.GET)
-    public LogDetailOverviewVM ajaxGetLogData(@RequestParam("category") String category,@RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate) throws ClassNotFoundException {
-        //dependency injection
-        ILogService logService = new LogService(); 
+    public LogDetailOverviewVM ajaxGetLogData(@RequestParam("category") String category, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate) throws ClassNotFoundException {
         
-        //haal logs op
-        List<Logging> lst = logService.getLogs();
+        //TODO:
+        //MAAK DEZE METHODE AAN IN DE LOGSERVICE EN ILOGSERVICE + bijhorende QUERRY
+        //List<Logging> lst = logService.getLogsByCategoryAndDate(category, startDate, endDate);
         
         //maak het viewmodel object aan
         LogDetailOverviewVM logOverview = new LogDetailOverviewVM();

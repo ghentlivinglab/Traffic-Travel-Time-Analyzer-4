@@ -1,4 +1,4 @@
-(function (log, routeChart, $) {
+(function (log, $) {
 
     // view
     const chartId = "container";
@@ -61,12 +61,24 @@
                 console.log("SUCCES");
                 data = logData;
                 log.showLogs(data);
+                console.log(data);
             }
         });
     };
     
     log.showLogs = function(data) {
         //overloop de logs en maak tabelrijen aan.
+        // Find a <table> element with id="myTable":
+        var table = document.getElementById("logtable");
+
+        var row = table.insertRow(0);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+
+        // Add some text to the new cells:
+        cell1.innerHTML = "TEST";
+        cell2.innerHTML = "TEST";
     };
 
-}(window.verkeer.compare = window.verkeer.compare || {}, verkeer.routeChart, jQuery));
+}({}, jQuery));
