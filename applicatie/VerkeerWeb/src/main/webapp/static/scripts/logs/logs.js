@@ -73,7 +73,6 @@
     
     log.showLogs = function(data) {
         //overloop de logs en maak tabelrijen aan.
-        // Find a <table> element with id="myTable":
         var table = document.getElementById("logtable");
         
         var array = data.logEntries;
