@@ -43,7 +43,6 @@
         var categoryOptions = document.getElementById(optionsId);
         var id = categoryOptions.options[categoryOptions.selectedIndex].value;
         var name = categoryOptions.options[categoryOptions.selectedIndex].text;
-        console.log("De geselecteerde categorie is: "+id);
         return {id: id, name: name};
     };
 
