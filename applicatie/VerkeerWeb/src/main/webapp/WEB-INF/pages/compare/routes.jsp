@@ -99,4 +99,5 @@
 <script src="<c:url value="/static/scripts/libs/export-csv.js" />"></script>
 <script src="<c:url value="/static/scripts/route/route-chart.js" />"></script>
 <script src="<c:url value="/static/scripts/compare/compare.js" />"></script>
+<script src="<c:url value="/static/scripts/compare/routes.js" />"></script>
 </html>
