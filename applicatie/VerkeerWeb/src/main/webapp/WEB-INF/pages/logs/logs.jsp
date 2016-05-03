@@ -18,7 +18,7 @@
                 <div class="col-sm-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Filter Logs - DEZE PAGINA IS NOG IN OPBOUW</h3>
+                            <h3 class="panel-title">Filter Logs</h3>
                         </div>
                         <div class="panel-body">
                             <!-- Row with all filter options -->
@@ -76,21 +76,13 @@
                             <table class="table sortable" id="logtable">
                                 <thead>
                                     <tr>
-                                        <th>Category</th>
+                                        <th>Type</th>
                                         <th>Date</th>
                                         <th>Time</th>
                                         <th>Message</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="logHomeEntry" items="${logHomeOverview.logEntries}">
-                                        <tr>
-                                                <td><a href="#">${logHomeEntry.category}</a></td>
-                                                <td>${logHomeEntry.infoCount}</td>
-                                                <td>${logHomeEntry.warningCount}</td>
-                                                <td>${logHomeEntry.errorCount}</td>
-                                        </tr>
-                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>

@@ -9,7 +9,7 @@
     // data
     var data;
 
-    $(document).ready(function () {
+    $(document).ready(function () { 
         // find buttons
         updateBtn = document.getElementById("update-btn");
         datePickerBegin = $("#datetimepicker-begin");
@@ -58,27 +58,40 @@
                 endDate: datePickerEnd.data("DateTimePicker").date().toDate(),
             },
             success: function (logData) {
-                console.log("SUCCES");
-                data = logData;
-                log.showLogs(data);
-                console.log(data);
+                log.clearTable();
+                log.showLogs(logData);
             }
         });
     };
+    
+    log.clearTable = function(){
+        //tabel wissen
+        for(var i = document.getElementById("logtable").rows.length; i > 1;i--)
+        {
+            document.getElementById("logtable").deleteRow(i -1);
+        }
+    }
     
     log.showLogs = function(data) {
         //overloop de logs en maak tabelrijen aan.
         // Find a <table> element with id="myTable":
         var table = document.getElementById("logtable");
+        
+        var array = data.logEntries;
+        var length = array.length;
+        for (var i = 0; i < length; i++) {
+            var row = table.insertRow(-1);
+            var typeCel = row.insertCell(-1);
+            var dateCel = row.insertCell(-1);
+            var timeCel = row.insertCell(-1);
+            var messageCel = row.insertCell(-1);
 
-        var row = table.insertRow(0);
-
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-
-        // Add some text to the new cells:
-        cell1.innerHTML = "TEST";
-        cell2.innerHTML = "TEST";
+            // Add some text to the new cells:
+            typeCel.innerHTML = array[i].type;
+            dateCel.innerHTML = array[i].date;
+            timeCel.innerHTML = array[i].time;
+            messageCel.innerHTML = array[i].message;
+        }
     };
 
 }({}, jQuery));

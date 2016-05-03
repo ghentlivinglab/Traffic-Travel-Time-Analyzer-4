@@ -8,6 +8,7 @@ import be.ugent.verkeer4.verkeerdomain.data.Logging;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.composite.LogCount;
+import be.ugent.verkeer4.verkeerweb.viewmodels.LogDetailEntryVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.LogDetailOverviewVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.LogHomeEntryVM;
 import be.ugent.verkeer4.verkeerweb.viewmodels.LogHomeOverviewVM;
@@ -50,12 +51,12 @@ public class LogController {
     public LogDetailOverviewVM ajaxGetLogData(@RequestParam("category") String category, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate) throws ClassNotFoundException {
         
         //TODO:
-        //MAAK DEZE METHODE AAN IN DE LOGSERVICE EN ILOGSERVICE + bijhorende QUERRY
-        //List<Logging> lst = logService.getLogsByCategoryAndDate(category, startDate, endDate);
+        //PAS DEZE METHODE VERDER AAN ZODAT bijhorende QUERY CORRECTE DATA 
+        List<Logging> lst = logService.getLogsByCategoryAndDate(category, startDate, endDate);
         
         //maak het viewmodel object aan
         LogDetailOverviewVM logOverview = new LogDetailOverviewVM();
-        /*
+        
         //Datum converteren naar enkel datum (zonder tijd)
         SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         
@@ -63,10 +64,8 @@ public class LogController {
         SimpleDateFormat localTimeFormat = new SimpleDateFormat("HH:mm:ss");
         
         //overlopen van de logEntries in de database
-        //enkel de laatste 100 entries weergeven
-        for(int i = lst.size()-1; i >= (lst.size() - 50); i--){
-            Logging l = lst.get(i);
-            LogHomeEntryVM entry = new LogHomeEntryVM();
+        for(Logging l : lst){
+            LogDetailEntryVM entry = new LogDetailEntryVM();
             entry.setId(l.getId());
             entry.setDate(localDateFormat.format(l.getDate()));
             entry.setTime(localTimeFormat.format(l.getDate()));
@@ -74,10 +73,7 @@ public class LogController {
             entry.setMessage(l.getMessage());
             
             //aanpassen naar het gewenste type voor de ViewModel
-            if(l.getType() == LogTypeEnum.Info){
-                entry.setType("info");
-            } 
-            else if (l.getType() == LogTypeEnum.Warning){
+            if (l.getType() == LogTypeEnum.Warning){
                 entry.setType("warning");
             }
             else{
@@ -85,8 +81,8 @@ public class LogController {
             }
             
             logOverview.getLogEntries().add(entry);
-            }
-        */
+        }
+        
         return logOverview;
     }    
 

@@ -84,6 +84,27 @@ public class LogService extends BaseService implements ILogService {
         return logs;
     }
     
+     /**
+     * Hier komt de methode om logs op te vragen.
+     * Deze wordeng gebruikt om weer te geven op het dashboard.
+     * @param category
+     * @param startDate
+     * @param endDate
+     * @return Lijst van logentries
+     */
+    @Override
+    public List<Logging> getLogsByCategoryAndDate(String category, Date startDate, Date endDate) {
+        List<Logging> logs = null;
+        
+        try {
+            logs = repo.getLogEntrySet().getLogsByCategoryAndDate(category, startDate, endDate);
+        } catch (Exception ex) {
+            Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex); 
+        }
+        
+        return logs;
+    }    
+    
     /**
      * 
      * @return Lijst van LoggingCount entries
