@@ -12,7 +12,7 @@
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Compare routes</h3>
+            <h3 class="panel-title">Compare route</h3>
         </div>
         <div class="panel-body">
             <!-- Row with all options + provider selection -->
@@ -20,17 +20,9 @@
                 <div class="col-md-10">
                     <!-- Row routes -->
                     <div class="row">
-                        <div class="col-md-6">
-                            <label for="route1">Select first route</label>
+                        <div class="col-md-12">
+                            <label for="route1">Select route</label>
                             <select id="route1" class="form-control">
-                                <c:forEach var="route" items="${routes}">
-                                    <option value="${route.id}">${route.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="route2">Select second route</label>
-                            <select id="route2" class="form-control">
                                 <c:forEach var="route" items="${routes}">
                                     <option value="${route.id}">${route.name}</option>
                                 </c:forEach>
@@ -98,5 +90,4 @@
 <script src="<c:url value="/static/scripts/libs/exporting.js" />"></script>
 <script src="<c:url value="/static/scripts/libs/export-csv.js" />"></script>
 <script src="<c:url value="/static/scripts/route/route-chart.js" />"></script>
-<script src="<c:url value="/static/scripts/route/compare/compare.js" />"></script>
 </html>
