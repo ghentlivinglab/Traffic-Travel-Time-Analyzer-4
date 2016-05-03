@@ -27,6 +27,7 @@
                                     <!-- Filters -->
                                     <div class="row">
                                         <div class="col-md-6">
+                                            
                                             <label for="category">Select category</label>
                                             <select id="category" class="form-control">
                                                 <c:forEach var="logs" items="${logs}">
@@ -72,24 +73,16 @@
                         </div>
                         <div class="panel-body">
                             <!-- Table -->
-                            <table class="table sortable">
+                            <table class="table sortable" id="logtable">
                                 <thead>
                                     <tr>
-                                        <th>Category</th>
+                                        <th>Type</th>
                                         <th>Date</th>
                                         <th>Time</th>
                                         <th>Message</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="logHomeEntry" items="${logHomeOverview.logEntries}">
-                                        <tr>
-                                                <td><a href="#">${logHomeEntry.category}</a></td>
-                                                <td>${logHomeEntry.infoCount}</td>
-                                                <td>${logHomeEntry.warningCount}</td>
-                                                <td>${logHomeEntry.errorCount}</td>
-                                        </tr>
-                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>

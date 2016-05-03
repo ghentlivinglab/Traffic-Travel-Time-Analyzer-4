@@ -33,4 +33,20 @@ public class LogEntryDbSet extends DbSet<Logging>  {
             return q.executeAndFetch(LogCount.class);
         }
     }
+    
+    public List<Logging> getLogsByCategoryAndDate(String category, Date startDate, Date endDate){
+        try (org.sql2o.Connection con = sql2o.open()) {
+            String query = 
+                    "SELECT * FROM logging "
+                    + "WHERE category = :category AND date between :startDate AND :endDate "
+                    + " ORDER BY date";
+
+            Query q = con.createQuery(query);
+            q.addParameter("category", category);
+            q.addParameter("startDate", startDate);
+            q.addParameter("endDate", endDate);
+            
+            return q.executeAndFetch(Logging.class);
+        }        
+    }
 }

@@ -1,4 +1,4 @@
-(function (log, routeChart, $) {
+(function (log, $) {
 
     // view
     const chartId = "container";
@@ -9,7 +9,7 @@
     // data
     var data;
 
-    $(document).ready(function () {
+    $(document).ready(function () { 
         // find buttons
         updateBtn = document.getElementById("update-btn");
         datePickerBegin = $("#datetimepicker-begin");
@@ -43,7 +43,6 @@
         var categoryOptions = document.getElementById(optionsId);
         var id = categoryOptions.options[categoryOptions.selectedIndex].value;
         var name = categoryOptions.options[categoryOptions.selectedIndex].text;
-        console.log("De geselecteerde categorie is: "+id);
         return {id: id, name: name};
     };
 
@@ -58,15 +57,39 @@
                 endDate: datePickerEnd.data("DateTimePicker").date().toDate(),
             },
             success: function (logData) {
-                console.log("SUCCES");
-                data = logData;
-                log.showLogs(data);
+                log.clearTable();
+                log.showLogs(logData);
             }
         });
     };
     
+    log.clearTable = function(){
+        //tabel wissen
+        for(var i = document.getElementById("logtable").rows.length; i > 1;i--)
+        {
+            document.getElementById("logtable").deleteRow(i -1);
+        }
+    }
+    
     log.showLogs = function(data) {
         //overloop de logs en maak tabelrijen aan.
+        var table = document.getElementById("logtable");
+        
+        var array = data.logEntries;
+        var length = array.length;
+        for (var i = 0; i < length; i++) {
+            var row = table.insertRow(-1);
+            var typeCel = row.insertCell(-1);
+            var dateCel = row.insertCell(-1);
+            var timeCel = row.insertCell(-1);
+            var messageCel = row.insertCell(-1);
+
+            // Add some text to the new cells:
+            typeCel.innerHTML = array[i].type;
+            dateCel.innerHTML = array[i].date;
+            timeCel.innerHTML = array[i].time;
+            messageCel.innerHTML = array[i].message;
+        }
     };
 
-}(window.verkeer.compare = window.verkeer.compare || {}, verkeer.routeChart, jQuery));
+}({}, jQuery));
