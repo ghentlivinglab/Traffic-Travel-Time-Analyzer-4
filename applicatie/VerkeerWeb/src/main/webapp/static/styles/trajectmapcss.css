@@ -1,44 +1,44 @@
-table {
-        width: 100%;
-    }
+.table {
+    width: 100%;
+}
 
-thead, tbody, tr, td, th { display: block; }
+.table thead, .table tbody,.table  tr, .table td, .table th { display: block; }
 
-tr:after {
+.table tr:after {
     content: ' ';
     display: block;
     visibility: hidden;
     clear: both;
 }
 
-thead th {
+.table thead th {
     height: 60px;
 
     /*text-align: left;*/
 }
 
-tbody {
+.table tbody {
     height: 750px;
     overflow-y: auto;
 }
 
-thead {
+.table thead {
     /* fallback */
 }
 
 
-tbody td, thead th {
-    
+.table tbody td,.table thead th {
+
     float: left;
 }
 
-th, td {
+.table th, .table td {
     width: 75px;
 }
 
-th:nth-child(1), td:nth-child(1) {
-    width: 180px;
+.table th:nth-child(1), .table td:nth-child(1) {
+    width: 260px;
 }
-th:last-child,td:last-child {
+.table th:last-child,.table td:last-child {
     width:inherit;
 }

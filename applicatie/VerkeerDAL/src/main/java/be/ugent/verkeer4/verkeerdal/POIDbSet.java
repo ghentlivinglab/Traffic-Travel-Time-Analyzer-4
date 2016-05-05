@@ -3,6 +3,7 @@ package be.ugent.verkeer4.verkeerdal;
 import be.ugent.verkeer4.verkeerdomain.data.POI;
 import be.ugent.verkeer4.verkeerdomain.data.POINearRoute;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
+import be.ugent.verkeer4.verkeerdomain.data.composite.POICount;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,9 +21,14 @@ public class POIDbSet extends DbSet<POI> {
         super(POI.class, sql2o);
     }
 
-    public List<POI> getActivePOI() {
+    public List<POI> getActivePOI(Date before) {
         HashMap<String, Object> map = new HashMap<>();
-        return this.getItems("Until is NULL", map);
+        if(before == null)
+            return this.getItems("Until is NULL", map);
+        else {
+            map.put("Before", before);
+            return this.getItems(":Before >= Since AND (:Before < Until OR Until is NULL)", map);
+        }
     }
 
     public Map<String, POI> getActivePOIPerReferenceIdForProvider(ProviderEnum provider) {
@@ -102,6 +108,22 @@ public class POIDbSet extends DbSet<POI> {
 
     public List<POI> getUnmatchedPOIs() {
         return getItems("MatchedWithRoutes = 0 or MatchedWithRoutes is null", null);
+    }
+    
+    public List<POICount> getPOICount() {
+        try (org.sql2o.Connection con = sql2o.open()) {
+            String query = 
+                    "SELECT category "
+                    + ", count(1) AS amount "
+                    + "FROM poi "
+                    + "WHERE Until is NULL "
+                    + "GROUP BY category "
+                    + "ORDER BY category";
+
+            Query q = con.createQuery(query);
+
+            return q.executeAndFetch(POICount.class);
+        }
     }
 
 }

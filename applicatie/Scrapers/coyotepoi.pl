@@ -8,8 +8,8 @@ use strict;
 use JSON;
 
 # coyote gebruikt een user & ww
-my $username = "110971610";
-my $password = "50c20b94";
+my $username = "190097429";
+my $password = "1e5fd22f";
 
 # mapping van de categorieen op de enum waarden
 my %categories = ( "24" => "3",  #incident trafic -> jam

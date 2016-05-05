@@ -9,8 +9,8 @@ use strict;
 use JSON;
 
 # Coyote heeft een username & wachtwoord nodig om in te loggen
-my $username = "110971610";
-my $password = "50c20b94";
+my $username = "190097429";
+my $password = "1e5fd22f";
 
 # redirect output naar /dev/null of NUL naargelang linux of windows
 my $redir = "/dev/null";

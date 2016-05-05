@@ -22,7 +22,7 @@ public interface IRouteService {
 
     public List<RouteWaypoint> getRouteWaypoints();
     
-    public List<RouteData> getMostRecentRouteSummaries();
+    public List<RouteData> getMostRecentRouteSummaries(Date before);
 
     public List<RouteWaypoint> getRouteWaypointsForRoute(int id);
 

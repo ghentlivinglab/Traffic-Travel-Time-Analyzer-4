@@ -6,31 +6,30 @@
 package be.ugent.verkeer4.verkeerweb.viewmodels;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  *
  * @author Tomas Bolckmans
  */
-public class LogOverviewVM {
-    private List<LogEntryVM> logEntries;
+public class LogHomeOverviewVM {
+    private List<LogHomeEntryVM> logEntries;
     
-    public LogOverviewVM(){
+    public LogHomeOverviewVM(){
         logEntries = new ArrayList<>();
     }
     
     /**
      * @return the logEntries
      */
-    public List<LogEntryVM> getLogEntries() {
+    public List<LogHomeEntryVM> getLogEntries() {
         return logEntries;
     }
 
     /**
      * @param logEntries the logEntries to set
      */
-    public void setLogEntries(List<LogEntryVM> logEntries) {
+    public void setLogEntries(List<LogHomeEntryVM> logEntries) {
         this.logEntries = logEntries;
     }
     

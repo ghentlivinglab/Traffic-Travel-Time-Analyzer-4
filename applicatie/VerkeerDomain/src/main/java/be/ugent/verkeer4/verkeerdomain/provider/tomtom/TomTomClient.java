@@ -1,7 +1,13 @@
 package be.ugent.verkeer4.verkeerdomain.provider.tomtom;
 
 import be.ugent.verkeer4.verkeerdomain.Settings;
+import be.ugent.verkeer4.verkeerdomain.provider.bing.BingClient;
+import com.google.gson.Gson;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.GsonConverterFactory;
@@ -13,21 +19,24 @@ public class TomTomClient {
 
         String apiKey = Settings.getInstance().getTomTomRoutingAPIKey();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.tomtom.com/routing/1/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        TomTomRoutingService service = retrofit.create(TomTomRoutingService.class);
-
         String locations = vanLat + "," + vanLng + ":" + totLat + "," + totLng;
-        List<String> avoid = null;
+        String avoid = "";
         if (avoidHighways) {
-            avoid = new ArrayList<String>();
-            avoid.add("motorways");
+            avoid = "motorways";
         }
-        CalculateRouteResponse response = service.calculateRoute(locations, apiKey, includeTraffic, avoid).execute().body();
 
-        return response;
+        String query = "?key=" + apiKey + "&" + "traffic=" + (includeTraffic ? "true" : "false") + (avoid.equalsIgnoreCase("") ? "" : "&avoid=" + avoid);
+        URL url = new URL("https://api.tomtom.com/routing/1/calculateRoute/" + locations + "/json/" + query);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                (conn.getInputStream())))) {
+
+            Gson gson = new Gson();
+            CalculateRouteResponse response = gson.fromJson(br, CalculateRouteResponse.class);
+            return response;
+        }
     }
 }

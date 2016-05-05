@@ -1,7 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="dropdown active navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -18,6 +18,9 @@
             <ul class="nav navbar-nav">
                 <li><a href="<c:url value="/route/list" />">Overview <span class="sr-only">(current)</span></a></li>
                 <li><a href="<c:url value="/route/map" />">Map View</a></li>
+                <li><a href="<c:url value="/logs" />">Logs</a></li>
+                <li><a href="<c:url value="/compare/route" />">Compare route</a></li>
+                <li><a href="<c:url value="/compare/routes" />">Compare routes</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

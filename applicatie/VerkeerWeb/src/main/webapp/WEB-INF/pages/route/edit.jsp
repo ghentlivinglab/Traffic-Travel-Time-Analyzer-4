@@ -6,7 +6,7 @@
 <html>
     <head>
         <jsp:include page="/WEB-INF/shared/head.jsp">
-            <jsp:param name="title" value="Route wijzigen"/>
+            <jsp:param name="title" value="Edit route"/>
         </jsp:include>
         <jsp:include page="/WEB-INF/shared/maprequirements.jsp"/>
         <script src="<c:url value="/static/scripts/route/edit.js" />"></script>
@@ -68,7 +68,8 @@
                                             Take shortest road.
                                         </label>
                                     </div>
-                                    <span>Not all providers make a distinction between the fastest and the shortest road.</span>
+                                    <span>Not all providers make a distinction between the fastest and the shortest road.</span><br>
+                                    <span style="font-weight:bold">! To save the waypoints correctly, the indicators on both maps need to be actively changed. If you want to change only one map, don't forget to reclick the other map as well.</span>
                                     <form:errors path="avoidHighwaysOrUseShortest" cssClass="error"/>
                                 </div>
 

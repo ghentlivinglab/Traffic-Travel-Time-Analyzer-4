@@ -6,7 +6,7 @@
 <html>
     <head>
         <jsp:include page="/WEB-INF/shared/head.jsp">
-            <jsp:param name="title" value="Traject overzicht" />
+            <jsp:param name="title" value="Route overview" />
         </jsp:include>
         <link rel="stylesheet" href="<c:url value="/static/styles/trajectlistcss.css" />"/>
         <script src="<c:url value="/static/scripts/route/overview.js" />"></script>

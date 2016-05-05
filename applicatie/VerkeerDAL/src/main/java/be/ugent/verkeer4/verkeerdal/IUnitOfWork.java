@@ -1,5 +1,7 @@
 package be.ugent.verkeer4.verkeerdal;
 
+import java.util.Date;
+
 public interface IUnitOfWork {
 
     public RouteDbSet getRouteSet();

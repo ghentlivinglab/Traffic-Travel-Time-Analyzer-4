@@ -16,13 +16,30 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         super(RouteData.class, sql2o);
     }
 
-    public List<RouteData> getItemsForRoute(int routeId, Date from, Date to) {
+    // Todo refactor beide overloads zodat andere opties dan where beter geregeld worden
+    public List<RouteData> getItemsForRoute(int routeId, Date from, Date to, String order) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("RouteId", routeId);
+        map.put("From", from);
+        map.put("To", to);
+        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map, order);
+    }
+
+    public List<RouteData> getItemsForRoute(int routeId, Date from, Date to, String order, int[] providers) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("RouteId", routeId);
         map.put("From", from);
         map.put("To", to);
 
-        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To", map);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < providers.length - 1; i++) {
+            builder.append(i);
+            builder.append(',');
+        }
+        builder.append(providers[providers.length - 1]);
+        map.put("providers", builder.toString());
+
+        return this.getItems("RouteId = :RouteId AND Timestamp BETWEEN :From and :To AND Provider in (:providers)", map, order);
     }
 
     public List<RouteData> getRouteDataAlignedTo5min(String condition, Map<String, Object> parameters) {
@@ -41,8 +58,14 @@ public class RouteDataDbSet extends DbSet<RouteData> {
         }
     }
 
-    public List<RouteData> getMostRecentSummaries() {
-        return getMostRecentSummaries(null, null);
+    public List<RouteData> getMostRecentSummaries(Date before) {
+        if (before == null) {
+            return getMostRecentSummaries(null, null);
+        } else {
+            Map<String, Object> params = new HashMap<>();
+            params.put("Before", before);
+            return getMostRecentSummaries("rd.Timestamp < :Before", params);
+        }
     }
 
     private List<RouteData> getMostRecentSummaries(String condition, Map<String, Object> parameters) {
@@ -52,8 +75,8 @@ public class RouteDataDbSet extends DbSet<RouteData> {
             if (condition != null) {
                 where += "WHERE " + condition + " ";
             }
-            String query = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd " + where + " group by routeId, provider) ";
-
+            String query;// = "select * from " + getTableName() + " where id in (select max(rd.id) from " + getTableName() + " rd " + where + " group by routeId, provider) ";
+            query = "select r.* from routedata r join (select max(rd.id) as mid from routedata rd " + where + " group by routeId, provider) as tmp on tmp.mid = r.id";
             Query q = con.createQuery(query);
 
             if (parameters != null) {

@@ -3,13 +3,17 @@ package be.ugent.verkeer4.verkeerweb.viewmodels;
 import be.ugent.verkeer4.verkeerdomain.data.ProviderEnum;
 import be.ugent.verkeer4.verkeerdomain.data.Route;
 import be.ugent.verkeer4.verkeerdomain.data.RouteData;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RouteSummaryEntryVM {
 
     private Route route;
-    private Map<ProviderEnum, RouteData> recentSummaries;
+    private Map<ProviderEnum, RouteDataVM> recentSummaries;
 
     private double averageCurrentTravelTime;
     private double delay;
@@ -36,14 +40,14 @@ public class RouteSummaryEntryVM {
     /**
      * @return the recentSummaries
      */
-    public Map<ProviderEnum, RouteData> getRecentSummaries() {
+    public Map<ProviderEnum, RouteDataVM> getRecentSummaries() {
         return recentSummaries;
     }
 
     /**
      * @param recentSummaries the recentSummaries to set
      */
-    public void setRecentSummaries(Map<ProviderEnum, RouteData> recentSummaries) {
+    public void setRecentSummaries(Map<ProviderEnum, RouteDataVM> recentSummaries) {
         this.recentSummaries = recentSummaries;
     }
 
@@ -60,11 +64,8 @@ public class RouteSummaryEntryVM {
         ProviderEnum prov = ProviderEnum.values()[provider];
         if (!recentSummaries.containsKey(prov)) {
             return 0;
-        } else {
+        } else {            
             double delay = recentSummaries.get(prov).getDelay();
-            if (delay < 0) {
-                delay = 0;
-            }
             return delay;
         }
     }

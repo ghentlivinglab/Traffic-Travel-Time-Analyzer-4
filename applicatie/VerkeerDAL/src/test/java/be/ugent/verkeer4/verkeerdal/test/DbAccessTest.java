@@ -10,12 +10,15 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherData;
 import be.ugent.verkeer4.verkeerdomain.data.WeatherDirectionEnum;
+import be.ugent.verkeer4.verkeerdomain.data.composite.LogCount;
 import be.ugent.verkeer4.verkeerdomain.data.composite.WeatherWithDistanceToRoute;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -219,5 +222,17 @@ public class DbAccessTest extends TestCase {
         assertEquals("Category is niet hetzelfde", log.getCategory(), storedLog.getCategory());
         
         repo.getLogEntrySet().delete(id);
+    }
+    
+    public void testLogCountOverview() {
+        //Hier moeten de logs nog meer gespecifieerd worden!
+        List<LogCount> logs = null;
+        
+        try {
+            logs = repo.getLogEntrySet().getLogCount();
+        } catch (Exception ex) {
+            
+        }
+
     }
 }

@@ -1,6 +1,8 @@
 
 package be.ugent.verkeer4.verkeerdomain.data;
 
+import java.util.Arrays;
+
 public enum ProviderEnum {
 
     TomTom(0),
@@ -11,7 +13,7 @@ public enum ProviderEnum {
     Waze(5),
     Bing(6),
     ViaMichelin(7);
-    
+
     private final int _value;
 
     ProviderEnum(int Value) {
@@ -27,5 +29,24 @@ public enum ProviderEnum {
             if (b.getValue() == i) { return b; }
         }
         return null;
+    }
+
+    public static String[] getProviderNamesSorted() {
+        ProviderEnum[] providersEnum = ProviderEnum.values();
+        String[] providers = new String[providersEnum.length];
+        for (int i = 0; i < providers.length; i++) {
+            providers[i] = providersEnum[i].name();
+        }
+        Arrays.sort(providers);
+        return providers;
+    }
+
+    public static int[] providerNamesToIds(String[] providers) {
+        int[] providerIds = new int[providers.length];
+        for (int i = 0; i < providerIds.length; i++) {
+            providerIds[i] = ProviderEnum.valueOf(ProviderEnum.class, providers[i]).getValue();
+
+        }
+        return providerIds;
     }
 }
