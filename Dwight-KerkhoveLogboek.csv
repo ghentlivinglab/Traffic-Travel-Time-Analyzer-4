@@ -59,3 +59,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 19/04/16,08:15,12:15,School,"Sprint 2 presentatie, overlopen issues en werk verdelen, issue 78",78,
 26/04/16,08:15,12:15,School,"Scrum meeting, memory leak opsporen & oplossen",,
 27/04/16,14:00,16:00,School,"Map weergave op bepaald tijdstip kunnen tonen",,
+06/05/16,09:00,10:00,Thuis,"Meer exception handling in future objecten aangezien poll service crash gelijk niet van memory leak komt",,
