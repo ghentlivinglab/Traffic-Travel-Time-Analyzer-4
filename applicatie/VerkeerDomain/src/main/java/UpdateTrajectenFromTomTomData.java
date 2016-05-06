@@ -47,9 +47,7 @@ class UpdateTrajectenFromTomTomData {
                     }
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            LogService.getInstance().insert(LogTypeEnum.Error, UpdateTrajectenFromTomTomData.class.getName(), ex.getMessage());
-        } catch (IOException ex) {
+        } catch (ClassNotFoundException | IOException ex) {
             LogService.getInstance().insert(LogTypeEnum.Error, UpdateTrajectenFromTomTomData.class.getName(), ex.getMessage());
         }
 
