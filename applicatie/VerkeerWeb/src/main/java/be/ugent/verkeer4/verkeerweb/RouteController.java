@@ -16,19 +16,15 @@ import be.ugent.verkeer4.verkeerweb.viewmodels.RouteOverviewVM;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 
 @Controller
 public class RouteController {
-
-    private static final int COMPARISON_THRESHOLD_MILLIESECONDS = 60 * 5 * 1000;
 
     /**
      * Toont het overzicht van alle routes
@@ -194,68 +190,6 @@ public class RouteController {
             detailJams.add(detailJam);
         }
         return detailJams;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "route/comparedata", method = RequestMethod.GET)
-    public CompareData ajaxGetCompareData(@RequestParam("routeId1") int routeId1, @RequestParam("routeId2") int routeId2,
-            @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate, @RequestParam("providers") String[] providers)
-            throws ClassNotFoundException {
-        IRouteService routeService = new RouteService();
-        IPOIService poiService = new POIService(routeService);
-        IProviderService providerService = new ProviderService(routeService, poiService);
-
-        int[] providerIds = new int[providers.length];
-        for (int i = 0; i < providerIds.length; i++) {
-            providerIds[i] = ProviderEnum.valueOf(ProviderEnum.class, providers[i]).getValue();
-
-        }
-
-        List<RouteData> routeData1 = providerService.getRouteDataForRoute(routeId1, startDate, endDate, "Timestamp", providerIds);
-        List<RouteData> routeData2 = providerService.getRouteDataForRoute(routeId2, startDate, endDate, "Timestamp", providerIds);
-        CompareData data = new CompareData();
-
-        // De "delegates"
-        ICompareDataMember travelTimeGetter = RouteData::getTravelTime;
-        ICompareDataMember delayGetter = RouteData::getDelay;
-
-        // Fill the data object
-        long start = startDate.getTime();
-        data.setRoute1TravelTime(calculateAvgRoute(routeData1, start, travelTimeGetter));
-        data.setRoute1Delay(calculateAvgRoute(routeData1, start, delayGetter));
-        data.setRoute2TravelTime(calculateAvgRoute(routeData2, start, travelTimeGetter));
-        data.setRoute2Delay(calculateAvgRoute(routeData2, start, delayGetter));
-        return data;
-    }
-
-    private List<long[]> calculateAvgRoute(List<RouteData> routeData, long startDate, ICompareDataMember dataMember) {
-        List<long[]> results = new ArrayList<>();
-        int index = 0;
-        int sum = 0;
-        int amount = 0;
-        while (index < routeData.size()) {
-            int previousAmount = amount;
-            if (routeData.get(index).getTimestamp().getTime() < startDate + COMPARISON_THRESHOLD_MILLIESECONDS) {
-                sum += dataMember.get(routeData.get(index));
-                amount++;
-                index++;
-            }
-
-            // check if no data match in this time frame
-            if (previousAmount == amount) {
-                // calculate avg
-                if (amount > 0) {
-                    int avg = sum / amount;
-                    long[] data = {startDate, avg};
-                    results.add(data);
-                }
-                // init vars for next iteration
-                sum = 0;
-                amount = 0;
-                startDate += COMPARISON_THRESHOLD_MILLIESECONDS;
-            }
-        }
-        return results;
     }
 
     /**
@@ -609,26 +543,5 @@ public class RouteController {
         double avgTravelTime = totalTravelTime / (float) routeSummaries.size();
         mr.setAverageCurrentTravelTime(avgTravelTime);
         return mr;
-    }
-
-    @RequestMapping(value = "/route/compare", method = RequestMethod.GET)
-    public ModelAndView compare() throws ClassNotFoundException {
-        // get provider names sorted
-        ProviderEnum[] providersEnum = ProviderEnum.values();
-        String[] providers = new String[providersEnum.length];
-        for (int i = 0; i < providers.length; i++) {
-            providers[i] = providersEnum[i].name();
-        }
-        Arrays.sort(providers);
-
-        // get the route names and id
-        RouteService routeService = new RouteService();
-        List<Route> routes = routeService.getRoutesInfo();
-
-        // send view
-        ModelAndView model = new ModelAndView("route/compare");
-        model.addObject("providers", providers);
-        model.addObject("routes", routes);
-        return model;
     }
 }

@@ -42,7 +42,7 @@ public class WeatherPollService extends BaseService {
         try {
             LogService.getInstance().insert(LogTypeEnum.Info, WeatherPollService.class.getName(), "Starting weahter poll...");
             weatherService.pollWeather(stations);
-        } catch (ClassNotFoundException ex) {
+        } catch (Exception ex) {
             LogService.getInstance().insert(LogTypeEnum.Error, WeatherPollService.class.getName(), ex.getMessage());
         }
     }    

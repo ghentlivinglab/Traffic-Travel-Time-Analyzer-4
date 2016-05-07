@@ -36,7 +36,7 @@ public class TrafficJamAnalysisService extends BaseService {
             for (Route route : routes) {
                 routeService.finalizeTrafficJams(route, today);
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (Exception ex) {
             LogService.getInstance().insert(LogTypeEnum.Error, TrafficJamAnalysisService.class.getName(), ex.getMessage());
         }
     }

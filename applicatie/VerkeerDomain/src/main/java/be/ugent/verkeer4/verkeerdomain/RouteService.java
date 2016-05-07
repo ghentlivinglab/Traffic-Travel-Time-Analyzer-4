@@ -13,7 +13,6 @@ import be.ugent.verkeer4.verkeerdomain.data.WeatherConditionEnum;
 import be.ugent.verkeer4.verkeerdomain.data.composite.POIWithDistanceToRoute;
 import be.ugent.verkeer4.verkeerdomain.data.composite.WeatherWithDistanceToRoute;
 import be.ugent.verkeer4.verkeerdomain.data.composite.GroupedRouteTrafficJamCause;
-import be.ugent.verkeer4.verkeerdomain.provider.google.GoogleMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.CalculateRouteResponse;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Leg;
 import be.ugent.verkeer4.verkeerdomain.provider.tomtom.Point;
@@ -116,13 +115,13 @@ public class RouteService extends BaseService implements IRouteService {
 
     private void UpdateRouteFromTomTom(CalculateRouteResponse response, Route r) throws Exception {
         be.ugent.verkeer4.verkeerdomain.provider.tomtom.Route tomtomRoute = response.getRoutes().get(0);
-        
+
         // update de afstand en default travel time op
         r.setDistance(tomtomRoute.getSummary().getLengthInMeters());
         r.setDefaultTravelTime(tomtomRoute.getSummary().getTravelTimeInSeconds());
-        
+
         repo.getRouteSet().update(r);
-        
+
         // sla alle waypoints op voor de route
         int idx = 0;
         for (Leg leg : tomtomRoute.getLegs()) {
@@ -132,33 +131,7 @@ public class RouteService extends BaseService implements IRouteService {
                 wp.setLatitude(pt.getLatitude());
                 wp.setLongitude(pt.getLongitude());
                 wp.setRouteId(r.getId());
-                
-                this.insertRouteWaypoint(wp);
-                System.out.println("Inserting new waypoint " + idx);
-                idx++;
-            }
-        }
-    }
-    
-    private void updateRouteFromGoogle(CalculateRouteResponse response, Route r) throws Exception {
-        be.ugent.verkeer4.verkeerdomain.provider.tomtom.Route tomtomRoute = response.getRoutes().get(0);
-        
-        // update de afstand en default travel time op
-        r.setDistance(tomtomRoute.getSummary().getLengthInMeters());
-        r.setDefaultTravelTime(tomtomRoute.getSummary().getTravelTimeInSeconds());
-        
-        repo.getRouteSet().update(r);
-        
-        // sla alle waypoints op voor de route
-        int idx = 0;
-        for (Leg leg : tomtomRoute.getLegs()) {
-            for (Point pt : leg.getPoints()) {
-                RouteWaypoint wp = new RouteWaypoint();
-                wp.setIndex(idx);
-                wp.setLatitude(pt.getLatitude());
-                wp.setLongitude(pt.getLongitude());
-                wp.setRouteId(r.getId());
-                
+
                 this.insertRouteWaypoint(wp);
                 System.out.println("Inserting new waypoint " + idx);
                 idx++;
@@ -191,7 +164,7 @@ public class RouteService extends BaseService implements IRouteService {
      * Geeft enkel recentste route data terug voor alle routes voor elke
      * provider
      *
-     * @param before Als before null is wordt de laatste gegevens gereturned, 
+     * @param before Als before null is wordt de laatste gegevens gereturned,
      * anders wordt tot op het before tijdstip gekeken
      * @return
      */
@@ -200,7 +173,6 @@ public class RouteService extends BaseService implements IRouteService {
         return repo.getRouteDataSet().getMostRecentSummaries(before);
     }
 
-    
     /**
      * Geeft de recentste route data terug voor een bepaalde route voor elke
      * provider
@@ -492,16 +464,25 @@ public class RouteService extends BaseService implements IRouteService {
                 case Incident:
                 case PoliceTrap:
                     // als er een accident was dat binnen de 25% van de traffic jam valt
-                    if (secondsFromStartOfJam < (0.25 * jamDurationSeconds)) { // binnen de 1e 25% van de traffic jam
-
-                        if (poi.getCategory() == POICategoryEnum.Hazard) {
-                            score += 0.75;
-                        } else if (poi.getCategory() == POICategoryEnum.Accident) {
-                            score += 1;
-                        } else if (poi.getCategory() == POICategoryEnum.Incident) {
-                            score += 0.25;
-                        } else if (poi.getCategory() == POICategoryEnum.PoliceTrap) {
-                            score += 0.10;
+                    if (secondsFromStartOfJam < (0.25 * jamDurationSeconds)) {
+                        if (null != poi.getCategory()) // binnen de 1e 25% van de traffic jam
+                        {
+                            switch (poi.getCategory()) {
+                                case Hazard:
+                                    score += 0.75;
+                                    break;
+                                case Accident:
+                                    score += 1;
+                                    break;
+                                case Incident:
+                                    score += 0.25;
+                                    break;
+                                case PoliceTrap:
+                                    score += 0.10;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                     break;

@@ -12,7 +12,7 @@
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Compare routes</h3>
+            <h3 class="panel-title">Compare route</h3>
         </div>
         <div class="panel-body">
             <!-- Row with all options + provider selection -->
@@ -20,17 +20,9 @@
                 <div class="col-md-10">
                     <!-- Row routes -->
                     <div class="row">
-                        <div class="col-md-6">
-                            <label for="route1">Select first route</label>
-                            <select id="route1" class="form-control">
-                                <c:forEach var="route" items="${routes}">
-                                    <option value="${route.id}">${route.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="route2">Select second route</label>
-                            <select id="route2" class="form-control">
+                        <div class="col-md-12">
+                            <label for="route">Select route</label>
+                            <select id="route" class="form-control">
                                 <c:forEach var="route" items="${routes}">
                                     <option value="${route.id}">${route.name}</option>
                                 </c:forEach>
@@ -40,10 +32,10 @@
                     <!-- Row dates -->
                     <div class="row" style="margin-top: 10px">
                         <div class="col-md-6">
-                            <label for="datetimepicker-begin-input">Start Date</label>
+                            <label for="datetimepicker-begin-input1">Start Date 1</label>
                             <div class="form-group">
-                                <div class='input-group date' id='datetimepicker-begin'>
-                                    <input type='text' class="form-control" id="datetimepicker-begin-input"/>
+                                <div class='input-group date' id='datetimepicker-begin1'>
+                                    <input type='text' class="form-control" id="datetimepicker-begin-input1"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -51,10 +43,34 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label for="datetimepicker-end-input">End Date</label>
+                            <label for="datetimepicker-end-input1">End Date 1</label>
                             <div class="form-group">
-                                <div class='input-group date' id='datetimepicker-end'>
-                                    <input type='text' class="form-control" id="datetimepicker-end-input"/>
+                                <div class='input-group date' id='datetimepicker-end1'>
+                                    <input type='text' class="form-control" id="datetimepicker-end-input1"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-md-6">
+                            <label for="datetimepicker-begin-input2">Start Date 2</label>
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker-begin2'>
+                                    <input type='text' class="form-control" id="datetimepicker-begin-input2"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="datetimepicker-end-input2">End Date 2</label>
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker-end2'>
+                                    <input type='text' class="form-control" id="datetimepicker-end-input2"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -98,5 +114,6 @@
 <script src="<c:url value="/static/scripts/libs/exporting.js" />"></script>
 <script src="<c:url value="/static/scripts/libs/export-csv.js" />"></script>
 <script src="<c:url value="/static/scripts/route/route-chart.js" />"></script>
-<script src="<c:url value="/static/scripts/route/compare/compare.js" />"></script>
+<script src="<c:url value="/static/scripts/compare/compare.js" />"></script>
+<script src="<c:url value="/static/scripts/compare/route.js" />"></script>
 </html>

@@ -53,7 +53,7 @@ public class HereMapsProvider extends BaseProvider implements IProvider, IPOIPro
             }
 
             return null;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LogService.getInstance().insert(LogTypeEnum.Error, HereMapsProvider.class.getName(), ex.getMessage());
             return null;
         }

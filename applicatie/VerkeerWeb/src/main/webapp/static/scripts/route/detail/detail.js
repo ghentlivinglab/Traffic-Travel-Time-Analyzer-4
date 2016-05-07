@@ -223,12 +223,6 @@
         toggled = !toggled;
     };
 
-    trajectDetail.getSecondsFromSummaryRow = function (row) {
-        var td = row.children[1]; // second td, the traveltime
-        var span = td.children[0]; // the span
-        return parseInt(span.getAttribute("data-time"));
-    };
-
     trajectDetail.buildTrafficJamTable = function (jams) {
         var table = document.getElementById("tblJamsBody");
 

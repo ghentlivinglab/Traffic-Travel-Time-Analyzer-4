@@ -18,8 +18,9 @@
             <ul class="nav navbar-nav">
                 <li><a href="<c:url value="/route/list" />">Overview <span class="sr-only">(current)</span></a></li>
                 <li><a href="<c:url value="/route/map" />">Map View</a></li>
-                <li><a href="<c:url value="/route/compare" />">Compare routes</a></li>
                 <li><a href="<c:url value="/logs" />">Logs</a></li>
+                <li><a href="<c:url value="/compare/route" />">Compare route</a></li>
+                <li><a href="<c:url value="/compare/routes" />">Compare routes</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
