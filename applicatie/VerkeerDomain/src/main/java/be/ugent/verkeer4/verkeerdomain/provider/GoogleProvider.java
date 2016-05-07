@@ -13,7 +13,6 @@ import be.ugent.verkeer4.verkeerdomain.data.RouteData;
 import be.ugent.verkeer4.verkeerdomain.provider.google.Element;
 import be.ugent.verkeer4.verkeerdomain.provider.google.GoogleMapsClient;
 import be.ugent.verkeer4.verkeerdomain.provider.google.Row;
-import java.io.IOException;
 
 
 /**

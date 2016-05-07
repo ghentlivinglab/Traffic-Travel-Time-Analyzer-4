@@ -190,6 +190,7 @@ public class POIService extends BaseService implements IPOIService {
         }
     }
     
+    @Override
     public List<POICount> getPOICount() {
         return repo.getPOISet().getPOICount();
     }

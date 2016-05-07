@@ -74,13 +74,13 @@ public class LogController {
             
             //aanpassen naar het gewenste type voor de ViewModel
             if (l.getType() == LogTypeEnum.Warning){
-                entry.setType("warning");
+                entry.setType("Warning");
+                logOverview.getLogEntries().add(entry);
             }
-            else{
-                entry.setType("danger");
+            if (l.getType() == LogTypeEnum.Error){
+                entry.setType("Error");
+                logOverview.getLogEntries().add(entry);
             }
-            
-            logOverview.getLogEntries().add(entry);
         }
         
         return logOverview;

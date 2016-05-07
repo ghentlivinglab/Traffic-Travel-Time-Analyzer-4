@@ -51,7 +51,7 @@
             },
             tooltip: {
                 formatter: function () {
-                    var date = moment(this.x).format("dddd, MMMM Do, HH:mm:ss");
+                    var date = moment(this.x).utc().format("dddd, MMMM Do, HH:mm:ss");
                     return date + "<br/>" + "<span style='color:" + this.point.series.color + "'>" + routeChart.getPointSymbol(this.point)
                         + "</span> " + this.series.name + ": <b>" + verkeer.secondsToText(this.point.y) + "</b>";
                 }

@@ -13,25 +13,25 @@ import be.ugent.verkeer4.verkeerdomain.RouteService;
 import be.ugent.verkeer4.verkeerdomain.data.LogTypeEnum;
 import java.util.Date;
 
-
 public abstract class BaseService {
-    
+
     private volatile boolean running = false;
 
     private int everyXMillis;
     private String name;
+
     public BaseService(int everyXMillis, String name) {
         this.everyXMillis = everyXMillis;
         this.name = name;
     }
-    
+
     public void start() {
         running = true;
         Thread t = new Thread(() -> {
             try {
                 run();
             } catch (ClassNotFoundException ex) {
-                LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName()+ " Poll", ex.getMessage());
+                LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName() + " Poll", ex.getMessage());
             }
         });
         t.setName(this.name);
@@ -52,17 +52,21 @@ public abstract class BaseService {
             if (new Date().getTime() - curTime > everyXMillis) {
                 curTime = new Date().getTime();
 
-                action();
+                try {
+                    action();
+                } catch (Exception ex) {
+                    LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName() + " Poll", ex.getMessage());
+                }
             } else {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName()+ " Poll", ex.getMessage());
+                    LogService.getInstance().insert(LogTypeEnum.Error, BaseService.class.getName() + " Poll", ex.getMessage());
                 }
             }
 
         }
     }
-    
+
     protected abstract void action();
 }

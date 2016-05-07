@@ -30,7 +30,7 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
                 return result;
             }
         } catch (Exception ex) {
-            LogService.getInstance().insert(LogTypeEnum.Warning, TomTomProvider.class.getName(), "Scraping failed for route " + route.getId() + ", falling back to API" + ex.getMessage());
+            LogService.getInstance().insert(LogTypeEnum.Warning, TomTomProvider.class.getName(), "Scraping failed for route " + route.getId() + ", falling back to API, error: " + ex.getMessage());
 
             return useAPI(route);
         }
@@ -53,7 +53,7 @@ public class TomTomProvider extends BaseProvider implements IProvider, IPOIProvi
             }
 
             return null;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LogService.getInstance().insert(LogTypeEnum.Error, TomTomProvider.class.getName(), ex.getMessage());
             return null;
         }
