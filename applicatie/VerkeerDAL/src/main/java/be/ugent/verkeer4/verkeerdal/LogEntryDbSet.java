@@ -39,7 +39,8 @@ public class LogEntryDbSet extends DbSet<Logging>  {
             String query = 
                     "SELECT * FROM logging "
                     + "WHERE category = :category AND date between :startDate AND :endDate "
-                    + " ORDER BY date";
+                    + " ORDER BY date"
+                    + " LIMIT 500";
 
             Query q = con.createQuery(query);
             q.addParameter("category", category);

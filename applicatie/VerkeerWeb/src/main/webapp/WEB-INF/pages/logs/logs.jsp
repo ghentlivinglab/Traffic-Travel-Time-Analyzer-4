@@ -72,6 +72,7 @@
                             <hr>
                         </div>
                         <div class="panel-body">
+                            <p>Maximum 500 entries.</p>
                             <!-- Table -->
                             <table class="table sortable" id="logtable">
                                 <thead>
