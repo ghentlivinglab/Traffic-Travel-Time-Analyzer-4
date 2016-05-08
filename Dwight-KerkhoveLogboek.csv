@@ -61,3 +61,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 27/04/16,14:00,16:00,School,"Map weergave op bepaald tijdstip kunnen tonen",,
 06/05/16,09:00,10:00,Thuis,"Meer exception handling in future objecten aangezien poll service crash gelijk niet van memory leak komt",,
 07/06/16,15:00,16:00,Thuis,"Readme en documentatie nazien",,
+08/06/16,08:30,09:00,Thuis,"Alles mergen met master, laatste versie in productie plaatsen, alles eens testen",,
