@@ -8,11 +8,15 @@
     var toggled = false;
     var routeDataFinished = false, trafficDataFinished = false;
 
+    // data vars
     var id;
     const chartId = "container";
     var travelTimes;
     var delays;
 
+    /**
+     *  display settings for the chart
+     */
     var providerSettings = {
         Coyote: {color: "#7cb5ec", symbol: "circle"},
         BeMobile: {color: "#434348", symbol: "diamond"},
@@ -122,12 +126,15 @@
     };
 
     $(document).ready(function () {
+        // init buttons and other vars
         refreshIcon = document.getElementById("refresh-icon");
         updateBtn = document.getElementById("update-btn");
         toggleBtn = document.getElementById("toggle-btn");
         datePickerBegin = $("#datetimepicker-begin");
         datePickerEnd = $("#datetimepicker-end");
         id = $("#routeId").val();
+
+        // set default date in view
         datePickerBegin.datetimepicker({
             format: "DD/MM/YYYY HH:mm",
             showTodayButton: true,
@@ -140,17 +147,26 @@
             showClear: true,
             defaultDate: moment().endOf("day")
         });
+
+        // set button actions
         updateBtn.addEventListener("click", trajectDetail.getRouteData);
         toggleBtn.addEventListener("click", trajectDetail.toggleChart);
+
+        // build the empty chart and fetch the data
         routeChart.buildChart(chartId);
         trajectDetail.getRouteData();
     });
 
+    /**
+     * Downloads the data from the server
+     */
     trajectDetail.getRouteData = function () {
         // spin the update button
         refreshIcon.classList.add("spinning");
         var startDate = datePickerBegin.data("DateTimePicker").date().toDate();
         var endDate = datePickerEnd.data("DateTimePicker").date().toDate();
+
+        // fetch traveltime and delay data
         $.ajax({
             method: "GET",
             url: "../routedata",
@@ -174,6 +190,7 @@
             }
         });
 
+        // fetch traffic data
         $.ajax({
             method: "GET",
             url: "../trafficdata",
@@ -192,6 +209,9 @@
         });
     };
 
+    /**
+     * Stops the update button from spinning
+     */
     trajectDetail.stopSpinning = function () {
         if(routeDataFinished && trafficDataFinished){
             refreshIcon.classList.remove("spinning");
@@ -200,6 +220,10 @@
         }
     };
 
+    /**
+     * Adds the view settings for a certain provider to the data
+     * @param providersData
+     */
     trajectDetail.setSeriesViewSettings = function (providersData) {
         providersData.forEach(function (ele) {
             var setting = providerSettings[ele.name];
@@ -212,6 +236,9 @@
         });
     };
 
+    /**
+     * Toggles the char between delay and traveltime
+     */
     trajectDetail.toggleChart = function () {
         if (toggled) {
             routeChart.showDefaultTitle();
@@ -223,6 +250,10 @@
         toggled = !toggled;
     };
 
+    /**
+     * Builds a table for the traffic jams
+     * @param jams
+     */
     trajectDetail.buildTrafficJamTable = function (jams) {
         var table = document.getElementById("tblJamsBody");
 

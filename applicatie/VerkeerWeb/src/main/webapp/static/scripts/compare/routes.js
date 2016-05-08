@@ -34,12 +34,18 @@
         compareBase.initChart();
     });
 
+    /**
+     * Get form data and fetch the correct info
+     */
     routes.updateChart = function () {
         compareBase.routeInfo1 = compareBase.getSelectedRoute("route1");
         compareBase.routeInfo2 = compareBase.getSelectedRoute("route2");
         routes.fetchRouteData();
     };
 
+    /**
+     * Downloads the route data from the server
+     */
     routes.fetchRouteData = function () {
         var providers = compareBase.getCheckedProviders();
 
