@@ -1,0 +1,25 @@
+De applicatie draait in een oneindige lus en zorgt ervoor dat elke 5min de poll methode wordt opgeroepen. In de poll service worden alle routes overlopen en per route alle providers in parallel opgeroepen. Hierdoor is het mogelijk om binnen de 7 sec alle gegevens voor een bepaalde route terug te krijgen. Er zijn momenteel 34 trajecten met max 7sec tussen, dus kan alles gepolled worden in 238sec, wat binnen de 5min valt. Hierdoor zijn we zeker dat de laatste gegevens elke 5min wordt opgevragen. \\ 
+
+Er zijn 2 soorten providers om de route gegevens te bepalen:
+
+\begin{itemize}
+\item Providers van ISummaryProvider zoals Coyote geven alle routes in één keer terug, dat zorgt ervoor dat die maar éénmaal om de 5min moet opgeroepen worden.
+\item Andere Providers van IProvider vragen gegevens op per route. Bijna alle providers maken onderliggend gebruik van perl scripts die met curl (commandline) de gegevens opvragen. Enkel Google Maps of Bing Maps is er geen scraper voorzien. Bij andere verschillende providers zoals TomTom en Here Maps is er een fallback naar de API met API keys die moeten geconfigureerd worden in de application.conf. 
+\end{itemize}
+
+De perl scripts staan onder /scrapers in productie en maken gebruik van curl command line om de requests door te voeren. Bij sommige scrapers zoals TomTom en Here maps wordt eerst de API Key uit de html pagina gevist om daarna de json request te versturen. Deze api key wordt een uur gecached in een .cache file zodat dit niet steeds bij elke request moet opnieuw verzamelt worden. Als de provider zijn api key wijzigt aan de front end wordt dit dus binnen een uur gedetecteerd en opgevangen. \\
+
+In veel gevallen is de json die geparsed wordt om de route gegevens eruit te halen klein genoeg om met eenvoudige reguliere expressies te parsen. Bij Waze moet er een som gemaakt worden van de segmenten en hebben we de JSON::XS Perl library gebruikt. \\
+
+\textbf{Requirements:} \\
+De perl scripts moeten met een perl interpreter kunnen uitgevoerd worden. Onder windows kan dit met ActivePerl, in een linux omgeving is perl veelal voorgeinstalleerd in /usr/bin/perl. \\
+
+Curl is meestal reeds geinstalleerd op linux, mocht dit nog niet zo zijn kan je curl via de package manager installeren. Onder windows is er een curl.exe die bij de perl scripts staat die gebruikt wordt. \\
+
+Voor de json library in perl te installeren zijn volgende commands nodig: \\
+
+\begin{lstlisting}
+> sudo cpan JSON
+> perl -MCPAN -e shell
+> install JSON::XS
+\end{lstlisting}

@@ -1,0 +1,20 @@
+\noindent
+\begin{longtable}{|>{\raggedleft\hsize=.7\hsize\bfseries}X|
+    >{\arraybackslash\hsize=1.3\hsize}X|} \hline
+\multicolumn{1}{|l|}{\textbf{Use Case}} &  Bekijk routemap\\ \hline
+Primaire actor & Gebruiker\\ \hline
+Stakeholders & Operator \\ \hline
+Preconditie &  De data van de routemap is beschikbaar.\\ \hline
+Postconditie &  De routemap wordt getoond waarop de routes worden weergeven op een kaart met indicatie van hun reistijd.\\ \hline
+\multicolumn{1}{|l|}{\textbf{Normaal verloop}} & \\ \hline
+1. & De gebruiker wenst de routemap op te vragen.\\ \hline
+2. & Het systeem haalt de recentste gegevens op om de routemap te vormen.\\ \hline
+3. & Het systeem toont de routemap.\\ \hline
+\multicolumn{1}{|l|}{\textbf{Alternatief verloop}} & \\ \hline
+3A. & Het systeem kan de routemap niet tonen. \\ \hline
+3A1. & Het systeem geeft een correcte boodschap. \\ \hline
+3A2. & Terug naar stap 1. \\ \hline
+\multicolumn{1}{|l|}{\textbf{Domeinspecifieke regels}} & \\ \hline
+\multicolumn{1}{|l|}{\textbf{Op te klaren punten}} & De filters worden pas achteraf toegepast. Daarom zit dit niet in deze use case.\\ \hline
+\caption{UC: Bekijk routemap \label{uc:mapbekijken}}
+\end{longtable}

@@ -1,0 +1,568 @@
+\documentclass[a4paper]{article}
+\title{Projectdossier VOP}
+% Packages
+\usepackage{fullpage}
+\usepackage[dutch]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{fancyhdr}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{wrapfig}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{newunicodechar}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{amsthm}
+\usepackage{lipsum}
+\usepackage{ltxtable}
+\usepackage{pdfpages}
+\usepackage{multicol}
+\usepackage[normalem]{ulem}
+\usepackage{listings}
+
+
+% Settings
+\renewcommand{\arraystretch}{1.5}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand*{\headrulewidth}{0pt}
+\fancyfoot[L]{Projectdossier VOP}
+\fancyfoot[R]{\thepage}
+
+% Custom commands
+\newcommand{\studenten} {Tomas Bolckmans \\Thomas Clauwaert\\Aaron Mousavi\\Dwight Kerkhove\\Niels Verbeeck}
+\newcommand{\begeleiders}{H. Naessens\\V. Ongenae\\P. Maenhaut} 
+\newcommand{\titel}{Projectdossier VOP: Verkeerscentrum}
+\newcommand{\ondertitel}{In opdracht van mobiliteitscenter Gent}
+\newcommand{\datum}{xx mei 2016}
+\newcommand{\academiejaar}{2015-2016}
+
+%boxes
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\setlength{\parskip}{10pt plus 1pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+% taakverdeling overzichttabel
+\useunder{\uline}{\ul}{}
+
+\begin{document}
+
+% Title page
+\begin{titlepage}
+\begin{center}
+\includegraphics[height=4cm]{Images/Ugentlogo.eps}\\[.5cm]
+
+Schakeljaar Master of Science in de\\
+industriële wetenschappen: informatica\\
+Academiejaar \academiejaar{}
+
+\vfill
+
+\HRule \\[0.4cm]
+{\huge \bfseries \titel{}}\\[0.4cm]
+\HRule \\[0.4cm]
+
+{\Large \ondertitel{}}\\[0.4cm]
+
+Ingediend op \datum{}
+
+\vfill
+\begin{minipage}{0.49\textwidth}
+\begin{flushleft}
+\textbf{Studenten} verkeer 4\\
+\studenten{}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.49\textwidth}
+\begin{flushright}
+\textbf{Professoren}\\
+\begeleiders{}\\
+\end{flushright}
+\end{minipage}
+
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Inleiding}
+\label{sec:inleiding}
+\lipsum[56]
+
+\section{Statusverslag:}
+\label{sec:statusverslag}
+
+\textbf{Pas op het einde van het project!}
+
+Een duidelijk overzicht van welke features al dan
+niet werden gerealiseerd (Vertrek hierbij van de backlogs en
+geef voor elke feature aan in welke mate die beschikbaar is in
+het eindproduct. Werd een feature slechts deels gerealiseerd,
+geef dan ook aan welke beperkingen er zijn.
+
+\newpage
+\section{Taakverdeling}
+\label{sec:taakverdeling}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+{\ul \textbf{Omschrijving}} & {\ul \textbf{UC/Algemeen}}         & {\ul \textbf{Tomas}} & {\ul \textbf{Thomas}} & {\ul \textbf{Aaron}} & {\ul \textbf{Dwight}} & {\ul \textbf{Niels}} \\ \hline
+Here Provider via API       & \textit{Verzamel Reistijdgegevens} & x                    &                       &                      &                       &                      \\ \hline
+Bing Maps Provider via API  & \textit{Verzamel Reistijdgegevens} & x                    &                       &                      &                       &                      \\ \hline
+TomTom Provider via API     & \textit{Verzamel Reistijdgegevens} &                      &                       &                      & x                     &                      \\ \hline
+Google Provider via API     & \textit{Verzamel Reistijdgegevens} &                      &                       &                      &                       & x                    \\ \hline
+Trajectoverzichtpagina      & \textit{Bekijk trajectoverzicht}   &                      & x                     &                      & x                     &                      \\ \hline
+Trajectdetailpagina         & \textit{Bekijk trajectdetail}      &                      &                       & x                    &                       &                      \\ \hline
+Use Case Diagram            & Analyse                            &                      & x                     &                      &                       &                      \\ \hline
+                            &                                    &                      &                       &                      &                       &                      \\ \hline
+                            &                                    &                      &                       &                      &                       &                      \\ \hline
+                            &                                    &                      &                       &                      &                       &                      \\ \hline
+\end{tabular}
+\caption{Taakverdeling}
+\label{tab:taakverdeling}
+\end{table}
+
+
+
+%\section{Analyse}
+%\label{sec:analyse}
+
+\section{Analyse: Use cases}
+\subsection{Globale domeinregels}
+
+Wanneer er sprake is van \textbf{\textit{``providers''}} dan wordt hiermee de verzameling van geïmplementeerde providers bedoelt. Deze bestaan momenteel uit TomTom, Coyote, HereMaps, Google Maps, Bing Maps en Waze. Indien er een providerafhankelijke beslissing werd genomen dan zal dit gespecificeerd worden.
+
+Een operator is altijd een gebruiker. Het verschil tussen beide valt nog nader te bespreken met de klant.
+
+\textbf{DR Trajectinformatie}: een traject heeft ...
+
+\textbf{DR Providers}:
+
+\textbf{DR Filters}:
+
+\textbf{DR Waze}: gegevens mogen niet ..
+
+\newpage
+
+%\subsection{Voorbeeld}
+%\LTXtable{\textwidth}{Use-cases/Voorbeeld.tex}
+%\newpage
+
+\subsection{Reistijd gegevens verzamelen}
+\LTXtable{\textwidth}{Use-cases/GegevensVerzamelen.tex}
+\newpage
+
+\subsection{Trajectenoverzicht bekijken}
+\LTXtable{\textwidth}{Use-cases/OverzichtBekijken.tex}
+\newpage
+
+\subsection{Trajectdetail bekijken}
+\LTXtable{\textwidth}{Use-cases/DetailBekijken.tex}
+\newpage
+
+\subsection{Trajectmap bekijken}
+\LTXtable{\textwidth}{Use-cases/MapBekijken.tex}
+\newpage
+
+\subsection{Providerdata vergelijken}
+\LTXtable{\textwidth}{Use-cases/DataVergelijken.tex}
+\newpage
+
+\subsection{Traject wijzigen}
+\LTXtable{\textwidth}{Use-cases/TrajectWijzigen.tex}
+\newpage
+
+\subsection{Traject toevoegen}
+\LTXtable{\textwidth}{Use-cases/TrajectToevoegen.tex}
+\newpage
+
+\subsection{Traject verwijderen}
+\LTXtable{\textwidth}{Use-cases/TrajectVerwijderen.tex}
+\newpage
+
+\subsection{Statuspagina bekijken}
+\LTXtable{\textwidth}{Use-cases/LogpaginaBekijken.tex}
+\newpage
+
+\subsection{Infopagina's bekijken}
+\LTXtable{\textwidth}{Use-cases/InfoPaginasBekijken.tex}
+\newpage
+
+\subsection{Dashboard bekijken}
+\LTXtable{\textwidth}{Use-cases/DashboardBekijken.tex}
+\newpage
+
+\subsection{Traject gegevens met reistijden aanbieden}
+\LTXtable{\textwidth}{Use-cases/ReistijdenAanbieden.tex}
+\newpage
+
+\subsection{POI gegevens verzamelen}
+\LTXtable{\textwidth}{Use-cases/POIGegevens.tex}
+\newpage
+
+\subsection{Weer gegevens verzamelen}
+\LTXtable{\textwidth}{Use-cases/WeerGegevens.tex}
+\newpage
+
+\subsection{Parkeer \& bord gegevens verzamelen}
+\LTXtable{\textwidth}{Use-cases/ParkeerGegevens.tex}
+\newpage
+
+%\section{Non-Functional Requirements (NFRs)}
+%\subsection{Voorbeeld}
+%\LTXtable{\textwidth}{NFRs/Voorbeeld.tex}
+
+\subsection{Look \& Feel Requirements}
+\LTXtable{\textwidth}{NFRs/Huisstijl.tex}
+
+\subsection{Look \& Feel Requirements}
+\LTXtable{\textwidth}{NFRs/VisueelOverzichtelijk.tex}
+
+\subsection{Usability \& Humanity Requirements}
+\LTXtable{\textwidth}{NFRs/Responsive.tex}
+
+\subsection{Operationele \& omgevingsrequirementss}
+\LTXtable{\textwidth}{NFRs/Productie.tex}
+
+\subsection{Wettelijke requirements}
+\LTXtable{\textwidth}{NFRs/Afscherming.tex}
+
+
+Under review:
+
+
+- Security Requirements: Hoe wordt admin stuff geregeld?
+
+- Security Requirements: app mag niet exploitbaar zijn
+
+
+
+\newpage
+\section{Analyse: Mockups}
+
+\subsection{Mockup Dashboard}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Images/mockupdashboard.png}\\
+\caption{Mockup Dashboard}
+\end{figure}
+
+\subsection{Mockup Logging}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/mockuplogging.png}\\
+\caption{Mockup Logging}
+\end{figure}
+
+\textbf{Voor overige visuele ondersteuningen (in de vorm van screenshots) verwijzen we graag naar de gebruikershandleiding.}
+
+\section{Analyse: Diagrammen}
+
+\subsection{Use case Diagram}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/usecasediagramv3.png}\\
+\caption{Use Case Diagram}
+\end{figure}
+
+\subsection{Klassendiagram - Web}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/kdiawebr.png}\\
+\caption{Klassendiagram - Web}
+\end{figure}
+
+\subsection{Klassendiagram - DAL}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/kdiadalr.png}\\
+\caption{Klassendiagram - DAL}
+\end{figure}
+
+\subsection{Klassendiagram - Domain Data}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/kdiadomaindatar.png}\\
+\caption{Klassendiagram - Domain Data}
+\end{figure}
+
+\subsection{Domain (1/2)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/kdiadomain1r.png}\\
+\caption{Klassendiagram Domain (1/2)}
+\end{figure}
+
+\subsection{Domain (2/2)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/kdiadomain2r.png}\\
+\caption{Klassendiagram Domain (2/2)}
+\end{figure}
+
+\subsection{TomTom Provider}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/ktestprovidertomtomr.png}\\
+\caption{Klassendiagram TomTom Provider}
+\end{figure}
+
+\subsection{Bing Provider}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/ktestproviderbingr.png}\\
+\caption{Klassendiagram Bing Provider}
+\end{figure}
+
+\subsection{Google Provider}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/ktestprovidergoogler.png}\\
+\caption{Klassendiagram Google Provider}
+\end{figure}
+
+\subsection{Here Provider}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/ktestproviderherer.png}\\
+\caption{Klassendiagram Here Provider}
+\end{figure}
+
+\newpage
+
+\section{Vragen en antwoorden}
+
+\subsection{Team -> Klant}
+
+\textbf{Hoe kunnen we best een betrouwbaarheid aan een provider toekennen op basis van de gegevens die we van verschillende providers opgeslagen hebben?}\\
+Onbeantwoord.(Dit is ook een vraag die we onszelf stellen..)
+
+\textbf{Hoever terug moet de gegevens bewaard worden? Weken, maanden, jaren, altijd?}\\
+Onbeantwoord.
+
+\textbf{Moet er ’s nachts ook even vaak gepollt worden? Met andere woorden zijn er momenten waarop we het systeem minder moeten belasten?}\\
+Onbeantwoord.
+
+\textbf{Hoe moeten we de kleuren voorstellen van routes? Vb. Op basis van de vertraging?}\\
+Onbeantwoord.
+
+\textbf{Moeten er nog wijzigingen gebeuren op de trajectdetailpagina?}\\
+Onbeantwoord.
+
+\textbf{Welke filters moeten toegepast kunnen worden op de trajectdetailpagina?}\\
+Onbeantwoord. (Aanvulling/wijziging van huidige filters..)\\
+
+\textbf{Welke grafieken moeten zeker aanwezig zijn?}\\
+Onbeantwoord. (Aanvulling/wijziging van huidige grafieken..)\\
+
+\textbf{Moet de applicatie meertalig zijn?}\\
+Onbeantwoord.
+
+\subsection{Klant -> Team}
+
+\textbf{Is het mogelijk waarden tussen verschillende providers die sterk afwijken aan te duiden?}\\
+
+\textbf{Is het mogelijk trajecten met de grootste vertragingen bovenaan te zetten?}\\
+
+\textbf{Kunnen de tijden worden weergeven in de vorm van minuten en seconden i.p.v. seconden.}\\
+
+
+\subsection{Team -> Team}
+
+\textbf{Technische details?}\\
+\begin{multicols}{2}
+\begin{itemize}
+\item Java 8
+\item Spring MVC
+\item IDE: Netbeans/IntelliJ
+\item MariaDb
+\item Glassfish 4.11
+\item Bootstrap
+\item Highcharts 
+\item Leaflet
+\end{itemize}
+\end{multicols}
+
+\textbf{1 gezamenlijke database of ieder lokaal afzonderlijk?}\\
+Iedereen werkt lokaal op zijn eigen database-instantie.\\
+
+\textbf{Wat is de projectstructuur}\\
+3-lagenstructuur. Enerzijds VerkeerWeb (frontend) en anderzijds VerkeerDomain, VerkeerDomainData en VerkeerDal (backend).\\
+
+\newpage
+\section{Kwaliteitscontrole}
+\label{sec:kwaliteitscontrole}
+
+Zie sprint 2.
+
+(methodologie m.b.t. testen);
+
+
+
+\section{Gebruikershandleiding}
+\label{sec:gebruikershandleiding}
+
+% Voorlopig de pdf 
+
+
+
+\includegraphics[page=1,scale=.8]{ManualWebsiteVerkeerGent.pdf}
+\includegraphics[page=2,scale=.8]{ManualWebsiteVerkeerGent.pdf}
+\includegraphics[page=3,scale=.8]{ManualWebsiteVerkeerGent.pdf}
+\includegraphics[page=4,scale=.8]{ManualWebsiteVerkeerGent.pdf}
+\includegraphics[page=5,scale=.8]{ManualWebsiteVerkeerGent.pdf}
+
+
+%Dit is een handleiding geschreven als informatieve bron bij het gebruik van de website ``Verkeer-4 (naam van de site)''.
+%Het beoogt een overzicht te geven bij het opzoeken van verkeersinformatie in en rond Gent. Dit zowel realtime als in het verleden.
+
+% dashboard img
+
+%Bij het surfen naar “Verkeer-4” zal u verwezen worden naar het dashboard van de website. Hier kunt u een korte samenvatting vinden van de belangrijkste informatie rond verkeer.
+
+%\begin{itemize}
+%\item De \textbf{Huidige situatie} geeft een visueel beeld van de huidige drukte weer. De meter zelf loopt van rustig (groen) naar extreem druk (rood).
+%\item De \textbf{Weer} widget geeft weer hoe het gesteld is met de huidige situatie van het weer. Dit kan het verkeer sterk beïnvloeden.
+%\item De \textbf{Gemiddelde drukte} geeft een overzicht van de gemiddelde drukte. Hierdoor kan er een inschatting gemaakt worden wanneer u het best vertrekt.
+%\item Het \textbf{Nieuws} overzicht toont de recente gebeurtenissen in en rond Gent.
+%\end{itemize}
+
+
+
+\section{Installatiehandleiding}
+\label{sec:installatiehandleiding}
+
+\subsection{Opzetten van de omgeving}
+
+Er wordt gebruik gemaakt van een databank, dus de database die je onder /db kan vinden moet eerst gerestored worden. 
+
+Zowel in de war als jar file zit een application.conf bestand dat de configuratie bevat. Hierin staat o.a de API keys en het pad naar de scrapers map. 
+
+\begin{lstlisting}
+general.inProduction=true
+APIKeys.TomTom = "5j7n539vbsbf6frb7kwzxtc6"
+APIKeys.Here.AppId = "rT5jJhpUtSJEYrkEXFSd"
+APIKeys.Here.AppCode = "MDfihaAj-_kw7eMW2dIb-A"
+APIKeys.Google.AppCode = "AIzaSyDSFudE3RU-uIFK4ID8i32bnq-rGRRtpGw"
+APIKeys.BingMaps = "Al2KtFQ_rRUJ7fHbjzEMRiYMIa0Kz-XAcrg47_u1wduJ_BbNY8rcwP3WoCusE5-n"
+ScrapePath = "/scrapers/"
+PerlPath = "/usr/bin/perl"
+\end{lstlisting}
+
+Er is ook een database-prod.conf bestand dat de database configuratie bevat (database-dev.conf wordt gebruikt wanneer general.inProduction=false is aangegeven):
+
+\begin{lstlisting}
+database {  
+      user = "root"
+      password = ""
+      connection = "//localhost:3306/verkeer"
+}
+\end{lstlisting}
+
+Zodra de juiste configuratie is ingesteld volstaat het de war te deployen op glassfish en naar de website te surfen. Om de polling service te starten kan je via de command line hetvolgende uitvoeren:
+
+\begin{lstlisting}
+> java -jar VerkeerPollService-1.0-SNAPSHOT.jar
+\end{lstlisting}
+
+Vanuit netbeans kan je ook het project starten, alle projecten zijn maven projecten die je kan openen in netbeans. Er is ook een overkoepelend project verkeer dat gebruikt kan worden om ``build with dependencies'' uit te voeren. Daarna volstaat het ofwel VerkeerWeb of VerkeerPollService te starten.
+
+\subsection{Documentatie Scrapers}
+
+De applicatie draait in een oneindige lus en zorgt ervoor dat elke 5min de poll methode wordt opgeroepen. In de poll service worden alle routes overlopen en per route alle providers in parallel opgeroepen. Hierdoor is het mogelijk om binnen de 7 sec alle gegevens voor een bepaalde route terug te krijgen. Er zijn momenteel 34 trajecten met max 7sec tussen, dus kan alles gepolled worden in 238sec, wat binnen de 5min valt. Hierdoor zijn we zeker dat de laatste gegevens elke 5min wordt opgevragen. \\ 
+
+Er zijn 2 soorten providers om de route gegevens te bepalen:
+
+\begin{itemize}
+\item Providers van ISummaryProvider zoals Coyote geven alle routes in één keer terug, dat zorgt ervoor dat die maar éénmaal om de 5min moet opgeroepen worden.
+\item Andere Providers van IProvider vragen gegevens op per route. Bijna alle providers maken onderliggend gebruik van perl scripts die met curl (commandline) de gegevens opvragen. Enkel Google Maps of Bing Maps is er geen scraper voorzien. Bij andere verschillende providers zoals TomTom en Here Maps is er een fallback naar de API met API keys die moeten geconfigureerd worden in de application.conf. 
+\end{itemize}
+
+De perl scripts staan onder /scrapers in productie en maken gebruik van curl command line om de requests door te voeren. Bij sommige scrapers zoals TomTom en Here maps wordt eerst de API Key uit de html pagina gevist om daarna de json request te versturen. Deze api key wordt een uur gecached in een .cache file zodat dit niet steeds bij elke request moet opnieuw verzamelt worden. Als de provider zijn api key wijzigt aan de front end wordt dit dus binnen een uur gedetecteerd en opgevangen. \\
+
+In veel gevallen is de json die geparsed wordt om de route gegevens eruit te halen klein genoeg om met eenvoudige reguliere expressies te parsen. Bij Waze moet er een som gemaakt worden van de segmenten en hebben we de JSON::XS Perl library gebruikt. \\
+
+\textbf{Requirements:} \\
+De perl scripts moeten met een perl interpreter kunnen uitgevoerd worden. Onder windows kan dit met ActivePerl, in een linux omgeving is perl veelal voorgeinstalleerd in /usr/bin/perl. \\
+
+Curl is meestal reeds geinstalleerd op linux, mocht dit nog niet zo zijn kan je curl via de package manager installeren. Onder windows is er een curl.exe die bij de perl scripts staat die gebruikt wordt. \\
+
+Voor de json library in perl te installeren zijn volgende commands nodig: \\
+
+\begin{lstlisting}
+> sudo cpan JSON
+> perl -MCPAN -e shell
+> install JSON::XS
+\end{lstlisting}
+
+\section{Productbacklog}
+\label{sec:productbacklog}
+
+% 4 * 90 u = 360 => 400
+% 15 Use cases waarvan 5 Must Have's
+% 40 * 5 = 200 -> 200 u voor de must have's
+% per must have gemiddeld 40 u (incl. testing)
+% per niet must have gemiddeld 20 u (incl. testing)
+% Het getal bij weging (bij nice to have) is ook een richtlijn dat we "niet" meer tijd moeten spenderen aan deze zaken. Bvb. als we teveel tijd steken in het verzamelen van POI gegevens dan laten we dit beter vallen.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|} 
+\hline
+\textbf{Use case} & \textbf{Must have} & \textbf{Nice to have}  & \textbf{Weging (uur)}\\ \hline \hline
+Verzamel reistijdgegevens & 1 & & 55 \\ \hline 
+Bekijk trajectoverzicht & 2 & & 25 \\ \hline 
+Bekijk trajectdetail & 2 & & 50 \\ \hline 
+Bekijk trajectmap & 3 & & 30 \\ \hline 
+Vergelijk providerdata & 4 & & 40 \\ \hline
+Wijzig traject & & 12 & 30 \\ \hline
+Voeg traject toe & & 14 & 10 \\ \hline
+Verwijder traject & & 14 & 10 \\ \hline
+Bekijk statuspagina & & 12 & 20 \\ \hline 
+Bekijk infopagina's & & 13 & 10 \\ \hline 
+Bekijk dashboard & & 13 & 15 \\ \hline 
+Aanbieden trajectgegevens met reistijden & & 11 & 45 \\ \hline
+Verzamel POI gegevens & & 16 & 20 \\ \hline
+Verzamel Weergegevens & & 16 & 20 \\ \hline
+Verzamel Parkeer \& bord gegevens & & 16 & 20 \\ \hline
+\end{tabular}
+\caption{Productbacklog \label{productbacklog}}
+\end{table}
+
+\newpage
+
+\listoffigures
+\listoftables
+
+\end{document}

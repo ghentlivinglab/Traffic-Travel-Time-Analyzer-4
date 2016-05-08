@@ -10,9 +10,9 @@
 
 # Opzetten test omgeving
 
-Er wordt gebruik gemaakt van een databank, dus de database die je onder /db kan vinden moet eerst gerestored worden.
+Er wordt gebruik gemaakt van een databank, dus de database die je onder /db kan vinden moet eerst gerestored worden naar de databank 'verkeer'.
 
-Zowel in de war als jar file zit een application.conf bestand dat de configuratie bevat. Hierin staat o.a de API keys en het pad naar de scrapers map. 
+Zowel in de war van de web app als jar file van de polling service zit een application.conf bestand dat de configuratie bevat. Hierin staat o.a de API keys en het pad naar de scrapers map. 
 ```
 general.inProduction=true
 APIKeys.TomTom = "5j7n539vbsbf6frb7kwzxtc6"
@@ -39,13 +39,15 @@ java -jar VerkeerPollService-1.0-SNAPSHOT.jar
 
 Vanuit netbeans kan je ook het project starten, alle projecten zijn maven projecten die je kan openen in netbeans. Er is ook een overkoepelend project verkeer dat gebruikt kan worden om 'build with dependencies' uit te voeren. Daarna volstaat het ofwel VerkeerWeb of VerkeerPollService te starten
 
+De scrapers kunnen ook getest worden aan de hand van 2 bash scripts, namelijk testscrapers.sh en testpoiscrapers.sh. Beide bevinden zich in de map Scrapers.
+
+Een volledig installatiehandleiding die alle stappen doorloopt kan je ook terugvinden in het projectdossier.
+
 # Documentatie
 
 [Projectdossier](https://github.ugent.be/iii-vop2016/verkeer-4/blob/master/Analyse/projectdossier-vop.pdf)
 
 [Algemene Analyse](https://github.ugent.be/iii-vop2016/verkeer-4/wiki/Analyse)
-
-[Gedetailleerde Klassendiagrammen](https://github.ugent.be/iii-vop2016/verkeer-4/wiki/Gedetailleerde-Klassendiagrammen)
 
 [Structuur & requirements van scrapers](https://github.ugent.be/iii-vop2016/verkeer-4/wiki/Documentatie-Scrapers)
 
