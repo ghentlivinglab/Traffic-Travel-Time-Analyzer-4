@@ -1,5 +1,6 @@
 (function (routeCompare, compareBase, routeChart, $) {
 
+    // view vars
     var updateBtn;
     var toggleBtn;
     var datePickerBegin1;
@@ -50,12 +51,18 @@
         compareBase.initChart();
     });
 
+    /**
+     * Get form data and fetch the correct info
+     */
     routeCompare.updateChart = function () {
         compareBase.routeInfo1 = compareBase.getSelectedRoute("route");
         compareBase.routeInfo2 = compareBase.routeInfo1;
         routeCompare.fetchRouteData();
     };
 
+    /**
+     * Downloads the route data from the server
+     */
     routeCompare.fetchRouteData = function () {
         var providers = compareBase.getCheckedProviders();
         $.ajax({

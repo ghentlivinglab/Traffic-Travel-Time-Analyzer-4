@@ -35,12 +35,10 @@ public class LogController {
         logService = new LogService(); 
         
         //logs overview model opbouwen
-        LogHomeOverviewVM logHomeOverview = getLogHomeOverviewModel(logService);
-        List<LogCount> logCounts = logService.getLogCount();
+        List<LogCount> logCounts = getLogCount(logService);
         
         // geef mee als model aan view
         ModelAndView model = new ModelAndView("logs/logs");
-        model.addObject("logHomeOverview", logHomeOverview);
         model.addObject("logs", logCounts);
                 
         return model;
@@ -50,8 +48,9 @@ public class LogController {
     @RequestMapping(value = "/logdata", method = RequestMethod.GET)
     public LogDetailOverviewVM ajaxGetLogData(@RequestParam("category") String category, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate) throws ClassNotFoundException {
         
-        //TODO:
-        //PAS DEZE METHODE VERDER AAN ZODAT bijhorende QUERY CORRECTE DATA 
+        String prefix = "be.ugent.verkeer4.";
+        category = prefix + category;
+        
         List<Logging> lst = logService.getLogsByCategoryAndDate(category, startDate, endDate);
         
         //maak het viewmodel object aan
@@ -86,24 +85,15 @@ public class LogController {
         return logOverview;
     }    
 
-    private LogHomeOverviewVM getLogHomeOverviewModel(ILogService logService) throws ClassNotFoundException {
-        //haal logCounts op
-        List<LogCount> lst = logService.getLogCount();
-        
-        //maak het viewmodel object aan
-        LogHomeOverviewVM logHomeOverview = new LogHomeOverviewVM();
-        
-        //overlopen van de logCount voor elke category.
-        for(LogCount l : lst){
-            LogHomeEntryVM entry = new LogHomeEntryVM();
-            entry.setCategory(l.getCategory());
-            entry.setInfoCount(l.getInfoCount());
-            entry.setWarningCount(l.getWarningCount());
-            entry.setErrorCount(l.getErrorCount());
+    private List<LogCount> getLogCount(ILogService logService){
+        //logs overview model opbouwen
+        List<LogCount> logCounts = logService.getLogCount();
+        for(int i = 0; i < logCounts.size(); i++){
+            String category = logCounts.get(i).getCategory();
             
-            logHomeOverview.getLogEntries().add(entry);
+            logCounts.get(i).setCategory(category.replaceFirst("be.ugent.verkeer4.", ""));
         }
-  
-        return logHomeOverview;
+        return logCounts;
     }
+
 }

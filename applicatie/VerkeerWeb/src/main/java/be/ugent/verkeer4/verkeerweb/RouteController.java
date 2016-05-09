@@ -212,7 +212,7 @@ public class RouteController {
         double mean = RouteDataStatistics.mean(summaries);
         double stdev = Math.sqrt(RouteDataStatistics.variance(mean, summaries));
         for (int i = 0; i < summariesVM.size(); i++) {
-            if(RouteDataStatistics.withinStd(summariesVM.get(i).getTravelTime(), mean, stdev, 1)){
+            if(!RouteDataStatistics.withinStd(summariesVM.get(i).getTravelTime(), mean, stdev, 1)){
                 summariesVM.get(i).setExtreme(true);
             }
         }

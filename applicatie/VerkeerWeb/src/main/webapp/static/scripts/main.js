@@ -37,6 +37,11 @@
         }
     };
 
+    /**
+     * Maps seconds to readable string
+     * @param seconds
+     * @returns {string}
+     */
     verkeer.secondsToText = function (seconds) {
         var min = Math.floor(seconds / 60) + "";
         if (min.length == 1)
@@ -61,7 +66,7 @@
 
 
     verkeer.delayClasses = [60, 420];
-    /*
+    /**
      Pass the delay in seconds and it returns a level that represents the delay:
      0: no delay (e.g. green)
      1: medium delay (e.g. orange)
@@ -81,6 +86,9 @@
         return level;
     };
 
+    /**
+     * Sets the correct label depending on the delay on elements with 'label-delay' class
+     */
     verkeer.labelDelays = function () {
         var times = $(".label-delay");
         for (var i = 0; i < times.length; i++) {
@@ -90,6 +98,11 @@
         }
     };
 
+    /**
+     * Maps a delay level to the correct css class
+     * @param delayLevel
+     * @returns {*}
+     */
     verkeer.getBootstrapLabelDelay = function (delayLevel) {
         var labelClass;
         switch (delayLevel) {

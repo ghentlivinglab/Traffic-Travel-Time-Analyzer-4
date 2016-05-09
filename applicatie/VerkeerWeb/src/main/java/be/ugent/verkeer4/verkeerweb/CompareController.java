@@ -19,8 +19,18 @@ import java.util.List;
 @Controller
 public class CompareController {
 
+    /**
+     * Het interval waar de waarden van de verschillende providers samengenomen
+     * worden tot 1 gemiddelde waarde
+     */
     private static final int COMPARISON_THRESHOLD_MILLIESECONDS = 60 * 5 * 1000;
 
+
+    /**
+     * Bouwt de view op om 2 verschillende routes, op hetzelfde tijdsstip te vergelijken
+     * @return
+     * @throws ClassNotFoundException
+     */
     @RequestMapping(value = "/compare/routes", method = RequestMethod.GET)
     public ModelAndView routesCompare() throws ClassNotFoundException {
         // get provider names sorted
@@ -37,6 +47,11 @@ public class CompareController {
         return model;
     }
 
+    /**
+     * Bouwt de view op 1 oute op twee verschillende tijdsstippen te vergelijken
+     * @return
+     * @throws ClassNotFoundException
+     */
     @RequestMapping(value = "/compare/route", method = RequestMethod.GET)
     public ModelAndView routeTimeCompare() throws ClassNotFoundException {
         // get provider names sorted
@@ -53,6 +68,16 @@ public class CompareController {
         return model;
     }
 
+    /**
+     * Berekent de data om 2 verschillende routes, op hetzelfde tijdsstip te vergelijken
+     * @param routeId1 eerste route
+     * @param routeId2 tweede route
+     * @param startDate startdatum
+     * @param endDate einddatum
+     * @param providers welke providers incl.
+     * @return
+     * @throws ClassNotFoundException
+     */
     @ResponseBody
     @RequestMapping(value = "compare/routesREST", method = RequestMethod.GET)
     public CompareData compareRoute(@RequestParam("routeId1") int routeId1, @RequestParam("routeId2") int routeId2,
@@ -69,6 +94,17 @@ public class CompareController {
         return routeDatasToCompareData(startDate.getTime(), routeData1, routeData2);
     }
 
+    /**
+     *  Berekent de data om 1 route op twee verschillende tijdsstippen te vergelijken
+     * @param routeId route
+     * @param providers de providers
+     * @param startDate1 startdatum interval 1
+     * @param endDate1 einddatum interval 1
+     * @param startDate2 startdatum 2
+     * @param endDate2 einddatum interval 2
+     * @return
+     * @throws ClassNotFoundException
+     */
     @ResponseBody
     @RequestMapping(value = "compare/routeREST", method = RequestMethod.GET)
     public CompareData compareRoutes(@RequestParam("routeId") int routeId, @RequestParam("providers") String[] providers,
@@ -86,6 +122,13 @@ public class CompareController {
         return routeDatasToCompareData(startDate.getTime(), routeData1, routeData2);
     }
 
+    /**
+     * Vergelijkt de data van twee routes vanaf een startdatum en berekent de gegevens
+     * @param startDate start van het interval (eind datum zit in de objecten)
+     * @param routeData1 routedata reeks1
+     * @param routeData2 idem reeks 2
+     * @return CompareData object met de juiste data
+     */
     private CompareData routeDatasToCompareData(long startDate, List<RouteData> routeData1,  List<RouteData> routeData2){
         CompareData data = new CompareData();
 
@@ -101,13 +144,22 @@ public class CompareController {
         return data;
     }
 
+    /**
+     * Neemt het gemiddelde van een reeks waarden dit in een gegeven interval liggen
+     * @param routeData de route data
+     * @param startDate begin interval
+     * @param dataMember welke data er berekend wordt
+     * @return Een lijst coorinaten (array)
+     */
     private List<long[]> calculateAvgRoute(List<RouteData> routeData, long startDate, ICompareDataMember dataMember) {
         List<long[]> results = new ArrayList<>();
         int index = 0;
         int sum = 0;
         int amount = 0;
+        // overloop alle data
         while (index < routeData.size()) {
             int previousAmount = amount;
+            // indien huidig object in huidig interval ligt, wordt het opgenomen
             if (routeData.get(index).getTimestamp().getTime() < startDate + COMPARISON_THRESHOLD_MILLIESECONDS) {
                 sum += dataMember.get(routeData.get(index));
                 amount++;
@@ -116,7 +168,7 @@ public class CompareController {
 
             // check if no data match in this time frame
             if (previousAmount == amount) {
-                // calculate avg
+                // calculate avg for this interval
                 if (amount > 0) {
                     int avg = sum / amount;
                     long[] data = {startDate, avg};
