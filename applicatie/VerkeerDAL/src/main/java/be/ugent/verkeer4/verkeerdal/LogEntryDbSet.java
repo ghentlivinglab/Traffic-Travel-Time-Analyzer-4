@@ -19,14 +19,10 @@ public class LogEntryDbSet extends DbSet<Logging>  {
     
     public List<LogCount> getLogCount() {
         try (org.sql2o.Connection con = sql2o.open()) {
-            String query = 
-                    "SELECT category "
-                    + ",CASE WHEN type = 0 THEN count(1) END AS infoCount "
-                    + ",CASE WHEN type = 1 THEN count(1) END AS warningCount "
-                    + ",CASE WHEN type = 2 THEN count(1) END AS errorCount "
-                    + "FROM logging "
-                    + "GROUP BY category "
-                    + "ORDER BY category";
+            String query = "SELECT category, count(CASE WHEN type = 0 THEN 1 END) AS infoCount,"
+                    + " count(CASE WHEN type = 1 THEN 1 END) AS warningCount,"
+                    + " count(CASE WHEN type = 2 THEN 1 END) AS errorCount"
+                    + " FROM logging GROUP BY category ORDER BY category";
 
             Query q = con.createQuery(query);
 
