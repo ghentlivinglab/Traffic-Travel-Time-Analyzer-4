@@ -47,3 +47,4 @@ Datum,Start,Einde,Plaats,Omschrijving,Issue #,Opmerkingen
 03/05/16,21:45,23:59,Thuis,"Op de aparte logpagina kunnen logs nu via een Ajax call gefilterd worden op category, datum en tijdstip",89,
 07/05/16,11:00,14:50,Thuis,"Performantie verbetering op loggingpagina, naamgeving aangepast, database binary verkleind, RestAPI branch gecontrolleerd op fouten",,
 09/05/16,20:00,22:15,Thuis,"Query logging dashboard aangepast, klassenamen bij logging ingekort, voorbereiding presentatie, aanpassing database onderzoeken",,
+10/05/16,08:15,12:15,Klant,"Presentatie voorbereiden en presentatie geven aan andere teams en klant.",,
